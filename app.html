@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MotorOS — Producto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08090b; --bg-soft:#0e1013; --graphite:#14161a; --graphite-2:#1a1d22;
+    --line:rgba(255,255,255,0.08); --line-soft:rgba(255,255,255,0.05);
+    --text:#f2f3f5; --text-dim:#9aa0aa; --text-faint:#666b76;
+    --accent:#5b8cff; --accent-2:#7ee3c8; --accent-3:#b98bff; --danger:#ff6b6b;
+    --glass:rgba(255,255,255,0.04); --glass-strong:rgba(255,255,255,0.07);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    font-size:14px; -webkit-font-smoothing:antialiased; overflow:hidden; height:100vh;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  button, input{font-family:inherit;}
+
+  .app-shell{display:flex; height:100vh;}
+
+  /* SIDEBAR */
+  .app-sidebar{width:236px; background:var(--bg-soft); border-right:1px solid var(--line-soft); flex-shrink:0; display:flex; flex-direction:column; padding:18px 12px;}
+  .app-logo{display:flex; align-items:center; gap:9px; font-weight:700; font-size:15px; margin-bottom:22px; padding:4px 8px;}
+  .logo-mark{width:26px; height:26px; border-radius:7px; background:linear-gradient(135deg,var(--accent),var(--accent-3)); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:#08090b; flex-shrink:0;}
+  .nav-group-label{font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-faint); padding:14px 10px 6px;}
+  .app-nav-item{
+    display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text-dim);
+    padding:9px 10px; border-radius:9px; margin-bottom:1px; font-weight:500; cursor:pointer;
+    transition:background .15s, color .15s;
+  }
+  .app-nav-item:hover{background:var(--glass); color:var(--text);}
+  .app-nav-item.active{background:var(--glass-strong); color:var(--text);}
+  .app-nav-item .ico{width:16px; text-align:center; font-size:13px; flex-shrink:0;}
+  .sidebar-footer{margin-top:auto; display:flex; align-items:center; gap:9px; padding:10px; border-top:1px solid var(--line-soft);}
+  .avatar-sm{width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg,var(--accent-3),var(--accent)); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#08090b; flex-shrink:0;}
+  .sidebar-footer .who{font-size:12px; font-weight:600;}
+  .sidebar-footer .role{font-size:10.5px; color:var(--text-faint);}
+
+  /* MAIN */
+  .app-content{flex:1; display:flex; flex-direction:column; min-width:0;}
+  .app-topbar{
+    height:56px; border-bottom:1px solid var(--line-soft); display:flex; align-items:center; justify-content:space-between;
+    padding:0 26px; flex-shrink:0; background:rgba(8,9,11,0.7); backdrop-filter:blur(10px);
+  }
+  .topbar-search{flex:1; max-width:340px; display:flex; align-items:center; gap:8px; background:var(--glass); border:1px solid var(--line); border-radius:9px; padding:7px 12px; color:var(--text-faint); font-size:12.5px;}
+  .topbar-right{display:flex; align-items:center; gap:14px;}
+  .icon-btn{width:32px; height:32px; border-radius:8px; background:var(--glass); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--text-dim); cursor:pointer;}
+  .view-scroll{flex:1; overflow-y:auto;}
+  .view{display:none; padding:26px 32px 60px; animation:fadeIn .3s ease;}
+  .view.active{display:block;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  .view-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; flex-wrap:wrap; gap:12px;}
+  .view-head h1{font-size:19px; font-weight:700; letter-spacing:-0.01em;}
+  .view-head p{font-size:12.5px; color:var(--text-faint); margin-top:3px;}
+
+  .btn{display:inline-flex; align-items:center; gap:6px; padding:9px 16px; border-radius:9px; font-size:12.5px; font-weight:600; cursor:pointer; border:1px solid transparent;}
+  .btn-primary{background:linear-gradient(135deg,var(--accent),#4169e8); color:#fff;}
+  .btn-ghost{background:var(--glass); border:1px solid var(--line); color:var(--text);}
+  .filters-row{display:flex; gap:6px;}
+  .filter-chip{font-size:11px; padding:6px 12px; border-radius:100px; background:var(--graphite-2); color:var(--text-faint); border:1px solid var(--line-soft); cursor:pointer;}
+  .filter-chip.active{background:var(--accent); color:#fff; border-color:transparent;}
+
+  /* KPI cards */
+  .kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:14px;}
+  .kpi-card{background:var(--graphite); border:1px solid var(--line-soft); border-radius:13px; padding:16px;}
+  .kpi-card .l{font-size:11.5px; color:var(--text-dim); margin-bottom:8px; font-weight:500;}
+  .kpi-card .v{font-size:20px; font-weight:700;}
+  .kpi-card .t{font-size:11px; margin-top:6px; font-weight:600;}
+  .up{color:var(--accent-2);} .warn{color:#ffc76b;}
+
+  .grid-2{display:grid; grid-template-columns:1.4fr 1fr; gap:14px;}
+  .card{background:var(--graphite); border:1px solid var(--line-soft); border-radius:14px; padding:18px;}
+  .card-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px;}
+  .card-head span{font-size:11.5px; color:var(--text-faint);}
+  .bars{display:flex; align-items:flex-end; gap:5px; height:80px;}
+  .bars .bar{flex:1; border-radius:4px 4px 0 0; background:linear-gradient(180deg,var(--accent),rgba(91,140,255,0.15));}
+
+  .insight-row{display:flex; gap:10px; align-items:flex-start; padding:11px 0; border-bottom:1px solid var(--line-soft); font-size:12.5px; color:var(--text-dim);}
+  .insight-row:last-child{border-bottom:none;}
+  .insight-row .pip{width:6px; height:6px; border-radius:50%; background:var(--accent-3); margin-top:6px; flex-shrink:0;}
+  .insight-row .apply{margin-left:auto; font-size:10.5px; color:var(--accent); font-weight:600; cursor:pointer; flex-shrink:0;}
+
+  table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  th{text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:0.03em; color:var(--text-faint); font-weight:600; padding:8px 10px; border-bottom:1px solid var(--line-soft);}
+  td{padding:10px 10px; border-bottom:1px solid var(--line-soft); color:var(--text-dim);}
+  tr.row-click{cursor:pointer;}
+  tr.row-click:hover td{background:var(--glass);}
+  tr.selected td{background:var(--glass-strong); color:var(--text);}
+  .thumb-sm{width:34px; height:24px; border-radius:5px; background:linear-gradient(135deg,#23262d,#191b1f); display:inline-block; vertical-align:middle; margin-right:8px;}
+  .badge{font-size:10px; padding:3px 9px; border-radius:100px; font-weight:600;}
+  .badge.available{background:rgba(126,227,200,0.12); color:var(--accent-2); border:1px solid rgba(126,227,200,0.3);}
+  .badge.reserved{background:rgba(255,199,107,0.12); color:#ffc76b; border:1px solid rgba(255,199,107,0.3);}
+  .badge.sold{background:var(--glass); color:var(--text-faint); border:1px solid var(--line);}
+  .badge.prep{background:rgba(91,140,255,0.12); color:var(--accent); border:1px solid rgba(91,140,255,0.3);}
+
+  /* Vehicle detail panel */
+  .detail-panel{margin-top:16px;}
+  .detail-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;}
+  .detail-head .name{font-size:17px; font-weight:700;}
+  .detail-head .sub{font-size:12px; color:var(--text-faint); margin-top:3px;}
+  .field-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  .field-group h5{font-size:10.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-faint); margin-bottom:10px;}
+  .field-row{display:flex; justify-content:space-between; font-size:12.5px; padding:6px 0; border-bottom:1px solid var(--line-soft);}
+  .field-row .l{color:var(--text-faint);}
+  .field-row .v{color:var(--text); font-weight:600;}
+  .alert-strip{display:flex; gap:6px; flex-wrap:wrap; margin-top:16px;}
+  .alert-chip{font-size:10.5px; padding:5px 11px; border-radius:100px; background:rgba(255,199,107,0.1); color:#ffc76b; border:1px solid rgba(255,199,107,0.25); font-weight:600;}
+  .alert-chip.danger{background:rgba(255,107,107,0.1); color:var(--danger); border-color:rgba(255,107,107,0.25);}
+  .alert-chip.ok{background:rgba(126,227,200,0.1); color:var(--accent-2); border-color:rgba(126,227,200,0.25);}
+
+  /* CRM Kanban */
+  .crm-board{display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:22px;}
+  .crm-col{background:var(--graphite-2); border-radius:11px; padding:9px;}
+  .crm-col h5{font-size:9.5px; text-transform:uppercase; letter-spacing:0.03em; color:var(--text-faint); margin-bottom:8px; padding:2px 4px; display:flex; justify-content:space-between;}
+  .lead-card{background:var(--bg-soft); border:1px solid var(--line-soft); border-radius:9px; padding:9px; margin-bottom:6px; cursor:pointer; transition:border-color .15s;}
+  .lead-card:hover{border-color:var(--accent);}
+  .lead-card.selected{border-color:var(--accent); background:rgba(91,140,255,0.08);}
+  .lead-card .n{font-size:11px; font-weight:600; color:var(--text);}
+  .lead-card .v{font-size:9.5px; color:var(--text-faint); margin-top:2px;}
+  .lead-card .p{font-size:9px; color:var(--accent-2); margin-top:4px; font-weight:600;}
+  .lead-detail{background:var(--graphite); border:1px solid var(--line-soft); border-radius:14px; padding:18px;}
+  .ai-insight{background:linear-gradient(135deg, rgba(185,139,255,0.1), rgba(91,140,255,0.06)); border:1px solid rgba(185,139,255,0.25); border-radius:12px; padding:14px 16px; margin-top:14px;}
+  .ai-insight .tag{font-size:10.5px; color:var(--accent-3); font-weight:700; margin-bottom:8px;}
+  .ai-insight p{font-size:12.5px; color:var(--text-dim); line-height:1.6;}
+  .action-chip-row{display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;}
+  .action-chip{font-size:10.5px; padding:6px 11px; border-radius:100px; background:var(--glass-strong); border:1px solid var(--line); color:var(--text-dim); cursor:pointer;}
+  .action-chip:hover{color:var(--text); border-color:var(--accent);}
+
+  /* MotorOS AI chat */
+  .chat-shell{max-width:720px; margin:0 auto; display:flex; flex-direction:column; height:calc(100vh - 200px);}
+  .chat-log{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:14px; padding:6px 2px 20px;}
+  .chat-msg{display:flex; gap:10px; max-width:80%;}
+  .chat-msg.user{align-self:flex-end; flex-direction:row-reverse;}
+  .chat-avatar{width:28px; height:28px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:13px;}
+  .chat-msg.ai .chat-avatar{background:linear-gradient(135deg,var(--accent),var(--accent-3));}
+  .chat-msg.user .chat-avatar{background:var(--graphite-2); border:1px solid var(--line-soft);}
+  .chat-bubble{background:var(--graphite); border:1px solid var(--line-soft); border-radius:13px; padding:11px 14px; font-size:13px; line-height:1.6; color:var(--text-dim);}
+  .chat-msg.user .chat-bubble{background:rgba(91,140,255,0.12); border-color:rgba(91,140,255,0.25); color:var(--text);}
+  .chat-suggestions{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px;}
+  .chat-suggest-chip{font-size:11.5px; padding:7px 13px; border-radius:100px; background:var(--glass); border:1px solid var(--line); color:var(--text-dim); cursor:pointer;}
+  .chat-suggest-chip:hover{border-color:var(--accent); color:var(--text);}
+  .chat-input-row{display:flex; gap:8px; border-top:1px solid var(--line-soft); padding-top:14px;}
+  .chat-input-row input{flex:1; background:var(--graphite); border:1px solid var(--line); border-radius:10px; padding:11px 14px; color:var(--text); font-size:13px;}
+  .chat-input-row input:focus{outline:none; border-color:var(--accent);}
+
+  /* generic list/report components reused across simple views */
+  .doc-list{display:flex; flex-direction:column; gap:8px;}
+  .doc-row{display:flex; align-items:center; gap:10px; background:var(--graphite-2); border-radius:10px; padding:11px 13px; font-size:12.5px;}
+  .doc-row .ico{width:28px; height:28px; border-radius:7px; background:var(--bg-soft); display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0;}
+  .doc-row .body{flex:1;}
+  .doc-row .name{color:var(--text); font-weight:600;}
+  .doc-row .meta{font-size:10.5px; color:var(--text-faint); margin-top:2px;}
+  .doc-row .status{font-size:10.5px; color:var(--accent-2); flex-shrink:0;}
+  .doc-row .status.pending{color:#ffc76b;}
+
+  .report-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+  .report-card{background:var(--graphite); border:1px solid var(--line-soft); border-radius:12px; padding:14px;}
+  .report-card .l{font-size:11px; color:var(--text-faint); margin-bottom:6px;}
+  .report-card .v{font-size:16px; font-weight:700; margin-bottom:10px;}
+  .report-card .exp{display:flex; gap:6px;}
+  .exp-btn{font-size:10px; padding:4px 9px; border-radius:6px; background:var(--bg-soft); color:var(--text-faint); border:1px solid var(--line-soft); font-weight:600; cursor:pointer;}
+
+  .stepper{display:flex; align-items:center; margin-bottom:18px; max-width:480px;}
+  .step{flex:1; text-align:center; position:relative;}
+  .step .dot2{width:24px; height:24px; border-radius:50%; background:var(--graphite-2); border:2px solid var(--line); margin:0 auto 8px; display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--text-faint); position:relative; z-index:1;}
+  .step.done .dot2{background:var(--accent); border-color:var(--accent); color:#fff;}
+  .step.current .dot2{background:var(--accent-2); border-color:var(--accent-2); color:#08090b;}
+  .step .lbl{font-size:10px; color:var(--text-faint); font-weight:600;}
+  .step::after{content:""; position:absolute; top:12px; left:50%; width:100%; height:2px; background:var(--line-soft); z-index:0;}
+  .step:last-child::after{display:none;}
+  .step.done::after{background:var(--accent);}
+
+  .settings-form{max-width:520px; display:flex; flex-direction:column; gap:14px;}
+  .form-row label{display:block; font-size:11.5px; color:var(--text-faint); margin-bottom:6px; font-weight:600;}
+  .form-row input, .form-row select{width:100%; background:var(--graphite-2); border:1px solid var(--line); border-radius:9px; padding:10px 12px; color:var(--text); font-size:13px;}
+
+  @media (max-width:1000px){
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+    .grid-2{grid-template-columns:1fr;}
+    .crm-board{grid-template-columns:repeat(4,1fr);}
+    .field-cols{grid-template-columns:1fr;}
+    .report-grid{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <div class="app-sidebar">
+    <div class="app-logo"><div class="logo-mark">M</div>MotorOS</div>
+
+    <div class="nav-group-label">General</div>
+    <div class="app-nav-item active" data-view="dashboard"><span class="ico">▣</span> Dashboard</div>
+    <div class="app-nav-item" data-view="inventario"><span class="ico">🚗</span> Inventario</div>
+    <div class="app-nav-item" data-view="compras"><span class="ico">🔑</span> Compras</div>
+    <div class="app-nav-item" data-view="ventas"><span class="ico">💳</span> Ventas</div>
+    <div class="app-nav-item" data-view="crm"><span class="ico">👥</span> Clientes CRM</div>
+    <div class="app-nav-item" data-view="financiamiento"><span class="ico">🏦</span> Financiamiento</div>
+
+    <div class="nav-group-label">Operación</div>
+    <div class="app-nav-item" data-view="documentos"><span class="ico">📄</span> Documentos</div>
+    <div class="app-nav-item" data-view="contabilidad"><span class="ico">📚</span> Contabilidad</div>
+    <div class="app-nav-item" data-view="marketing"><span class="ico">📣</span> Marketing</div>
+    <div class="app-nav-item" data-view="publicaciones"><span class="ico">🌐</span> Publicaciones</div>
+    <div class="app-nav-item" data-view="reportes"><span class="ico">📊</span> Reportes</div>
+
+    <div class="nav-group-label">Inteligencia</div>
+    <div class="app-nav-item" data-view="ai"><span class="ico">🤖</span> MotorOS AI</div>
+    <div class="app-nav-item" data-view="config"><span class="ico">⚙️</span> Configuración</div>
+
+    <div class="sidebar-footer">
+      <div class="avatar-sm">AQ</div>
+      <div><div class="who">Ariel Quiroz</div><div class="role">Dueño · Automotora Demo</div></div>
+    </div>
+  </div>
+
+  <div class="app-content">
+    <div class="app-topbar">
+      <div class="topbar-search">🔍 Buscar vehículo, cliente o documento…</div>
+      <div class="topbar-right">
+        <div class="icon-btn">🔔</div>
+        <div class="icon-btn">⌘K</div>
+      </div>
+    </div>
+
+    <div class="view-scroll">
+
+      <!-- ============ DASHBOARD ============ -->
+      <div class="view active" id="view-dashboard">
+        <div class="view-head">
+          <div><h1>Dashboard Ejecutivo</h1><p>Resumen financiero y comercial de tu automotora</p></div>
+          <div class="filters-row"><div class="filter-chip">Semana</div><div class="filter-chip active">Mes</div><div class="filter-chip">Año</div></div>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi-card"><div class="l">Ventas totales</div><div class="v">$458.500.000</div><div class="t up">↑ 12.4%</div></div>
+          <div class="kpi-card"><div class="l">Margen bruto</div><div class="v">$96.400.000</div><div class="t up">↑ 8.1%</div></div>
+          <div class="kpi-card"><div class="l">Utilidad neta</div><div class="v">$71.200.000</div><div class="t up">14.8% margen</div></div>
+          <div class="kpi-card"><div class="l">Capital invertido</div><div class="v">$612.000.000</div><div class="t warn">72 vehículos</div></div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-card"><div class="l">Caja disponible</div><div class="v">$184.000.000</div><div class="t up">Saludable</div></div>
+          <div class="kpi-card"><div class="l">Cuentas por cobrar</div><div class="v">$38.000.000</div><div class="t warn">6 clientes</div></div>
+          <div class="kpi-card"><div class="l">Cuentas por pagar</div><div class="v">$22.000.000</div><div class="t">3 proveedores</div></div>
+          <div class="kpi-card"><div class="l">Ticket promedio</div><div class="v">$25.400.000</div><div class="t up">18 vendidos</div></div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:14px;">
+          <div class="card">
+            <div class="card-head"><strong>Ventas vs. costos</strong><span>Últimos 6 meses</span></div>
+            <div class="bars" id="dashBars"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><strong>MotorOS Insights</strong><span>Actualizado ahora</span></div>
+            <div class="insight-row"><span class="pip"></span> Tu inventario aumentó 15% este mes. <span class="apply">Ver</span></div>
+            <div class="insight-row"><span class="pip"></span> 8 vehículos llevan más de 90 días sin venderse. <span class="apply">Revisar</span></div>
+            <div class="insight-row"><span class="pip"></span> 3 precios están fuera de mercado. <span class="apply">Ajustar</span></div>
+            <div class="insight-row"><span class="pip"></span> 14 clientes esperan seguimiento. <span class="apply">Contactar</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><strong>Ranking de vendedores</strong><span>Este mes</span></div>
+          <table>
+            <tr><th>Vendedor</th><th>Vehículos vendidos</th><th>Ventas</th><th>Comisiones</th></tr>
+            <tr><td>Carla M.</td><td>7</td><td>$128.400.000</td><td>$3.850.000</td></tr>
+            <tr><td>Diego R.</td><td>6</td><td>$104.200.000</td><td>$3.120.000</td></tr>
+            <tr><td>Fernanda S.</td><td>5</td><td>$88.900.000</td><td>$2.660.000</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ INVENTARIO ============ -->
+      <div class="view" id="view-inventario">
+        <div class="view-head">
+          <div><h1>Inventario Vehicular</h1><p>72 vehículos activos · haz clic en un vehículo para ver su ficha completa</p></div>
+          <div class="btn btn-primary">+ Nuevo vehículo</div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <table>
+            <tr><th>Vehículo</th><th>Patente</th><th>Año</th><th>Km</th><th>Estado</th><th>Precio venta</th><th>Margen</th><th>Días stock</th></tr>
+            <tbody id="vehicleTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="card detail-panel" id="vehicleDetail"></div>
+      </div>
+
+      <!-- ============ COMPRAS ============ -->
+      <div class="view" id="view-compras">
+        <div class="view-head"><div><h1>Compras y Adquisiciones</h1><p>Compra directa, consignación e intercambio</p></div><div class="btn btn-primary">+ Registrar compra</div></div>
+        <div class="card">
+          <div class="doc-list">
+            <div class="doc-row"><div class="ico">🔑</div><div class="body"><div class="name">Compra directa — Chevrolet Sail</div><div class="meta">Cliente vendedor: Rodrigo Paredes · $18.900.000</div></div><div class="status">Pagado</div></div>
+            <div class="doc-row"><div class="ico">📋</div><div class="body"><div class="name">Consignación — Hyundai Tucson</div><div class="meta">Proveedor: AutoExpress</div></div><div class="status pending">Doc. pendiente</div></div>
+            <div class="doc-row"><div class="ico">🔁</div><div class="body"><div class="name">Intercambio — recibe Chevrolet Sail</div><div class="meta">Cliente: María Soto</div></div><div class="status">Registrado</div></div>
+            <div class="doc-row"><div class="ico">🔑</div><div class="body"><div class="name">Compra directa — Renault Sandero</div><div class="meta">Cliente vendedor: Pablo Ibáñez · $9.400.000</div></div><div class="status pending">Pago parcial</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ VENTAS ============ -->
+      <div class="view" id="view-ventas">
+        <div class="view-head"><div><h1>Ventas y Cierre</h1><p>Rentabilidad calculada automáticamente al cerrar</p></div></div>
+        <div class="card">
+          <table>
+            <tr><th>Cliente</th><th>Vehículo</th><th>Precio venta</th><th>Forma pago</th><th>Vendedor</th><th>Margen real</th><th>Comisión</th></tr>
+            <tr><td>Javier Muñoz</td><td>Mazda CX-5 2020</td><td>$16.490.000</td><td>Financiamiento</td><td>Carla M.</td><td style="color:var(--accent-2); font-weight:600;">$2.180.000</td><td>$494.700</td></tr>
+            <tr><td>Soledad Vera</td><td>Kia Sportage 2021</td><td>$19.990.000</td><td>Contado</td><td>Diego R.</td><td style="color:var(--accent-2); font-weight:600;">$2.640.000</td><td>$599.700</td></tr>
+            <tr><td>Ignacio Rojas</td><td>Nissan Versa 2019</td><td>$9.290.000</td><td>Financiamiento</td><td>Fernanda S.</td><td style="color:var(--accent-2); font-weight:600;">$1.120.000</td><td>$278.700</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ CLIENTES CRM ============ -->
+      <div class="view" id="view-crm">
+        <div class="view-head"><div><h1>Clientes CRM</h1><p>Pipeline comercial · haz clic en un cliente para ver el detalle</p></div><div class="btn btn-primary">+ Nuevo lead</div></div>
+        <div class="crm-board" id="crmBoard"></div>
+        <div class="lead-detail" id="leadDetail"></div>
+      </div>
+
+      <!-- ============ FINANCIAMIENTO ============ -->
+      <div class="view" id="view-financiamiento">
+        <div class="view-head"><div><h1>Financiamiento</h1><p>Estado de solicitudes activas</p></div></div>
+        <div class="card" style="max-width:560px;">
+          <div class="card-head"><strong>Toyota Hilux SRV — Javier Muñoz</strong><span>Banco Santander</span></div>
+          <div class="stepper">
+            <div class="step done"><div class="dot2">✓</div><div class="lbl">Enviada</div></div>
+            <div class="step done"><div class="dot2">✓</div><div class="lbl">Evaluación</div></div>
+            <div class="step current"><div class="dot2">●</div><div class="lbl">Aprobado</div></div>
+            <div class="step"><div class="dot2">4</div><div class="lbl">Firmado</div></div>
+          </div>
+          <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);">
+            <div class="kpi-card"><div class="l">Monto</div><div class="v" style="font-size:14px;">$14.500.000</div></div>
+            <div class="kpi-card"><div class="l">Plazo</div><div class="v" style="font-size:14px;">48 meses</div></div>
+            <div class="kpi-card"><div class="l">Cuota</div><div class="v" style="font-size:14px;">$412.300</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ DOCUMENTOS ============ -->
+      <div class="view" id="view-documentos">
+        <div class="view-head"><div><h1>Documentos</h1><p>Generación automática con datos del vehículo y cliente</p></div></div>
+        <div class="card">
+          <div class="doc-list">
+            <div class="doc-row"><div class="ico">📄</div><div class="body"><div class="name">Nota de venta — Mazda CX-5</div></div><div class="status">Generado</div></div>
+            <div class="doc-row"><div class="ico">📄</div><div class="body"><div class="name">Contrato de compra — Chevrolet Sail</div></div><div class="status">Generado</div></div>
+            <div class="doc-row"><div class="ico">📄</div><div class="body"><div class="name">Contrato de consignación — Hyundai Tucson</div></div><div class="status">Generado</div></div>
+            <div class="doc-row"><div class="ico">📄</div><div class="body"><div class="name">Documentos de entrega — Kia Sportage</div></div><div class="status">Generado</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ CONTABILIDAD ============ -->
+      <div class="view" id="view-contabilidad">
+        <div class="view-head"><div><h1>Contabilidad</h1><p>Cierre financiero del mes</p></div></div>
+        <div class="report-grid">
+          <div class="report-card"><div class="l">Ventas</div><div class="v">$458.5M</div><div class="exp"><span class="exp-btn">PDF</span><span class="exp-btn">Excel</span></div></div>
+          <div class="report-card"><div class="l">Margen</div><div class="v">$96.4M</div><div class="exp"><span class="exp-btn">PDF</span><span class="exp-btn">Excel</span></div></div>
+          <div class="report-card"><div class="l">Comisiones</div><div class="v">$14.1M</div><div class="exp"><span class="exp-btn">PDF</span><span class="exp-btn">Excel</span></div></div>
+          <div class="report-card"><div class="l">Flujo de caja</div><div class="v">$184M</div><div class="exp"><span class="exp-btn">PDF</span><span class="exp-btn">Excel</span></div></div>
+        </div>
+      </div>
+
+      <!-- ============ MARKETING ============ -->
+      <div class="view" id="view-marketing">
+        <div class="view-head"><div><h1>Marketing</h1><p>Campañas activas por canal</p></div></div>
+        <div class="card">
+          <div class="doc-list">
+            <div class="doc-row"><div class="ico">📸</div><div class="body"><div class="name">Campaña Instagram — SUVs de la semana</div><div class="meta">3.200 alcance · 48 clics</div></div><div class="status">Activa</div></div>
+            <div class="doc-row"><div class="ico">📘</div><div class="body"><div class="name">Campaña Facebook — Financiamiento 0% pie</div><div class="meta">5.100 alcance · 112 clics</div></div><div class="status">Activa</div></div>
+            <div class="doc-row"><div class="ico">✉️</div><div class="body"><div class="name">Email — Leads fríos últimos 90 días</div><div class="meta">340 envíos</div></div><div class="status pending">Programada</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ PUBLICACIONES ============ -->
+      <div class="view" id="view-publicaciones">
+        <div class="view-head"><div><h1>Publicaciones</h1><p>Sincronización multicanal</p></div></div>
+        <div class="card">
+          <table>
+            <tr><th>Canal</th><th>Vehículos publicados</th><th>Estado</th></tr>
+            <tr><td>Sitio propio</td><td>58</td><td><span class="badge available">Sincronizado</span></td></tr>
+            <tr><td>Mercado Libre</td><td>52</td><td><span class="badge available">Sincronizado</span></td></tr>
+            <tr><td>Facebook Marketplace</td><td>49</td><td><span class="badge available">Sincronizado</span></td></tr>
+            <tr><td>Instagram</td><td>40</td><td><span class="badge reserved">Actualizando</span></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ REPORTES ============ -->
+      <div class="view" id="view-reportes">
+        <div class="view-head"><div><h1>Reportes</h1><p>Rentabilidad por vehículo y por vendedor</p></div></div>
+        <div class="card">
+          <div class="card-head"><strong>Evolución de inventario</strong><span>12 meses</span></div>
+          <div class="bars" id="reportBars"></div>
+        </div>
+      </div>
+
+      <!-- ============ MOTOROS AI ============ -->
+      <div class="view" id="view-ai">
+        <div class="view-head"><div><h1>MotorOS AI</h1><p>Tu gerente digital, disponible 24/7</p></div></div>
+        <div class="chat-shell">
+          <div class="chat-log" id="chatLog">
+            <div class="chat-msg user"><div class="chat-avatar">AQ</div><div class="chat-bubble">¿Qué autos debería bajar de precio?</div></div>
+            <div class="chat-msg ai"><div class="chat-avatar">🤖</div><div class="chat-bubble">Estos 7 vehículos tienen bajo movimiento y margen suficiente para ajuste: CX-5 2020, Tucson 2022, Sail 2021 y 4 más. ¿Quieres que prepare las nuevas fichas de precio?</div></div>
+            <div class="chat-msg user"><div class="chat-avatar">AQ</div><div class="chat-bubble">¿Cuánto ganamos este mes?</div></div>
+            <div class="chat-msg ai"><div class="chat-avatar">🤖</div><div class="chat-bubble">Vendieron 18 vehículos con margen promedio de 14,8%. Utilidad neta estimada: $71.200.000.</div></div>
+          </div>
+          <div class="chat-suggestions">
+            <div class="chat-suggest-chip" data-q="stock">¿Qué vehículos llevan más tiempo en stock?</div>
+            <div class="chat-suggest-chip" data-q="leads">¿Qué clientes debería contactar hoy?</div>
+            <div class="chat-suggest-chip" data-q="margen">¿Cuál es mi margen promedio?</div>
+          </div>
+          <div class="chat-input-row">
+            <input type="text" id="chatInput" placeholder="Pregúntale a MotorOS AI sobre tu negocio…">
+            <div class="btn btn-primary" id="chatSend">Enviar</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ CONFIGURACIÓN ============ -->
+      <div class="view" id="view-config">
+        <div class="view-head"><div><h1>Configuración</h1><p>Datos de tu automotora</p></div></div>
+        <div class="settings-form">
+          <div class="form-row"><label>Nombre de la automotora</label><input type="text" value="Automotora Demo"></div>
+          <div class="form-row"><label>Moneda</label><select><option>CLP — Peso chileno</option><option>ARS — Peso argentino</option><option>MXN — Peso mexicano</option></select></div>
+          <div class="form-row"><label>Canales conectados</label><input type="text" value="Sitio propio, Mercado Libre, Facebook, Instagram"></div>
+          <div class="btn btn-primary" style="width:fit-content;">Guardar cambios</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- View switching ----------
+  const navItems = document.querySelectorAll('.app-nav-item');
+  const views = document.querySelectorAll('.view');
+  navItems.forEach(item=>{
+    item.addEventListener('click', ()=>{
+      navItems.forEach(i=>i.classList.remove('active'));
+      item.classList.add('active');
+      views.forEach(v=>v.classList.remove('active'));
+      document.getElementById('view-'+item.dataset.view).classList.add('active');
+    });
+  });
+
+  // ---------- Bar charts ----------
+  function buildBars(id, values){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.innerHTML = values.map(v => `<div class="bar" style="height:${v}%"></div>`).join('');
+  }
+  buildBars('dashBars', [40,55,48,62,58,75,70,88,80,95,90,100]);
+  buildBars('reportBars', [25,35,32,48,44,60,55,70,66,78,82,90]);
+
+  // ---------- Inventario: table + ficha de vehículo ----------
+  const vehicles = [
+    { name:"Toyota Hilux SRV", plate:"ABC123", vin:"9BWZZZ377VT004251", engine:"2GD-FTV", year:2023, km:120000, fuel:"Diesel", trans:"Automática", color:"Blanco", body:"Doble cabina",
+      state:"available", stateLabel:"Publicado", price:31490000, buy:24200000, costs:1300000, totalCost:25500000, minPrice:29900000, marginExp:5990000, marginFinal:null, days:22,
+      alerts:[] },
+    { name:"Mazda CX-5", plate:"XPQ982", vin:"JM3KE2CY0M0123456", engine:"PY-VPS", year:2020, km:58000, fuel:"Bencina", trans:"Automática", color:"Gris", body:"SUV",
+      state:"available", stateLabel:"Publicado", price:16490000, buy:13100000, costs:800000, totalCost:13900000, minPrice:15200000, marginExp:2600000, marginFinal:null, days:92,
+      alerts:["stalled","price"] },
+    { name:"Kia Sportage", plate:"RTY345", vin:"KNAPH813AG7654321", engine:"G4NA", year:2021, km:41000, fuel:"Bencina", trans:"Automática", color:"Rojo", body:"SUV",
+      state:"reserved", stateLabel:"Reservado", price:19990000, buy:16500000, costs:600000, totalCost:17100000, minPrice:18900000, marginExp:2890000, marginFinal:null, days:14,
+      alerts:[] },
+    { name:"Nissan Versa", plate:"LMN221", vin:"3N1CN7AP4KL456789", engine:"HR16", year:2019, km:70500, fuel:"Bencina", trans:"Manual", color:"Blanco", body:"Sedán",
+      state:"sold", stateLabel:"Vendido", price:9290000, buy:7600000, costs:400000, totalCost:8000000, minPrice:8700000, marginExp:1290000, marginFinal:1120000, days:0,
+      alerts:[] },
+    { name:"Chevrolet Sail", plate:"GHI778", vin:"9GAAT8090J1122334", engine:"1.5L", year:2021, km:45000, fuel:"Bencina", trans:"Manual", color:"Plata", body:"Sedán",
+      state:"prep", stateLabel:"Preparación", price:9800000, buy:8100000, costs:350000, totalCost:8450000, minPrice:9200000, marginExp:1350000, marginFinal:null, days:5,
+      alerts:["margin"] },
+  ];
+  const fmt = n => "$" + n.toLocaleString('es-CL');
+  const badgeClass = { available:"available", reserved:"reserved", sold:"sold", prep:"prep" };
+
+  function renderVehicleTable(){
+    const tbody = document.getElementById('vehicleTableBody');
+    tbody.innerHTML = vehicles.map((v,i)=>`
+      <tr class="row-click" data-idx="${i}">
+        <td><span class="thumb-sm"></span>${v.name}</td>
+        <td class="mono">${v.plate}</td>
+        <td>${v.year}</td>
+        <td>${v.km.toLocaleString('es-CL')} km</td>
+        <td><span class="badge ${badgeClass[v.state]}">${v.stateLabel}</span></td>
+        <td>${fmt(v.price)}</td>
+        <td>${fmt(v.marginFinal ?? v.marginExp)}</td>
+        <td>${v.days} días</td>
+      </tr>`).join('');
+    tbody.querySelectorAll('tr').forEach(tr=>{
+      tr.addEventListener('click', ()=>selectVehicle(parseInt(tr.dataset.idx)));
+    });
+  }
+  function alertChip(type){
+    if(type==="stalled") return `<div class="alert-chip">⚠ Vehículo detenido</div>`;
+    if(type==="margin") return `<div class="alert-chip danger">⚠ Margen bajo</div>`;
+    if(type==="price") return `<div class="alert-chip">⚠ Precio fuera de mercado</div>`;
+    return "";
+  }
+  function selectVehicle(idx){
+    document.querySelectorAll('#vehicleTableBody tr').forEach((tr,i)=>tr.classList.toggle('selected', i===idx));
+    const v = vehicles[idx];
+    document.getElementById('vehicleDetail').innerHTML = `
+      <div class="detail-head">
+        <div><div class="name">${v.name} ${v.year}</div><div class="sub">${v.plate} · VIN ${v.vin} · Motor ${v.engine} · ${v.fuel} · ${v.trans}</div></div>
+        <span class="badge ${badgeClass[v.state]}">${v.stateLabel}</span>
+      </div>
+      <div class="field-cols">
+        <div class="field-group">
+          <h5>Información básica</h5>
+          <div class="field-row"><span class="l">Color</span><span class="v">${v.color}</span></div>
+          <div class="field-row"><span class="l">Carrocería</span><span class="v">${v.body}</span></div>
+          <div class="field-row"><span class="l">Kilometraje</span><span class="v">${v.km.toLocaleString('es-CL')} km</span></div>
+          <div class="field-row"><span class="l">Días en stock</span><span class="v">${v.days}</span></div>
+        </div>
+        <div class="field-group">
+          <h5>Información financiera</h5>
+          <div class="field-row"><span class="l">Precio compra</span><span class="v">${fmt(v.buy)}</span></div>
+          <div class="field-row"><span class="l">Gastos asociados</span><span class="v">${fmt(v.costs)}</span></div>
+          <div class="field-row"><span class="l">Costo total real</span><span class="v">${fmt(v.totalCost)}</span></div>
+          <div class="field-row"><span class="l">Precio mínimo</span><span class="v">${fmt(v.minPrice)}</span></div>
+        </div>
+        <div class="field-group">
+          <h5>Rentabilidad</h5>
+          <div class="field-row"><span class="l">Precio publicado</span><span class="v">${fmt(v.price)}</span></div>
+          <div class="field-row"><span class="l">Margen esperado</span><span class="v">${fmt(v.marginExp)}</span></div>
+          <div class="field-row"><span class="l">Margen final</span><span class="v">${v.marginFinal ? fmt(v.marginFinal) : "—"}</span></div>
+        </div>
+      </div>
+      <div class="alert-strip">
+        ${v.alerts.length ? v.alerts.map(alertChip).join('') : '<div class="alert-chip ok">✓ Sin alertas activas</div>'}
+      </div>
+    `;
+  }
+  renderVehicleTable();
+  selectVehicle(0);
+
+  // ---------- CRM Kanban ----------
+  const stages = ["Lead nuevo","Contacto","Cotización","Prueba","Financiam.","Negociación","Venta"];
+  const leads = [
+    { name:"Pedro Alarcón", vehicle:"Chevrolet Sail", stage:0, prob:20, phone:"+56 9 1234 5678", notes:"Contactó por Instagram, pidió fotos adicionales.", ai:"Enviar más fotos y video del interior.", actions:["Contactar","Enviar fotos"] },
+    { name:"Camila Reyes", vehicle:"Hyundai Tucson", stage:1, prob:35, phone:"+56 9 2345 6789", notes:"Primera llamada realizada, evalúa presupuesto.", ai:"Ofrecer opciones de financiamiento.", actions:["Enviar oferta","Agendar prueba"] },
+    { name:"Javier Muñoz", vehicle:"Toyota Corolla", stage:2, prob:86, phone:"+56 9 3456 7890", notes:"Cliente interesado hace 3 horas, cotización enviada.", ai:"Cliente con alta intención. Contactar ahora.", actions:["Contactar ahora","Mostrar similares"] },
+    { name:"Soledad Vera", vehicle:"Kia Sportage", stage:3, prob:60, phone:"+56 9 4567 8901", notes:"Realizó prueba de manejo, muy conforme.", ai:"Avanzar a cotización de financiamiento.", actions:["Cotizar financiamiento"] },
+    { name:"Ignacio Rojas", vehicle:"Nissan Versa", stage:4, prob:70, phone:"+56 9 5678 9012", notes:"Solicitud de crédito en evaluación en Banco Santander.", ai:"Confirmar aprobación con el banco.", actions:["Ver financiamiento"] },
+    { name:"María Soto", vehicle:"Mazda CX-5", stage:5, prob:78, phone:"+56 9 6789 0123", notes:"Negociando precio final, pide descuento de $300.000.", ai:"Margen permite descuento hasta $250.000.", actions:["Enviar contraoferta"] },
+    { name:"Rodrigo Paredes", vehicle:"Toyota Hilux SRV", stage:6, prob:100, phone:"+56 9 7890 1234", notes:"Venta cerrada, a la espera de documentación.", ai:"Generar documentos de entrega.", actions:["Generar documentos"] },
+  ];
+  function renderCRM(){
+    const board = document.getElementById('crmBoard');
+    board.innerHTML = stages.map((s,i)=>`
+      <div class="crm-col">
+        <h5>${s} <span>${leads.filter(l=>l.stage===i).length}</span></h5>
+        ${leads.filter(l=>l.stage===i).map(l=>`
+          <div class="lead-card" data-idx="${leads.indexOf(l)}">
+            <div class="n">${l.name}</div>
+            <div class="v">${l.vehicle}</div>
+            <div class="p">${l.prob}% prob.</div>
+          </div>`).join('')}
+      </div>`).join('');
+    board.querySelectorAll('.lead-card').forEach(card=>{
+      card.addEventListener('click', ()=>selectLead(parseInt(card.dataset.idx)));
+    });
+  }
+  function selectLead(idx){
+    document.querySelectorAll('.lead-card').forEach((c,i)=>c.classList.toggle('selected', parseInt(c.dataset.idx)===idx));
+    const l = leads[idx];
+    document.getElementById('leadDetail').innerHTML = `
+      <div class="detail-head">
+        <div><div class="name">${l.name}</div><div class="sub">${l.phone} · Interesado en ${l.vehicle}</div></div>
+        <span class="badge available">${l.prob}% probabilidad</span>
+      </div>
+      <div class="field-row"><span class="l">Notas del vendedor</span><span class="v" style="text-align:right; max-width:60%;">${l.notes}</span></div>
+      <div class="ai-insight">
+        <div class="tag">🤖 IA COMERCIAL</div>
+        <p>${l.ai}</p>
+      </div>
+      <div class="action-chip-row">${l.actions.map(a=>`<div class="action-chip">${a}</div>`).join('')}</div>
+    `;
+  }
+  renderCRM();
+  selectLead(2);
+
+  // ---------- MotorOS AI chat ----------
+  const chatLog = document.getElementById('chatLog');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+  const answers = {
+    stock: "8 vehículos llevan más de 90 días en stock: Mazda CX-5, Hyundai Tucson y 6 más. Recomiendo revisar su estrategia de precio esta semana.",
+    leads: "Tienes 6 clientes que requieren contacto hoy, el más urgente es Javier Muñoz (86% de probabilidad de compra, cotización enviada hace 3 horas).",
+    margen: "Tu margen promedio este mes es de 14,8%, levemente por sobre el objetivo de 13%. El segmento SUV es el que más margen aporta."
+  };
+  function addMsg(text, who){
+    const div = document.createElement('div');
+    div.className = 'chat-msg ' + who;
+    div.innerHTML = `<div class="chat-avatar">${who==='user'?'AQ':'🤖'}</div><div class="chat-bubble">${text}</div>`;
+    chatLog.appendChild(div);
+    chatLog.scrollTop = chatLog.scrollHeight;
+  }
+  function respond(userText, key){
+    addMsg(userText, 'user');
+    setTimeout(()=>{
+      const reply = answers[key] || "Estoy analizando tu negocio con datos reales de MotorOS. En esta demo, prueba una de las preguntas sugeridas para ver una respuesta completa.";
+      addMsg(reply, 'ai');
+    }, 500);
+  }
+  document.querySelectorAll('.chat-suggest-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=> respond(chip.textContent, chip.dataset.q));
+  });
+  chatSend.addEventListener('click', ()=>{
+    if(!chatInput.value.trim()) return;
+    respond(chatInput.value.trim(), null);
+    chatInput.value='';
+  });
+  chatInput.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){ chatSend.click(); }
+  });
+</script>
+
+</body>
+</html>
