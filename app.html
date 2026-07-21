@@ -93,18 +93,16 @@
   tr.row-click:hover td{background:var(--glass);}
   tr.selected td{background:var(--glass-strong); color:var(--text);}
   .thumb-sm{width:34px; height:24px; border-radius:5px; display:inline-block; vertical-align:middle; margin-right:8px;}
-  /* estudio fotografico consistente para todos los vehiculos */
+  /* marco fotografico consistente para todos los vehiculos: mismo tamano, mismo recorte, misma superposicion */
   .veh-thumb{
-    position:relative; width:100%; height:100%; border-radius:inherit; overflow:hidden;
-    background: radial-gradient(ellipse 90% 75% at 50% 32%, #2c303a 0%, #1c1e23 62%, #131418 100%);
-    display:flex; align-items:center; justify-content:center;
+    position:relative; width:100%; height:100%; border-radius:inherit; overflow:hidden; background:#1c1e23;
   }
   .veh-thumb::after{
-    content:""; position:absolute; bottom:10%; left:50%; width:64%; height:16%;
-    background: radial-gradient(ellipse, rgba(0,0,0,0.55), transparent 72%);
-    transform: translateX(-50%);
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(10,11,13,0) 45%, rgba(8,9,11,0.5) 100%);
+    pointer-events:none;
   }
-  .veh-icon{position:relative; z-index:1; width:66%; height:auto; color:#c9cdd6; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.45));}
+  .veh-photo{width:100%; height:100%; object-fit:cover; display:block;}
   .badge{font-size:10px; padding:3px 9px; border-radius:100px; font-weight:600;}
   .badge.available{background:rgba(126,227,200,0.12); color:var(--accent-2); border:1px solid rgba(126,227,200,0.3);}
   .badge.reserved{background:rgba(255,199,107,0.12); color:#ffc76b; border:1px solid rgba(255,199,107,0.3);}
@@ -259,18 +257,6 @@
 </style>
 </head>
 <body>
-
-<svg width="0" height="0" style="position:absolute;">
-  <defs>
-    <symbol id="carGlyph" viewBox="0 0 100 50">
-      <path d="M8 34 C8 34 10 20 24 18 L34 18 C38 12 46 8 56 8 L68 8 C76 8 82 14 84 20 L90 20 C94 20 96 24 96 28 L96 32 C96 34 94 36 92 36 L86 36 C86 30 81 26 75 26 C69 26 64 30 64 36 L34 36 C34 30 29 26 23 26 C17 26 12 30 12 36 L8 36 C6 36 4 34 4 32 L4 30 Z" fill="currentColor"/>
-      <circle cx="23" cy="36" r="7" fill="#12141a"/>
-      <circle cx="23" cy="36" r="3" fill="currentColor" opacity="0.5"/>
-      <circle cx="75" cy="36" r="7" fill="#12141a"/>
-      <circle cx="75" cy="36" r="3" fill="currentColor" opacity="0.5"/>
-    </symbol>
-  </defs>
-</svg>
 
 <div class="app-shell">
   <div class="app-sidebar">
@@ -585,21 +571,27 @@
   const vehicles = [
     { name:"Toyota Hilux SRV", plate:"ABC123", vin:"9BWZZZ377VT004251", engine:"2GD-FTV", year:2023, km:120000, fuel:"Diesel", trans:"Automática", color:"Blanco", body:"Doble cabina",
       state:"available", stateLabel:"Publicado", price:31490000, buy:24200000, costs:1300000, totalCost:25500000, minPrice:29900000, marginExp:5990000, marginFinal:null, days:22,
+      photo:"https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=500&q=80&fit=crop&auto=format",
       alerts:[] },
     { name:"Mazda CX-5", plate:"XPQ982", vin:"JM3KE2CY0M0123456", engine:"PY-VPS", year:2020, km:58000, fuel:"Bencina", trans:"Automática", color:"Gris", body:"SUV",
       state:"available", stateLabel:"Publicado", price:16490000, buy:13100000, costs:800000, totalCost:13900000, minPrice:15200000, marginExp:2600000, marginFinal:null, days:92,
+      photo:"https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=500&q=80&fit=crop&auto=format",
       alerts:["stalled","price"] },
     { name:"Kia Sportage", plate:"RTY345", vin:"KNAPH813AG7654321", engine:"G4NA", year:2021, km:41000, fuel:"Bencina", trans:"Automática", color:"Rojo", body:"SUV",
       state:"reserved", stateLabel:"Reservado", price:19990000, buy:16500000, costs:600000, totalCost:17100000, minPrice:18900000, marginExp:2890000, marginFinal:null, days:14,
+      photo:"https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=500&q=80&fit=crop&auto=format",
       alerts:[] },
     { name:"Nissan Versa", plate:"LMN221", vin:"3N1CN7AP4KL456789", engine:"HR16", year:2019, km:70500, fuel:"Bencina", trans:"Manual", color:"Blanco", body:"Sedán",
       state:"sold", stateLabel:"Vendido", price:9290000, buy:7600000, costs:400000, totalCost:8000000, minPrice:8700000, marginExp:1290000, marginFinal:1120000, days:0,
+      photo:"https://images.unsplash.com/photo-1704246125646-cfdf0cb6d2b8?w=500&q=80&fit=crop&auto=format",
       alerts:[] },
     { name:"Chevrolet Sail", plate:"GHI778", vin:"9GAAT8090J1122334", engine:"1.5L", year:2021, km:45000, fuel:"Bencina", trans:"Manual", color:"Plata", body:"Sedán",
       state:"prep", stateLabel:"Preparación", price:9800000, buy:8100000, costs:350000, totalCost:8450000, minPrice:9200000, marginExp:1350000, marginFinal:null, days:5,
+      photo:"https://images.unsplash.com/photo-1654554584641-1266def1cd14?w=500&q=80&fit=crop&auto=format",
       alerts:["margin"] },
     { name:"Hyundai Tucson", plate:"JKL560", vin:"KM8J3CA46NU123456", engine:"2.0L", year:2022, km:30200, fuel:"Bencina", trans:"Automática", color:"Azul", body:"SUV",
       state:"ingreso", stateLabel:"Ingreso", price:0, buy:15200000, costs:0, totalCost:15200000, minPrice:0, marginExp:0, marginFinal:null, days:2,
+      photo:"https://images.unsplash.com/photo-1688893287874-ac7fbd686c24?w=500&q=80&fit=crop&auto=format",
       alerts:[] },
   ];
   const fmt = n => "$" + n.toLocaleString('es-CL');
@@ -624,7 +616,7 @@
           </div>
           ${items.length ? items.map(v=>`
             <div class="kcard" data-idx="${v.idx}">
-              <div class="kthumb veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div>
+              <div class="kthumb veh-thumb"><img class="veh-photo" src="${v.photo}" alt="${v.name}" loading="lazy"></div>
               <div class="kinfo">
                 <div class="kname">${v.name}</div>
                 <div class="kyear">${v.year} · ${v.km.toLocaleString('es-CL')} km</div>
@@ -642,7 +634,7 @@
     const tbody = document.getElementById('vehicleTableBody');
     tbody.innerHTML = vehicles.map((v,i)=>`
       <tr class="row-click" data-idx="${i}">
-        <td><span class="thumb-sm veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></span>${v.name}</td>
+        <td><span class="thumb-sm veh-thumb"><img class="veh-photo" src="${v.photo}" alt="${v.name}" loading="lazy"></span>${v.name}</td>
         <td class="mono">${v.plate}</td>
         <td>${v.year}</td>
         <td>${v.km.toLocaleString('es-CL')} km</td>
@@ -666,7 +658,7 @@
     const v = vehicles[idx];
     document.getElementById('vehicleDetail').innerHTML = `
       <div class="detail-head">
-        <div class="detail-photo veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div>
+        <div class="detail-photo veh-thumb"><img class="veh-photo" src="${v.photo}" alt="${v.name} ${v.year}" loading="lazy"></div>
         <div style="flex:1;"><div class="name">${v.name} ${v.year}</div><div class="sub">${v.plate} · VIN ${v.vin} · Motor ${v.engine} · ${v.fuel} · ${v.trans}</div></div>
         <span class="badge ${badgeClass[v.state]}">${v.stateLabel}</span>
       </div>

@@ -387,18 +387,16 @@
   .site-catalog{display:grid; grid-template-columns:repeat(3,1fr); gap:8px;}
   .site-car{background:var(--bg-soft); border-radius:8px; padding:8px;}
   .site-car .ph{height:36px; border-radius:5px; margin-bottom:6px;}
-  /* estudio fotografico consistente para todos los vehiculos */
+  /* marco fotografico consistente para todos los vehiculos: mismo tamano, mismo recorte, misma superposicion */
   .veh-thumb{
-    position:relative; width:100%; height:100%; border-radius:inherit; overflow:hidden;
-    background: radial-gradient(ellipse 90% 75% at 50% 32%, #2c303a 0%, #1c1e23 62%, #131418 100%);
-    display:flex; align-items:center; justify-content:center;
+    position:relative; width:100%; height:100%; border-radius:inherit; overflow:hidden; background:#1c1e23;
   }
   .veh-thumb::after{
-    content:""; position:absolute; bottom:10%; left:50%; width:64%; height:16%;
-    background: radial-gradient(ellipse, rgba(0,0,0,0.55), transparent 72%);
-    transform: translateX(-50%);
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(10,11,13,0) 45%, rgba(8,9,11,0.5) 100%);
+    pointer-events:none;
   }
-  .veh-icon{position:relative; z-index:1; width:66%; height:auto; color:#c9cdd6; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.45));}
+  .veh-photo{width:100%; height:100%; object-fit:cover; display:block;}
   .site-car .t{font-size:9px; color:var(--text-dim);}
 
   /* ============ INTERNAL DASHBOARD ============ */
@@ -449,18 +447,6 @@
 <body>
 
 <div class="bg-grid"></div>
-
-<svg width="0" height="0" style="position:absolute;">
-  <defs>
-    <symbol id="carGlyph" viewBox="0 0 100 50">
-      <path d="M8 34 C8 34 10 20 24 18 L34 18 C38 12 46 8 56 8 L68 8 C76 8 82 14 84 20 L90 20 C94 20 96 24 96 28 L96 32 C96 34 94 36 92 36 L86 36 C86 30 81 26 75 26 C69 26 64 30 64 36 L34 36 C34 30 29 26 23 26 C17 26 12 30 12 36 L8 36 C6 36 4 34 4 32 L4 30 Z" fill="currentColor"/>
-      <circle cx="23" cy="36" r="7" fill="#12141a"/>
-      <circle cx="23" cy="36" r="3" fill="currentColor" opacity="0.5"/>
-      <circle cx="75" cy="36" r="7" fill="#12141a"/>
-      <circle cx="75" cy="36" r="3" fill="currentColor" opacity="0.5"/>
-    </symbol>
-  </defs>
-</svg>
 
 <header>
   <nav>
@@ -629,11 +615,11 @@
           <div class="module-visual">
             <div class="visual-card">
               <div class="kanban">
-                <div class="kanban-col"><h5>Ingreso</h5><div class="car-card"><div class="thumb veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="name">Chevrolet Sail</div><div class="meta">2021 · 45.000 km</div></div></div>
-                <div class="kanban-col"><h5>Preparación</h5><div class="car-card"><div class="thumb veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="name">Hyundai Tucson</div><div class="meta">2022 · 30.200 km</div></div></div>
-                <div class="kanban-col"><h5>Publicado</h5><div class="car-card"><div class="thumb veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="name">Hilux SRV</div><div class="meta">2023 · 120.000 km</div></div><div class="car-card"><div class="warn-dot">⚠</div><div class="thumb veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="name">CX-5</div><div class="meta">92 días en stock</div></div></div>
-                <div class="kanban-col"><h5>Reservado</h5><div class="car-card"><div class="thumb veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="name">Kia Sportage</div><div class="meta">2021 · 41.000 km</div></div></div>
-                <div class="kanban-col"><h5>Vendido</h5><div class="car-card"><div class="thumb veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="name">Nissan Versa</div><div class="meta">2019 · 70.500 km</div></div></div>
+                <div class="kanban-col"><h5>Ingreso</h5><div class="car-card"><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1654554584641-1266def1cd14?w=300&q=80&fit=crop&auto=format" alt="Chevrolet Sail" loading="lazy"></div><div class="name">Chevrolet Sail</div><div class="meta">2021 · 45.000 km</div></div></div>
+                <div class="kanban-col"><h5>Preparación</h5><div class="car-card"><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1688893287874-ac7fbd686c24?w=300&q=80&fit=crop&auto=format" alt="Hyundai Tucson" loading="lazy"></div><div class="name">Hyundai Tucson</div><div class="meta">2022 · 30.200 km</div></div></div>
+                <div class="kanban-col"><h5>Publicado</h5><div class="car-card"><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=300&q=80&fit=crop&auto=format" alt="Hilux SRV" loading="lazy"></div><div class="name">Hilux SRV</div><div class="meta">2023 · 120.000 km</div></div><div class="car-card"><div class="warn-dot">⚠</div><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=300&q=80&fit=crop&auto=format" alt="CX-5" loading="lazy"></div><div class="name">CX-5</div><div class="meta">92 días en stock</div></div></div>
+                <div class="kanban-col"><h5>Reservado</h5><div class="car-card"><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=300&q=80&fit=crop&auto=format" alt="Kia Sportage" loading="lazy"></div><div class="name">Kia Sportage</div><div class="meta">2021 · 41.000 km</div></div></div>
+                <div class="kanban-col"><h5>Vendido</h5><div class="car-card"><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1704246125646-cfdf0cb6d2b8?w=300&q=80&fit=crop&auto=format" alt="Nissan Versa" loading="lazy"></div><div class="name">Nissan Versa</div><div class="meta">2019 · 70.500 km</div></div></div>
               </div>
               <div class="veh-detail-head">
                 <div><div class="name">Toyota Hilux SRV</div><div class="sub">ABC123 · VIN 9BW... · Motor 2GD · Diesel · Automática</div></div>
@@ -851,12 +837,12 @@
               <div class="browser-bar"><div class="dash-dot"></div><div class="dash-dot"></div><div class="dash-dot"></div><div class="url">tuautomotora.cl/catalogo</div></div>
               <div class="site-body">
                 <div class="site-catalog">
-                  <div class="site-car"><div class="ph veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="t">Hilux SRV 2023</div></div>
-                  <div class="site-car"><div class="ph veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="t">CX-5 2020</div></div>
-                  <div class="site-car"><div class="ph veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="t">Sportage 2021</div></div>
-                  <div class="site-car"><div class="ph veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="t">Tucson 2022</div></div>
-                  <div class="site-car"><div class="ph veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="t">Sail 2021</div></div>
-                  <div class="site-car"><div class="ph veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div><div class="t">Versa 2019</div></div>
+                  <div class="site-car"><div class="ph veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=300&q=80&fit=crop&auto=format" alt="Hilux SRV" loading="lazy"></div><div class="t">Hilux SRV 2023</div></div>
+                  <div class="site-car"><div class="ph veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=300&q=80&fit=crop&auto=format" alt="CX-5" loading="lazy"></div><div class="t">CX-5 2020</div></div>
+                  <div class="site-car"><div class="ph veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=300&q=80&fit=crop&auto=format" alt="Sportage" loading="lazy"></div><div class="t">Sportage 2021</div></div>
+                  <div class="site-car"><div class="ph veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1688893287874-ac7fbd686c24?w=300&q=80&fit=crop&auto=format" alt="Tucson" loading="lazy"></div><div class="t">Tucson 2022</div></div>
+                  <div class="site-car"><div class="ph veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1654554584641-1266def1cd14?w=300&q=80&fit=crop&auto=format" alt="Sail" loading="lazy"></div><div class="t">Sail 2021</div></div>
+                  <div class="site-car"><div class="ph veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1704246125646-cfdf0cb6d2b8?w=300&q=80&fit=crop&auto=format" alt="Versa" loading="lazy"></div><div class="t">Versa 2019</div></div>
                 </div>
               </div>
             </div>
