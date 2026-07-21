@@ -186,8 +186,8 @@
   .chat-msg{display:flex; gap:10px; max-width:80%;}
   .chat-msg.user{align-self:flex-end; flex-direction:row-reverse;}
   .chat-avatar{width:28px; height:28px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:13px;}
-  .chat-msg.ai .chat-avatar{background:linear-gradient(135deg,var(--accent),var(--accent-3));}
   .chat-msg.user .chat-avatar{background:var(--graphite-2); border:1px solid var(--line-soft);}
+  .bot-img{width:100%; height:100%; object-fit:contain; display:block;}
   .chat-bubble{background:var(--graphite); border:1px solid var(--line-soft); border-radius:13px; padding:11px 14px; font-size:13px; line-height:1.6; color:var(--text-dim);}
   .chat-msg.user .chat-bubble{background:rgba(91,140,255,0.12); border-color:rgba(91,140,255,0.25); color:var(--text);}
   .chat-suggestions{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px;}
@@ -232,10 +232,11 @@
   .ai-widget-btn{
     position:fixed; bottom:22px; right:22px; width:54px; height:54px; border-radius:50%;
     background:linear-gradient(135deg,var(--accent),var(--accent-3)); border:none; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; font-size:22px;
+    display:flex; align-items:center; justify-content:center; font-size:22px; padding:8px;
     box-shadow:0 14px 32px -8px rgba(91,140,255,0.6); z-index:200; transition:transform .15s;
   }
   .ai-widget-btn:hover{transform:scale(1.06);}
+  .ai-widget-btn img{width:100%; height:100%; object-fit:contain; display:block;}
   .ai-widget-btn .dot-live{position:absolute; top:2px; right:2px; width:11px; height:11px; border-radius:50%; background:var(--accent-2); border:2px solid var(--bg);}
   .ai-widget-panel{
     position:fixed; bottom:88px; right:22px; width:360px; max-width:calc(100vw - 40px); max-height:min(560px, calc(100vh - 120px));
@@ -511,9 +512,9 @@
         <div class="chat-shell">
           <div class="chat-log" id="chatLog">
             <div class="chat-msg user"><div class="chat-avatar">AQ</div><div class="chat-bubble">¿Qué autos debería bajar de precio?</div></div>
-            <div class="chat-msg ai"><div class="chat-avatar">🤖</div><div class="chat-bubble">Estos 7 vehículos tienen bajo movimiento y margen suficiente para ajuste: CX-5 2020, Tucson 2022, Sail 2021 y 4 más. ¿Quieres que prepare las nuevas fichas de precio?</div></div>
+            <div class="chat-msg ai"><div class="chat-avatar"><img class="bot-img" src="images/chatbot.png" alt="MotorOS AI"></div><div class="chat-bubble">Estos 7 vehículos tienen bajo movimiento y margen suficiente para ajuste: CX-5 2020, Tucson 2022, Sail 2021 y 4 más. ¿Quieres que prepare las nuevas fichas de precio?</div></div>
             <div class="chat-msg user"><div class="chat-avatar">AQ</div><div class="chat-bubble">¿Cuánto ganamos este mes?</div></div>
-            <div class="chat-msg ai"><div class="chat-avatar">🤖</div><div class="chat-bubble">Vendieron 18 vehículos con margen promedio de 14,8%. Utilidad neta estimada: $71.200.000.</div></div>
+            <div class="chat-msg ai"><div class="chat-avatar"><img class="bot-img" src="images/chatbot.png" alt="MotorOS AI"></div><div class="chat-bubble">Vendieron 18 vehículos con margen promedio de 14,8%. Utilidad neta estimada: $71.200.000.</div></div>
           </div>
           <div class="chat-suggestions">
             <div class="chat-suggest-chip" data-q="stock">¿Qué vehículos llevan más tiempo en stock?</div>
@@ -544,7 +545,7 @@
 
 <!-- ============ MOTOROS AI — WIDGET FLOTANTE ============ -->
 <button class="ai-widget-btn" id="aiWidgetBtn" title="MotorOS AI">
-  🤖<span class="dot-live"></span>
+  <img src="images/chatbot.png" alt="MotorOS AI"><span class="dot-live"></span>
 </button>
 
 <div class="ai-widget-panel" id="aiWidgetPanel">
@@ -560,7 +561,7 @@
     <button class="ai-widget-close" id="aiWidgetClose">✕</button>
   </div>
   <div class="ai-widget-log" id="widgetLog">
-    <div class="chat-msg ai"><div class="chat-avatar">🤖</div><div class="chat-bubble">Hola, soy MotorOS AI. Conozco todo tu inventario, ventas, clientes y documentos — pregúntame lo que necesites. Algunas respuestas cambian según tu rol.</div></div>
+    <div class="chat-msg ai"><div class="chat-avatar"><img class="bot-img" src="images/chatbot.png" alt="MotorOS AI"></div><div class="chat-bubble">Hola, soy MotorOS AI. Conozco todo tu inventario, ventas, clientes y documentos — pregúntame lo que necesites. Algunas respuestas cambian según tu rol.</div></div>
   </div>
   <div class="ai-widget-suggest">
     <div class="widget-suggest-chip" data-q="agregar">¿Cómo agrego un vehículo?</div>
@@ -1068,7 +1069,7 @@
   function addMsg(text, who){
     const div = document.createElement('div');
     div.className = 'chat-msg ' + who;
-    div.innerHTML = `<div class="chat-avatar">${who==='user'?'AQ':'🤖'}</div><div class="chat-bubble">${text}</div>`;
+    div.innerHTML = `<div class="chat-avatar">${who==='user'?'AQ':'<img class=\"bot-img\" src=\"images/chatbot.png\" alt=\"MotorOS AI\">'}</div><div class="chat-bubble">${text}</div>`;
     chatLog.appendChild(div);
     chatLog.scrollTop = chatLog.scrollHeight;
   }
@@ -1120,7 +1121,7 @@
     const div = document.createElement('div');
     div.className = 'chat-msg ' + who;
     const bubbleClass = locked ? 'chat-bubble locked-bubble' : 'chat-bubble';
-    div.innerHTML = `<div class="chat-avatar">${who==='user' ? 'AQ' : '🤖'}</div><div class="${bubbleClass}">${text}</div>`;
+    div.innerHTML = `<div class="chat-avatar">${who==='user' ? 'AQ' : '<img class=\"bot-img\" src=\"images/chatbot.png\" alt=\"MotorOS AI\">'}</div><div class="${bubbleClass}">${text}</div>`;
     widgetLog.appendChild(div);
     widgetLog.scrollTop = widgetLog.scrollHeight;
   }

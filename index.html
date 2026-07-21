@@ -386,8 +386,8 @@
   .chat-msg{display:flex; gap:10px; max-width:92%;}
   .chat-msg.user{align-self:flex-end; flex-direction:row-reverse;}
   .chat-avatar{width:26px; height:26px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px;}
-  .chat-msg.ai .chat-avatar{background:linear-gradient(135deg, var(--accent), var(--accent-3));}
   .chat-msg.user .chat-avatar{background:var(--graphite-2); border:1px solid var(--line-soft);}
+  .bot-img{width:100%; height:100%; object-fit:contain; display:block;}
   .chat-bubble{background:var(--graphite-2); border:1px solid var(--line-soft); border-radius:12px; padding:10px 13px; font-size:12.5px; line-height:1.6; color:var(--text-dim);}
   .chat-msg.user .chat-bubble{background:rgba(91,140,255,0.12); border-color:rgba(91,140,255,0.25); color:var(--text);}
   .chat-input-mock{display:flex; align-items:center; gap:8px; background:var(--graphite-2); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:12.5px; color:var(--text-faint);}
@@ -944,9 +944,9 @@
             <div class="visual-card">
               <div class="chat-window">
                 <div class="chat-msg user"><div class="chat-avatar">👤</div><div class="chat-bubble">¿Qué autos debería bajar de precio?</div></div>
-                <div class="chat-msg ai"><div class="chat-avatar">🤖</div><div class="chat-bubble">Estos 7 vehículos tienen bajo movimiento y margen suficiente para ajuste.</div></div>
+                <div class="chat-msg ai"><div class="chat-avatar"><img class="bot-img" src="images/chatbot.png" alt="MotorOS AI"></div><div class="chat-bubble">Estos 7 vehículos tienen bajo movimiento y margen suficiente para ajuste.</div></div>
                 <div class="chat-msg user"><div class="chat-avatar">👤</div><div class="chat-bubble">¿Cuánto ganamos este mes?</div></div>
-                <div class="chat-msg ai"><div class="chat-avatar">🤖</div><div class="chat-bubble">Vendieron 18 vehículos con margen promedio de 14,8%.</div></div>
+                <div class="chat-msg ai"><div class="chat-avatar"><img class="bot-img" src="images/chatbot.png" alt="MotorOS AI"></div><div class="chat-bubble">Vendieron 18 vehículos con margen promedio de 14,8%.</div></div>
               </div>
               <div class="chat-input-mock">Pregúntale a MotorOS AI...</div>
             </div>
