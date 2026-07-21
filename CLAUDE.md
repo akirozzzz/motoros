@@ -72,6 +72,12 @@ docs/
   comercial) enlazadas por URL — no se descargan al repo. Ver `docs/DECISIONES.md` para el
   porqué (no hay forma de descargar/generar imágenes en el sandbox, y las fotos de Google
   Images tienen problemas de copyright).
+- Todos los íconos de la interfaz son **Lucide Icons**, cargados vía CDN
+  (`unpkg.com/lucide@latest`) y convertidos con `<i data-lucide="nombre">` +
+  `lucide.createIcons()`. **No usar emojis ni otros packs de íconos.** Si agregas contenido
+  nuevo con íconos dentro de una función que se re-ejecuta después de la carga inicial
+  (chat, filtros, CRM, etc.), hay que llamar `lucide.createIcons()` de nuevo al final de esa
+  función — si no, el ícono nuevo no se convierte a SVG y queda invisible.
 - Los datos de inventario/ventas en `app.html` se generan con un PRNG con semilla fija
   (`seededRandom`), así los números son consistentes entre recargas de la página pero no
   son datos reales de ningún cliente.

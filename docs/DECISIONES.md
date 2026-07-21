@@ -68,6 +68,34 @@ los vehículos se vieran con ese nivel de detalle, no solo el seleccionado.
 carga por JavaScript y no se pudo inspeccionar (sin navegador Chrome conectado en la
 sesión). Es un login 100% demo: cualquier correo/contraseña entra, no hay backend.
 
+## Iconografía: Lucide Icons (reemplazó todos los emojis)
+
+El usuario pidió usar **exclusivamente Lucide Icons** en toda la interfaz (nav, botones,
+alertas, chat, etc.), nada de emojis ni de imágenes genéricas, con trazo fino y estilo
+consistente. Se implementó así, dado que el sitio no tiene build step:
+
+- **Lucide se carga vía CDN** (`<script src="https://unpkg.com/lucide@latest">`), no vía
+  npm/build — es la forma correcta de usarlo en un sitio estático sin bundler. Esto agrega
+  **una dependencia de red en tiempo de ejecución** que el sitio no tenía antes (antes todo
+  era 100% autocontenido salvo Google Fonts). Si algún día se quiere volver a cero
+  dependencias externas, la alternativa sería incrustar un sprite SVG local con los `<path>`
+  exactos de cada ícono usado (mismo patrón que ya se usaba para el ícono de auto antes de
+  tener fotos reales).
+- Cada ícono se marca como `<i data-lucide="nombre-en-kebab-case" style="width:Npx;height:Npx;">`
+  y `lucide.createIcons()` los reemplaza por el SVG real. **Importante:** como varias partes
+  de la interfaz generan contenido con `innerHTML` dinámicamente después de la carga inicial
+  (chat del widget/vista IA, lista de inventario filtrada, detalle de un lead del CRM), hay
+  que llamar `lucide.createIcons()` de nuevo **dentro de esas funciones**, no solo una vez al
+  final de la carga — si se agrega un ícono nuevo a un lugar que se re-renderiza
+  dinámicamente, hay que acordarse de este detalle o el ícono no aparece.
+- No se tocaron: el número `⌘K` (atajo de teclado, es texto convencional no un ícono), el
+  punto `●` del stepper de financiamiento (indicador de "paso actual", no es un ícono con
+  significado propio), ni el nombre de marca "M" del logo.
+- **La imagen del robot (`images/chatbot.png`) se reemplazó por el ícono `Bot` de Lucide**
+  en todos los avatares del chat — la imagen contradecía la regla de "solo Lucide, nada de
+  imágenes". El archivo **sigue en el repo sin usar** (no se borró sin preguntar); si ya no
+  hace falta, se puede eliminar.
+
 ## Mascota del chatbot (MotorOS AI)
 
 El usuario subió `images/chatbot.png` (un robot ilustrado cargando un auto) para usar como

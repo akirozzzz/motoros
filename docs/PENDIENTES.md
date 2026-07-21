@@ -43,6 +43,17 @@ Lo que ya funciona de punta a punta:
   Compras, Ventas, CRM, Financiamiento, Documentos, Contabilidad, Reportes) ya están
   conectados al generador de 140 vehículos.
 
+## Etapa reciente: iconografía Lucide
+
+Se reemplazaron todos los emojis de la interfaz (nav, topbar, alertas, chat, etc.) por
+íconos de Lucide (SVG vía CDN). Ver `docs/DECISIONES.md` para el detalle técnico y el
+recordatorio importante sobre llamar `lucide.createIcons()` en contenido dinámico. Commit
+`e303f14`.
+
+**Pendiente menor:** `images/chatbot.png` quedó sin usar en el repo (se reemplazó por el
+ícono `Bot`). No se borró porque no hay que eliminar archivos sin preguntar — confirmar con
+el usuario si se puede quitar.
+
 ## Próximos pasos sugeridos (sin confirmar con el usuario todavía — ver primero con él)
 
 En orden de impacto probable:
