@@ -78,14 +78,15 @@ En orden de impacto probable:
   junto a "Ver plataforma" (ambos llevan a `login.html` por ahora, es intencional). Se oculta
   junto con el nav central en mobile (<=760px) para no saturar el header. Commit `6004fa7`.
 - **Etapa 4 — Imágenes en la sección "El problema" (varias iteraciones de diseño).**
-  Collage grande superpuesto → fila compacta de miniaturas con etiquetas de texto → fila
-  sin etiquetas con imágenes más grandes (140×140px, 100×100px en mobile) → **si falta la
-  imagen, el espacio se oculta por completo (sin placeholder)**. El usuario subió **Frazer**
-  y **Facebook Marketplace** a `~/CLAUDE/motoros/images/` (vía Finder), se comprimieron (una
-  pesaba 4.4MB) y se muestran apiladas como dos hojas superpuestas, sin texto encima.
-  Commits `348e1e6`, `5dc6203`, `7209015`, `225e3dd`, `4e8d0b0`. **Pendiente: faltan 3
-  imágenes reales** (Excel, Fotos dispersas, Sin seguimiento) — esos espacios no se muestran
-  hasta que se agreguen. Ver `images/README.md` para el estado exacto.
+  Collage grande superpuesto → fila compacta con etiquetas de texto → fila sin etiquetas →
+  espacios sin imagen se ocultan (sin placeholder) → **imágenes más grandes (170×170px,
+  120×120px en mobile) y más separadas en el stack de Frazer/Facebook**, porque la de atrás
+  casi no se veía. El usuario subió **Frazer** y **Facebook Marketplace** a
+  `~/CLAUDE/motoros/images/` (vía Finder), se comprimieron (una pesaba 4.4MB) y se muestran
+  apiladas como dos hojas superpuestas, sin texto encima. Commits `348e1e6`, `5dc6203`,
+  `7209015`, `225e3dd`, `4e8d0b0`, `541fa21`. **Pendiente: faltan 3 imágenes reales** (Excel,
+  Fotos dispersas, Sin seguimiento) — esos espacios no se muestran hasta que se agreguen. Ver
+  `images/README.md`.
 - **Fix — placeholder de imágenes no se veía.** El `onerror` de los `<img>` llamaba
   `this.remove()` antes de leer `this.parentElement`, y al remover el nodo se pierde la
   referencia al padre — la clase `img-missing` nunca se aplicaba y la tarjeta quedaba
