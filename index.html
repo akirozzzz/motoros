@@ -215,55 +215,49 @@
   .problem-section{padding:100px 0 120px;}
   .problem-sub{font-size:16px; color:var(--text-dim); max-width:480px; margin-top:14px; line-height:1.6;}
 
-  /* "El problema": texto a la izquierda, fila de capturas antiguas chicas a la derecha */
+  /* "El problema": texto a la izquierda, fila de capturas antiguas a la derecha (sin texto encima) */
   .problem-top{display:flex; align-items:center; justify-content:space-between; gap:36px; flex-wrap:wrap;}
   .problem-text{flex:1; min-width:280px;}
-  .problem-strip{display:flex; gap:10px; flex-wrap:wrap; max-width:340px; flex-shrink:0;}
+  .problem-strip{display:flex; gap:16px; flex-wrap:wrap; max-width:520px; flex-shrink:0;}
   .strip-photo{
-    position:relative; width:92px; height:92px; border-radius:10px; overflow:hidden; flex-shrink:0;
-    box-shadow:0 12px 28px -10px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
+    position:relative; width:140px; height:140px; border-radius:12px; overflow:hidden; flex-shrink:0;
+    box-shadow:0 16px 34px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
     background: var(--graphite-2);
   }
   .strip-photo img{
     width:100%; height:100%; object-fit:cover; display:block;
     filter:saturate(0.6) contrast(0.95) brightness(0.85);
   }
-  .strip-tag{
-    position:absolute; bottom:4px; left:4px; right:4px; text-align:center;
-    background:rgba(8,9,11,0.8); color:#fff; font-size:8.5px; font-weight:700;
-    line-height:1.25; padding:3px 2px; border-radius:6px; letter-spacing:0.01em;
-  }
   .strip-photo.img-missing{
     display:flex; align-items:center; justify-content:center;
     background: repeating-linear-gradient(135deg, #1b1d22, #1b1d22 8px, #16171b 8px, #16171b 16px);
     border:1px dashed rgba(255,255,255,0.18);
   }
-  .strip-photo.img-missing::before{content:"🖼️"; font-size:18px; opacity:0.35;}
+  .strip-photo.img-missing::before{content:"🖼️"; font-size:26px; opacity:0.35;}
 
   /* Stack de 2 imagenes reales, apiladas como hojas */
-  .strip-stack{position:relative; width:92px; height:92px; flex-shrink:0; margin:0 6px;}
+  .strip-stack{position:relative; width:140px; height:140px; flex-shrink:0; margin:0 8px;}
   .stack-sheet{
-    position:absolute; inset:0; border-radius:10px; overflow:hidden;
-    box-shadow:0 12px 26px -10px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.07);
+    position:absolute; inset:0; border-radius:12px; overflow:hidden;
+    box-shadow:0 16px 32px -12px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.07);
     background: var(--graphite-2); transition: transform .25s ease;
   }
   .stack-sheet img{
     width:100%; height:100%; object-fit:cover; display:block;
     filter:saturate(0.7) contrast(0.95) brightness(0.9);
   }
-  .stack-back{transform: translate(7px,7px) rotate(7deg); z-index:1;}
-  .stack-front{transform: translate(-4px,-4px) rotate(-4deg); z-index:2;}
-  .strip-stack:hover .stack-back{transform: translate(10px,9px) rotate(9deg);}
-  .strip-stack:hover .stack-front{transform: translate(-6px,-6px) rotate(-6deg);}
-  .stack-front .strip-tag{white-space:nowrap;}
+  .stack-back{transform: translate(10px,10px) rotate(7deg); z-index:1;}
+  .stack-front{transform: translate(-6px,-6px) rotate(-4deg); z-index:2;}
+  .strip-stack:hover .stack-back{transform: translate(14px,13px) rotate(9deg);}
+  .strip-stack:hover .stack-front{transform: translate(-9px,-9px) rotate(-6deg);}
 
   @media (max-width: 900px){
     .problem-top{flex-direction:column; align-items:flex-start;}
     .problem-strip{max-width:100%;}
   }
   @media (max-width: 480px){
-    .strip-photo{width:72px; height:72px;}
-    .strip-stack{width:72px; height:72px;}
+    .strip-photo{width:100px; height:100px;}
+    .strip-stack{width:100px; height:100px;}
   }
 
   .problem-quote{
@@ -602,20 +596,16 @@
           </div>
           <div class="stack-sheet stack-front">
             <img src="images/problema-frazer.jpg" alt="Pantalla de un sistema DMS antiguo, estilo Frazer" loading="lazy">
-            <span class="strip-tag">Frazer · Facebook</span>
           </div>
         </div>
         <div class="strip-photo">
           <img src="images/problema-excel.jpg" alt="Planilla Excel de inventario de vehículos" loading="lazy" onerror="this.parentElement.classList.add('img-missing'); this.remove();">
-          <span class="strip-tag">Excel</span>
         </div>
         <div class="strip-photo">
           <img src="images/problema-fotos-dispersas.jpg" alt="Fotos de vehículos desordenadas y duplicadas" loading="lazy" onerror="this.parentElement.classList.add('img-missing'); this.remove();">
-          <span class="strip-tag">Fotos dispersas</span>
         </div>
         <div class="strip-photo">
           <img src="images/problema-sin-seguimiento.jpg" alt="Cliente interesado sin seguimiento comercial" loading="lazy" onerror="this.parentElement.classList.add('img-missing'); this.remove();">
-          <span class="strip-tag">Sin seguimiento</span>
         </div>
       </div>
     </div>
