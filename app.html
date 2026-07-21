@@ -24,14 +24,29 @@
 
   .app-shell{display:flex; height:100vh;}
 
-  /* SIDEBAR */
-  .app-sidebar{width:236px; background:var(--bg-soft); border-right:1px solid var(--line-soft); flex-shrink:0; display:flex; flex-direction:column; padding:18px 12px;}
-  .app-logo{display:flex; align-items:center; gap:9px; font-weight:700; font-size:15px; margin-bottom:22px; padding:4px 8px;}
+  /* SIDEBAR — compacta (80px) por defecto en escritorio, se expande a 260px al hover, sin mover el contenido principal */
+  .app-sidebar{
+    position:fixed; top:0; left:0; height:100vh; z-index:100;
+    width:80px; background:var(--bg-soft); border-right:1px solid var(--line-soft);
+    display:flex; flex-direction:column; padding:18px 10px; overflow:hidden;
+    transition: width .25s cubic-bezier(.4,0,.2,1), box-shadow .25s ease;
+  }
+  .app-sidebar:hover{
+    width:260px; padding:18px 12px;
+    box-shadow: 18px 0 60px -18px rgba(0,0,0,0.6);
+  }
+  .app-logo{display:flex; align-items:center; gap:9px; font-weight:700; font-size:15px; margin-bottom:22px; padding:4px 8px; white-space:nowrap;}
   .logo-mark{width:26px; height:26px; border-radius:7px; background:linear-gradient(135deg,var(--accent),var(--accent-3)); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:#08090b; flex-shrink:0;}
-  .nav-group-label{font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-faint); padding:14px 10px 6px;}
+  .nav-group-label{
+    font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-faint); padding:14px 10px 6px;
+    white-space:nowrap; opacity:0; transform:translateX(-8px);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .app-sidebar:hover .nav-group-label{opacity:1; transform:translateX(0); transition-delay:.05s;}
   .app-nav-item{
     display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text-dim);
     padding:9px 10px; border-radius:9px; margin-bottom:1px; font-weight:500; cursor:pointer;
+    white-space:nowrap;
     transition:background .15s, color .15s;
   }
   .app-nav-item:hover{background:var(--glass); color:var(--text);}
@@ -39,13 +54,30 @@
   .app-nav-item .ico{width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; opacity:0.85; flex-shrink:0;}
   .app-nav-item .ico svg{width:16px; height:16px;}
   .app-nav-item.active .ico{color:var(--accent); opacity:1;}
-  .sidebar-footer{margin-top:auto; display:flex; align-items:center; gap:9px; padding:10px; border-top:1px solid var(--line-soft);}
+  .app-nav-item .nav-label{
+    opacity:0; transform:translateX(-8px);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .app-sidebar:hover .app-nav-item .nav-label{opacity:1; transform:translateX(0); transition-delay:.05s;}
+  .sidebar-footer{margin-top:auto; display:flex; align-items:center; gap:9px; padding:10px; border-top:1px solid var(--line-soft); overflow:hidden;}
   .avatar-sm{width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg,var(--accent-3),var(--accent)); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#08090b; flex-shrink:0;}
-  .sidebar-footer .who{font-size:12px; font-weight:600;}
-  .sidebar-footer .role{font-size:10.5px; color:var(--text-faint);}
+  .sidebar-footer .who{font-size:12px; font-weight:600; white-space:nowrap;}
+  .sidebar-footer .role{font-size:10.5px; color:var(--text-faint); white-space:nowrap;}
+  .sidebar-footer-info{
+    flex:1; min-width:0; opacity:0; transform:translateX(-8px);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .sidebar-footer .icon-btn{
+    opacity:0; pointer-events:none;
+    transition: opacity .2s ease;
+  }
+  .app-sidebar:hover .sidebar-footer-info,
+  .app-sidebar:hover .sidebar-footer .icon-btn{
+    opacity:1; transform:translateX(0); pointer-events:auto; transition-delay:.05s;
+  }
 
   /* MAIN */
-  .app-content{flex:1; display:flex; flex-direction:column; min-width:0;}
+  .app-content{flex:1; display:flex; flex-direction:column; min-width:0; margin-left:80px;}
   .app-topbar{
     height:56px; border-bottom:1px solid var(--line-soft); display:flex; align-items:center; justify-content:space-between;
     padding:0 26px; flex-shrink:0; background:rgba(8,9,11,0.7); backdrop-filter:blur(10px);
@@ -277,12 +309,20 @@
   .table-scroll table{min-width:640px;}
 
   @media (max-width:860px){
-    .app-sidebar{
-      position:fixed; top:0; left:0; height:100vh; z-index:300;
+    /* En mobile no hay hover: el sidebar es un cajon de 260px que se abre/cierra con el boton hamburguesa */
+    .app-sidebar, .app-sidebar:hover{
+      width:260px; padding:18px 12px; z-index:300;
       transform:translateX(-100%); transition:transform .25s ease;
       box-shadow:20px 0 60px rgba(0,0,0,0.5);
     }
     .app-sidebar.open{transform:translateX(0);}
+    .app-sidebar .nav-group-label,
+    .app-sidebar .app-nav-item .nav-label,
+    .app-sidebar .sidebar-footer-info,
+    .app-sidebar .sidebar-footer .icon-btn{
+      opacity:1; transform:translateX(0); pointer-events:auto;
+    }
+    .app-content{margin-left:0;}
     .hamburger-btn{display:flex;}
     .topbar-search span{display:none;}
     .topbar-search{max-width:none; flex:0 0 auto; width:38px; justify-content:center; padding:7px;}
@@ -310,27 +350,27 @@
     <div class="app-logo"><div class="logo-mark">M</div>MotorOS</div>
 
     <div class="nav-group-label">General</div>
-    <div class="app-nav-item active" data-view="dashboard"><span class="ico"><i data-lucide="layout-dashboard"></i></span> Dashboard</div>
-    <div class="app-nav-item" data-view="inventario"><span class="ico"><i data-lucide="car"></i></span> Inventario</div>
-    <div class="app-nav-item" data-view="compras"><span class="ico"><i data-lucide="shopping-cart"></i></span> Compras</div>
-    <div class="app-nav-item" data-view="ventas"><span class="ico"><i data-lucide="badge-dollar-sign"></i></span> Ventas</div>
-    <div class="app-nav-item" data-view="crm"><span class="ico"><i data-lucide="users"></i></span> Clientes CRM</div>
-    <div class="app-nav-item" data-view="financiamiento"><span class="ico"><i data-lucide="landmark"></i></span> Financiamiento</div>
+    <div class="app-nav-item active" data-view="dashboard" title="Dashboard"><span class="ico"><i data-lucide="layout-dashboard"></i></span><span class="nav-label">Dashboard</span></div>
+    <div class="app-nav-item" data-view="inventario" title="Inventario"><span class="ico"><i data-lucide="car"></i></span><span class="nav-label">Inventario</span></div>
+    <div class="app-nav-item" data-view="compras" title="Compras"><span class="ico"><i data-lucide="shopping-cart"></i></span><span class="nav-label">Compras</span></div>
+    <div class="app-nav-item" data-view="ventas" title="Ventas"><span class="ico"><i data-lucide="badge-dollar-sign"></i></span><span class="nav-label">Ventas</span></div>
+    <div class="app-nav-item" data-view="crm" title="Clientes CRM"><span class="ico"><i data-lucide="users"></i></span><span class="nav-label">Clientes CRM</span></div>
+    <div class="app-nav-item" data-view="financiamiento" title="Financiamiento"><span class="ico"><i data-lucide="landmark"></i></span><span class="nav-label">Financiamiento</span></div>
 
     <div class="nav-group-label">Operación</div>
-    <div class="app-nav-item" data-view="documentos"><span class="ico"><i data-lucide="file-text"></i></span> Documentos</div>
-    <div class="app-nav-item" data-view="contabilidad"><span class="ico"><i data-lucide="calculator"></i></span> Contabilidad</div>
-    <div class="app-nav-item" data-view="marketing"><span class="ico"><i data-lucide="megaphone"></i></span> Marketing</div>
-    <div class="app-nav-item" data-view="publicaciones"><span class="ico"><i data-lucide="globe"></i></span> Publicaciones</div>
-    <div class="app-nav-item" data-view="reportes"><span class="ico"><i data-lucide="chart-no-axes-combined"></i></span> Reportes</div>
+    <div class="app-nav-item" data-view="documentos" title="Documentos"><span class="ico"><i data-lucide="file-text"></i></span><span class="nav-label">Documentos</span></div>
+    <div class="app-nav-item" data-view="contabilidad" title="Contabilidad"><span class="ico"><i data-lucide="calculator"></i></span><span class="nav-label">Contabilidad</span></div>
+    <div class="app-nav-item" data-view="marketing" title="Marketing"><span class="ico"><i data-lucide="megaphone"></i></span><span class="nav-label">Marketing</span></div>
+    <div class="app-nav-item" data-view="publicaciones" title="Publicaciones"><span class="ico"><i data-lucide="globe"></i></span><span class="nav-label">Publicaciones</span></div>
+    <div class="app-nav-item" data-view="reportes" title="Reportes"><span class="ico"><i data-lucide="chart-no-axes-combined"></i></span><span class="nav-label">Reportes</span></div>
 
     <div class="nav-group-label">Inteligencia</div>
-    <div class="app-nav-item" data-view="ai"><span class="ico"><i data-lucide="sparkles"></i></span> MotorOS AI</div>
-    <div class="app-nav-item" data-view="config"><span class="ico"><i data-lucide="settings"></i></span> Configuración</div>
+    <div class="app-nav-item" data-view="ai" title="MotorOS AI"><span class="ico"><i data-lucide="sparkles"></i></span><span class="nav-label">MotorOS AI</span></div>
+    <div class="app-nav-item" data-view="config" title="Configuración"><span class="ico"><i data-lucide="settings"></i></span><span class="nav-label">Configuración</span></div>
 
     <div class="sidebar-footer">
       <div class="avatar-sm">AQ</div>
-      <div style="flex:1;"><div class="who">Ariel Quiroz</div><div class="role">Dueño · Automotora Demo</div></div>
+      <div class="sidebar-footer-info"><div class="who">Ariel Quiroz</div><div class="role">Dueño · Automotora Demo</div></div>
       <a href="login.html" class="icon-btn" aria-label="Cerrar sesión" title="Cerrar sesión" style="width:26px;height:26px;"><i data-lucide="log-out" style="width:14px;height:14px;"></i></a>
     </div>
   </div>
