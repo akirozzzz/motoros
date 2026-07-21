@@ -85,6 +85,14 @@
   .nav-links a{transition:color .2s;}
   .nav-links a:hover{color:var(--text);}
   .nav-cta{display:flex; gap:12px; align-items:center;}
+  .nav-login{font-size:14px; font-weight:500; color:var(--text-dim); white-space:nowrap;}
+  .nav-login:hover{color:var(--text);}
+
+  @media (max-width:760px){
+    .nav-links{display:none;}
+    .nav-cta{gap:8px;}
+    .nav-login{display:none;}
+  }
 
   .btn{
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
@@ -464,6 +472,7 @@
       <a href="#contacto">Contacto</a>
     </div>
     <div class="nav-cta">
+      <a href="login.html" class="nav-login">Iniciar sesión</a>
       <a href="login.html" class="btn btn-ghost btn-sm">Ver plataforma</a>
       <a href="#contacto" class="btn btn-primary btn-sm">Solicitar Demo</a>
     </div>
