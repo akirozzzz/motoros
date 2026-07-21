@@ -98,6 +98,27 @@
   .badge.reserved{background:rgba(255,199,107,0.12); color:#ffc76b; border:1px solid rgba(255,199,107,0.3);}
   .badge.sold{background:var(--glass); color:var(--text-faint); border:1px solid var(--line);}
   .badge.prep{background:rgba(91,140,255,0.12); color:var(--accent); border:1px solid rgba(91,140,255,0.3);}
+  .badge.ingreso{background:rgba(185,139,255,0.12); color:var(--accent-3); border:1px solid rgba(185,139,255,0.3);}
+
+  /* Kanban profesional de inventario */
+  .kboard{display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:18px;}
+  .kcol{background:var(--graphite-2); border-radius:12px; padding:10px;}
+  .kcol-head{display:flex; align-items:center; gap:7px; padding:4px 6px 12px;}
+  .kcol-head .dot3{width:7px; height:7px; border-radius:50%; flex-shrink:0;}
+  .kcol-head .lbl{font-size:11px; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.03em;}
+  .kcol-head .count{margin-left:auto; font-size:10.5px; font-weight:700; color:var(--text-faint); background:var(--bg-soft); padding:2px 9px; border-radius:100px;}
+  .kcard{display:flex; align-items:center; gap:10px; background:var(--graphite); border:1px solid var(--line-soft); border-radius:10px; padding:9px; margin-bottom:8px; cursor:pointer; transition:border-color .15s;}
+  .kcard:hover{border-color:var(--accent);}
+  .kcard .kthumb{width:44px; height:44px; border-radius:9px; background:linear-gradient(135deg,#272b34,#191b1f); display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0;}
+  .kcard .kinfo{flex:1; min-width:0;}
+  .kcard .kname{font-size:12px; font-weight:700; color:var(--text); line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .kcard .kyear{font-size:10.5px; color:var(--text-faint); margin-top:2px;}
+  .kdays{font-size:9.5px; font-weight:700; color:var(--accent); background:rgba(91,140,255,0.12); border:1px solid rgba(91,140,255,0.3); padding:3px 9px; border-radius:100px; white-space:nowrap; flex-shrink:0;}
+  .kempty{font-size:11px; color:var(--text-faint); text-align:center; padding:22px 4px;}
+
+  @media (max-width:1100px){
+    .kboard{grid-template-columns:repeat(5,minmax(150px,1fr)); overflow-x:auto; padding-bottom:6px;}
+  }
 
   /* Vehicle detail panel */
   .detail-panel{margin-top:16px;}
@@ -282,6 +303,8 @@
           <div><h1>Inventario Vehicular</h1><p>72 vehículos activos · haz clic en un vehículo para ver su ficha completa</p></div>
           <div class="btn btn-primary">+ Nuevo vehículo</div>
         </div>
+
+        <div class="kboard" id="kanbanBoard"></div>
 
         <div class="card" style="margin-bottom:16px;">
           <table>
@@ -483,9 +506,46 @@
     { name:"Chevrolet Sail", plate:"GHI778", vin:"9GAAT8090J1122334", engine:"1.5L", year:2021, km:45000, fuel:"Bencina", trans:"Manual", color:"Plata", body:"Sedán",
       state:"prep", stateLabel:"Preparación", price:9800000, buy:8100000, costs:350000, totalCost:8450000, minPrice:9200000, marginExp:1350000, marginFinal:null, days:5,
       alerts:["margin"] },
+    { name:"Hyundai Tucson", plate:"JKL560", vin:"KM8J3CA46NU123456", engine:"2.0L", year:2022, km:30200, fuel:"Bencina", trans:"Automática", color:"Azul", body:"SUV",
+      state:"ingreso", stateLabel:"Ingreso", price:0, buy:15200000, costs:0, totalCost:15200000, minPrice:0, marginExp:0, marginFinal:null, days:2,
+      alerts:[] },
   ];
   const fmt = n => "$" + n.toLocaleString('es-CL');
-  const badgeClass = { available:"available", reserved:"reserved", sold:"sold", prep:"prep" };
+  const badgeClass = { available:"available", reserved:"reserved", sold:"sold", prep:"prep", ingreso:"ingreso" };
+  const bodyIcon = { "Doble cabina":"🛻", "SUV":"🚙", "Sedán":"🚗" };
+  const kanbanCols = [
+    { state:"ingreso", label:"Ingreso", dot:"var(--accent-3)" },
+    { state:"prep", label:"Preparación", dot:"var(--accent)" },
+    { state:"available", label:"Publicado", dot:"var(--accent-2)" },
+    { state:"reserved", label:"Reservado", dot:"#ffc76b" },
+    { state:"sold", label:"Vendido", dot:"var(--text-faint)" },
+  ];
+  function renderInventoryKanban(){
+    const board = document.getElementById('kanbanBoard');
+    board.innerHTML = kanbanCols.map(col=>{
+      const items = vehicles.map((v,i)=>({...v, idx:i})).filter(v=>v.state===col.state);
+      return `
+        <div class="kcol">
+          <div class="kcol-head">
+            <span class="dot3" style="background:${col.dot}"></span>
+            <span class="lbl">${col.label}</span>
+            <span class="count">${items.length}</span>
+          </div>
+          ${items.length ? items.map(v=>`
+            <div class="kcard" data-idx="${v.idx}">
+              <div class="kthumb">${bodyIcon[v.body] || "🚗"}</div>
+              <div class="kinfo">
+                <div class="kname">${v.name}</div>
+                <div class="kyear">${v.year} · ${v.km.toLocaleString('es-CL')} km</div>
+              </div>
+              <div class="kdays">${v.days} días</div>
+            </div>`).join('') : `<div class="kempty">No hay vehículos</div>`}
+        </div>`;
+    }).join('');
+    board.querySelectorAll('.kcard').forEach(card=>{
+      card.addEventListener('click', ()=>selectVehicle(parseInt(card.dataset.idx)));
+    });
+  }
 
   function renderVehicleTable(){
     const tbody = document.getElementById('vehicleTableBody');
@@ -496,8 +556,8 @@
         <td>${v.year}</td>
         <td>${v.km.toLocaleString('es-CL')} km</td>
         <td><span class="badge ${badgeClass[v.state]}">${v.stateLabel}</span></td>
-        <td>${fmt(v.price)}</td>
-        <td>${fmt(v.marginFinal ?? v.marginExp)}</td>
+        <td>${v.price ? fmt(v.price) : "—"}</td>
+        <td>${v.state==="ingreso" ? "—" : fmt(v.marginFinal ?? v.marginExp)}</td>
         <td>${v.days} días</td>
       </tr>`).join('');
     tbody.querySelectorAll('tr').forEach(tr=>{
@@ -545,6 +605,7 @@
       </div>
     `;
   }
+  renderInventoryKanban();
   renderVehicleTable();
   selectVehicle(0);
 
