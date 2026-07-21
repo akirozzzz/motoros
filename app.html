@@ -381,20 +381,13 @@
       <!-- ============ INVENTARIO ============ -->
       <div class="view" id="view-inventario">
         <div class="view-head">
-          <div><h1>Inventario Vehicular</h1><p>72 vehículos activos · haz clic en un vehículo para ver su ficha completa</p></div>
+          <div><h1>Inventario Vehicular</h1><p>72 vehículos activos · ficha completa de cada uno</p></div>
           <div class="btn btn-primary">+ Nuevo vehículo</div>
         </div>
 
         <div class="kboard" id="kanbanBoard"></div>
 
-        <div class="card" style="margin-bottom:16px;">
-          <div class="table-scroll"><table>
-            <tr><th>Vehículo</th><th>Patente</th><th>Año</th><th>Km</th><th>Estado</th><th>Precio venta</th><th>Margen</th><th>Días stock</th></tr>
-            <tbody id="vehicleTableBody"></tbody>
-          </table></div>
-        </div>
-
-        <div class="card detail-panel" id="vehicleDetail"></div>
+        <div id="vehicleList"></div>
       </div>
 
       <!-- ============ COMPRAS ============ -->
@@ -676,40 +669,29 @@
         </div>`;
     }).join('');
     board.querySelectorAll('.kcard').forEach(card=>{
-      card.addEventListener('click', ()=>selectVehicle(parseInt(card.dataset.idx)));
+      card.addEventListener('click', ()=>{
+        const el = document.getElementById('vehicle-card-'+card.dataset.idx);
+        if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+      });
     });
   }
 
-  function renderVehicleTable(){
-    const tbody = document.getElementById('vehicleTableBody');
-    tbody.innerHTML = vehicles.map((v,i)=>`
-      <tr class="row-click" data-idx="${i}">
-        <td><span class="thumb-sm veh-thumb"><img class="veh-photo" src="${v.photo}" alt="${v.name}" loading="lazy"></span>${v.name}</td>
-        <td class="mono">${v.plate}</td>
-        <td>${v.year}</td>
-        <td>${v.km.toLocaleString('es-CL')} km</td>
-        <td><span class="badge ${badgeClass[v.state]}">${v.stateLabel}</span></td>
-        <td>${v.price ? fmt(v.price) : "—"}</td>
-        <td>${v.state==="ingreso" ? "—" : fmt(v.marginFinal ?? v.marginExp)}</td>
-        <td>${v.days} días</td>
-      </tr>`).join('');
-    tbody.querySelectorAll('tr').forEach(tr=>{
-      tr.addEventListener('click', ()=>selectVehicle(parseInt(tr.dataset.idx)));
-    });
-  }
   function alertChip(type){
     if(type==="stalled") return `<div class="alert-chip">⚠ Vehículo detenido</div>`;
     if(type==="margin") return `<div class="alert-chip danger">⚠ Margen bajo</div>`;
     if(type==="price") return `<div class="alert-chip">⚠ Precio fuera de mercado</div>`;
     return "";
   }
-  function selectVehicle(idx){
-    document.querySelectorAll('#vehicleTableBody tr').forEach((tr,i)=>tr.classList.toggle('selected', i===idx));
-    const v = vehicles[idx];
-    document.getElementById('vehicleDetail').innerHTML = `
+
+  function vehicleCardHTML(v, idx){
+    return `
+    <div class="card detail-panel" id="vehicle-card-${idx}" style="margin-bottom:14px;">
       <div class="detail-head">
         <div class="detail-photo veh-thumb"><img class="veh-photo" src="${v.photo}" alt="${v.name} ${v.year}" loading="lazy"></div>
-        <div style="flex:1;"><div class="name">${v.name} ${v.year}</div><div class="sub">${v.plate} · VIN ${v.vin} · Motor ${v.engine} · ${v.fuel} · ${v.trans}</div></div>
+        <div style="flex:1;">
+          <div class="name">${v.name} ${v.year}</div>
+          <div class="sub">${v.plate} · VIN ${v.vin} · Motor ${v.engine} · ${v.fuel} · ${v.trans}</div>
+        </div>
         <span class="badge ${badgeClass[v.state]}">${v.stateLabel}</span>
       </div>
       <div class="field-cols">
@@ -729,19 +711,23 @@
         </div>
         <div class="field-group">
           <h5>Rentabilidad</h5>
-          <div class="field-row"><span class="l">Precio publicado</span><span class="v">${fmt(v.price)}</span></div>
-          <div class="field-row"><span class="l">Margen esperado</span><span class="v">${fmt(v.marginExp)}</span></div>
+          <div class="field-row"><span class="l">Precio publicado</span><span class="v">${v.price ? fmt(v.price) : "—"}</span></div>
+          <div class="field-row"><span class="l">Margen esperado</span><span class="v">${v.state==="ingreso" ? "—" : fmt(v.marginExp)}</span></div>
           <div class="field-row"><span class="l">Margen final</span><span class="v">${v.marginFinal ? fmt(v.marginFinal) : "—"}</span></div>
         </div>
       </div>
       <div class="alert-strip">
         ${v.alerts.length ? v.alerts.map(alertChip).join('') : '<div class="alert-chip ok">✓ Sin alertas activas</div>'}
       </div>
-    `;
+    </div>`;
   }
+
+  function renderVehicleList(){
+    document.getElementById('vehicleList').innerHTML = vehicles.map((v,idx)=>vehicleCardHTML(v, idx)).join('');
+  }
+
   renderInventoryKanban();
-  renderVehicleTable();
-  selectVehicle(0);
+  renderVehicleList();
 
   // ---------- CRM Kanban ----------
   const stages = ["Lead nuevo","Contacto","Cotización","Prueba","Financiam.","Negociación","Venta"];
