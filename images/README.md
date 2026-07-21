@@ -25,9 +25,10 @@ usuario. Las 3 restantes se muestran como cuadros individuales en la misma fila.
   sentido subir archivos de varios MB — enlentece la carga de la página sin mejorar nada
   visualmente. `problema-facebook-marketplace.jpg` originalmente pesaba 4.4MB (un screenshot
   de pantalla completa) y se comprimió a ~46KB sin pérdida visible a ese tamaño.
-- Mientras no exista un archivo (Excel, Fotos dispersas, Sin seguimiento), la tarjeta
-  correspondiente muestra automáticamente un placeholder con patrón diagonal y un ícono de
-  imagen — no se ve como un ícono de "imagen rota" del navegador.
+- Mientras no exista un archivo (Excel, Fotos dispersas, Sin seguimiento), ese espacio
+  simplemente **no se muestra** (el cuadro se oculta por completo, sin placeholder ni ícono).
+  La fila se ve más corta con solo las imágenes que sí existen, hasta que agregues las que
+  faltan.
 
 ## Cómo agregar las que faltan
 
