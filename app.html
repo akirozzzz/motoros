@@ -291,17 +291,17 @@
 
   /* MotorOS AI — widget flotante global */
   .ai-widget-btn{
-    position:fixed; bottom:22px; right:22px; width:54px; height:54px; border-radius:50%;
-    background:linear-gradient(135deg,var(--accent),var(--accent-3)); border:none; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; font-size:22px; padding:8px;
+    position:fixed; bottom:22px; right:22px; width:58px; height:58px; border-radius:50%;
+    background:linear-gradient(160deg,#161a22,#0a0c10); border:1px solid var(--line); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:22px; padding:10px;
     box-shadow:0 14px 32px -8px rgba(91,140,255,0.6); z-index:200; transition:transform .15s;
   }
   .ai-widget-btn:hover{transform:scale(1.06);}
-  .ai-widget-btn img{width:100%; height:100%; object-fit:contain; display:block;}
+  .ai-widget-btn .bot-mascot{width:100%; height:100%; display:block;}
   .ai-widget-btn .dot-live{position:absolute; top:2px; right:2px; width:11px; height:11px; border-radius:50%; background:var(--accent-2); border:2px solid var(--bg);}
   @media (prefers-reduced-motion: no-preference){
-    .ai-widget-btn img{animation: botIdleFloat 2.6s ease-in-out infinite;}
-    .ai-widget-btn.rising img{animation: botRiseUp .55s cubic-bezier(.34,1.56,.64,1);}
+    .ai-widget-btn .bot-mascot{animation: botIdleFloat 2.6s ease-in-out infinite;}
+    .ai-widget-btn.rising .bot-mascot{animation: botRiseUp .55s cubic-bezier(.34,1.56,.64,1);}
   }
   @keyframes botIdleFloat{
     0%, 100%{transform:translateY(0) rotate(0deg);}
@@ -407,6 +407,16 @@
         <path d="M6,134 L6,156 L146,128 A17,17 0 0 1 146,162 L146,128 Z" fill="url(#motorosGrad)" opacity="1"/>
         <path d="M144,258 L144,55 L232,195 L322,20 L322,258" fill="none" stroke="url(#motorosGrad)" stroke-width="48" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3"/>
       </g>
+    </symbol>
+    <symbol id="motorosBot" viewBox="0 0 200 200">
+      <line x1="100" y1="30" x2="100" y2="52" stroke="url(#motorosGrad)" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="100" cy="24" r="11" fill="url(#motorosGrad)"/>
+      <circle cx="30" cy="118" r="20" fill="#2563EB"/>
+      <circle cx="170" cy="118" r="20" fill="#2563EB"/>
+      <rect x="35" y="60" width="130" height="105" rx="52" fill="url(#motorosGrad)"/>
+      <rect x="60" y="95" width="80" height="55" rx="24" fill="#081025"/>
+      <circle cx="85" cy="122" r="9" fill="#7ee3c8"/>
+      <circle cx="115" cy="122" r="9" fill="#7ee3c8"/>
     </symbol>
   </defs>
 </svg>
@@ -658,7 +668,7 @@
 
 <!-- ============ MOTOROS AI — WIDGET FLOTANTE ============ -->
 <button class="ai-widget-btn" id="aiWidgetBtn" title="MotorOS AI">
-  <img src="images/chatbot.png" alt="MotorOS AI"><span class="dot-live"></span>
+  <svg class="bot-mascot" aria-label="MotorOS AI"><use href="#motorosBot"/></svg><span class="dot-live"></span>
 </button>
 
 <div class="ai-widget-panel" id="aiWidgetPanel">

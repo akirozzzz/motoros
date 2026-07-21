@@ -87,6 +87,23 @@ lectura del CSS:
 Si después de este cambio el problema persiste, lo más rápido para diagnosticarlo es que el
 usuario mande una captura de pantalla del sidebar tal cual se ve cortado.
 
+## Etapa reciente: mascota propia del chatbot (reemplaza images/chatbot.png)
+
+El usuario aclaró que quería que el botón flotante de MotorOS AI se viera como el "monito"
+del video que subió (cara redonda, antena, pantalla con dos ojitos) — no la imagen de
+"robot levantando un auto" que se venía usando. Como el video tenía marca de agua de
+Iconscout (ver etapa anterior de la animación), se diseñó una **mascota 100% original en
+SVG** inspirada en ese estilo genérico de robot (cabeza redonda, antena con bolita, orejas,
+pantalla con dos ojos) pero con la paleta de marca de MotorOS (degradado azul + ojos en
+verde menta `--accent-2`), en vez de naranja. Se instaló como `<symbol id="motorosBot">`
+(mismo mecanismo que el logo) en `app.html`, reemplazando el `<img src="images/chatbot.png">`
+del botón flotante. Mantiene las animaciones de flote/salto ya construidas, ahora apuntando
+al SVG en vez de a la imagen.
+
+**`images/chatbot.png` ahora sí quedó completamente sin uso** en el repo. No se borró
+todavía (no hay que eliminar archivos sin preguntar) — confirmar con el usuario si se puede
+quitar.
+
 ## Etapa reciente: identidad de marca (logo vectorial) instalada + sidebar afinada
 
 Se creó un set completo de identidad de marca (`brand/`, además copiado a
