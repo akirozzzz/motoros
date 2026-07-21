@@ -68,6 +68,23 @@ los vehículos se vieran con ese nivel de detalle, no solo el seleccionado.
 carga por JavaScript y no se pudo inspeccionar (sin navegador Chrome conectado en la
 sesión). Es un login 100% demo: cualquier correo/contraseña entra, no hay backend.
 
+## Sidebar compacta con hover-expand (sin mover el contenido principal)
+
+El sidebar de `app.html` pasó de "siempre 236px, texto + ícono visibles" a "80px compacto
+(solo ícono) por defecto en escritorio, expandido a 260px al pasar el cursor". Decisión de
+implementación clave: **el sidebar es `position:fixed`, no un hijo normal del flex de
+`.app-shell`**, y `.app-content` tiene un `margin-left:80px` fijo que nunca cambia. Así, la
+expansión a 260px es un overlay que se monta encima del contenido (con box-shadow), y el
+layout principal nunca se recalcula ni salta — si en el futuro se cambia el ancho compacto o
+expandido, hay que actualizar el `margin-left` de `.app-content` para que siga coincidiendo
+con el ancho compacto.
+
+Se envolvió el texto de cada ítem en `<span class="nav-label">` (mismo texto exacto, sin
+agregar/quitar contenido) porque sin ese wrapper no es posible animar el fade-in/desplazamiento
+del texto por separado del ícono — es un detalle de implementación, no un cambio de contenido.
+Mobile (<=860px) no se tocó en su comportamiento: sigue siendo el cajón de 260px con botón
+hamburguesa que ya existía.
+
 ## Iconografía: Lucide Icons (reemplazó todos los emojis)
 
 El usuario pidió usar **exclusivamente Lucide Icons** en toda la interfaz (nav, botones,

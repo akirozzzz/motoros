@@ -43,6 +43,13 @@ Lo que ya funciona de punta a punta:
   Compras, Ventas, CRM, Financiamiento, Documentos, Contabilidad, Reportes) ya están
   conectados al generador de 140 vehículos.
 
+## Etapa reciente: sidebar compacta con hover-expand
+
+`app.html`: el sidebar ahora es compacto (80px, solo íconos) por defecto en escritorio y se
+expande a 260px al pasar el cursor, como overlay (no mueve el contenido principal). En mobile
+sigue igual (cajón de 260px con botón hamburguesa). Ver `docs/DECISIONES.md` para el detalle
+de implementación (`position:fixed` + `margin-left` fijo en `.app-content`). Commit `584015a`.
+
 ## Etapa reciente: iconografía Lucide
 
 Se reemplazaron todos los emojis de la interfaz (nav, topbar, alertas, chat, etc.) por
