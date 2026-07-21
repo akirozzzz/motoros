@@ -68,6 +68,34 @@ los vehículos se vieran con ese nivel de detalle, no solo el seleccionado.
 carga por JavaScript y no se pudo inspeccionar (sin navegador Chrome conectado en la
 sesión). Es un login 100% demo: cualquier correo/contraseña entra, no hay backend.
 
+## Módulos conectados al generador de datos
+
+**Se conectaron Compras, Financiamiento, Documentos, Contabilidad y Reportes al mismo
+generador de 140 vehículos** (en dos etapas), en vez de dejarlos con contenido de ejemplo
+estático que no correspondía a ningún dato real del sistema. Reglas aplicadas para decidir
+qué mostrar en cada uno (para que un asistente futuro no las reinvente distinto):
+
+- **Compras**: cada vehículo tiene un origen de compra (tipo, contraparte, estado de pago,
+  días desde el ingreso) generado junto con el resto de sus datos. La vista muestra las 20
+  adquisiciones más recientes.
+- **Financiamiento**: solo los vehículos en estado "Reservado" generan un caso de crédito
+  activo (con banco, monto, plazo, cuota y etapa Enviada/Evaluación/Aprobado — nunca
+  "Firmado", porque si el crédito ya se firmó, el vehículo pasaría a "Vendido").
+- **Documentos**: se generan desde eventos reales — nota de venta y documentos de entrega
+  para cada vehículo vendido; contrato de compra o de consignación según el tipo de
+  adquisición de cada vehículo. Se muestran los 20 más recientes de un total mayor.
+- **Contabilidad**: Ventas, Margen, Comisiones y Flujo de caja neto se calculan sumando los
+  40 vehículos vendidos (no son cifras sueltas). El "flujo de caja neto" es una aproximación
+  (ventas − costo total − comisiones), no un balance contable real.
+- **Reportes**: se agregó una tabla real de "Top 10 vehículos por rentabilidad" (por
+  `marginFinal`), además del gráfico de barras decorativo que ya existía.
+
+**Marketing y Configuración se dejaron sin conectar a propósito**: Marketing muestra
+campañas de ejemplo que no tienen un mapeo natural a los datos de vehículos (son campañas
+publicitarias, no transacciones), y Configuración es un formulario de ajustes de la cuenta,
+no un listado de datos. Si se quiere conectar igual, hay que definir primero qué
+significaría "dato real" en esos dos casos.
+
 ## MotorOS AI
 
 **Se agregó un widget flotante de MotorOS AI disponible en toda la plataforma** (no solo en

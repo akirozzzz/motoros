@@ -36,18 +36,20 @@ Lo que ya funciona de punta a punta:
 - El widget de MotorOS AI y el chat de la vista dedicada "MotorOS AI" tienen lógica de
   respuestas **separada y duplicada** (dos diccionarios de preguntas/respuestas distintos).
   Si se agregan más respuestas, hay que decidir si conviene unificarlos.
-- Módulos del sidebar de `app.html` que **no tienen datos dinámicos todavía** (son vistas
-  con contenido de ejemplo estático, no conectadas al generador de inventario):
-  Financiamiento, Documentos, Contabilidad, Marketing, Reportes, Configuración.
-  (**Compras ya se conectó** — ver `docs/DECISIONES.md`.)
+- Módulos del sidebar de `app.html` que **todavía no tienen datos dinámicos** (contenido
+  de ejemplo estático, no conectado al generador de inventario): **Marketing** (campañas
+  por canal — no tiene un mapeo natural a datos de vehículos) y **Configuración** (formulario
+  de ajustes, no es "dato" que conectar). El resto de los módulos (Dashboard, Inventario,
+  Compras, Ventas, CRM, Financiamiento, Documentos, Contabilidad, Reportes) ya están
+  conectados al generador de 140 vehículos.
 
 ## Próximos pasos sugeridos (sin confirmar con el usuario todavía — ver primero con él)
 
 En orden de impacto probable:
 
-1. **Conectar el resto de los módulos al generador de datos** (Financiamiento, Documentos,
-   Contabilidad, Reportes) para que sean coherentes con los 140 vehículos, igual que ya se
-   hizo con Inventario, Ventas y Compras.
+1. **Decidir si Marketing y Configuración necesitan conectarse a algo real**, o si se dejan
+   como están (campañas de ejemplo y formulario de ajustes respectivamente) porque no tienen
+   un mapeo natural a los datos de vehículos.
 2. **Definir si el login necesita algo más real** (aunque sea simulado con localStorage) o
    si se deja como demo pura a propósito.
 3. **Decidir la estrategia de fotos de vehículos a largo plazo** (subir fotos propias del
@@ -63,6 +65,12 @@ En orden de impacto probable:
 - **Etapa 1 — Compras conectada al inventario real.** Cada vehículo generado tiene un
   origen de compra (tipo, contraparte, estado de pago, días desde el ingreso). La vista
   Compras muestra las 20 adquisiciones más recientes de las 140 totales. Commit `6e973ef`.
+- **Etapa 2 — Financiamiento, Documentos, Contabilidad y Reportes conectados.**
+  Financiamiento genera un caso de crédito por cada vehículo Reservado; Documentos genera
+  notas de venta/contratos desde ventas y adquisiciones reales; Contabilidad calcula Ventas/
+  Margen/Comisiones/Flujo de caja sumando los 40 vendidos; Reportes agregó una tabla de
+  "Top 10 vehículos por rentabilidad". Verificado con balance de tags, sintaxis JS y una
+  corrida en Node con DOM simulado (sin excepciones). Commit `89910fc`.
 
 ## Cómo publicar cambios (recordatorio para el asistente)
 
