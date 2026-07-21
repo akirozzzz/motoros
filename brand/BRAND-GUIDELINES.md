@@ -3,8 +3,15 @@
 ## El símbolo
 
 La "M" está construida como tres líneas de movimiento (velocidad) que se transforman en un
-trazo sólido y estable — la idea: información dispersa y en movimiento que se convierte en
-un sistema ordenado. Es 100% vectorial (paths SVG), no hay ninguna imagen rasterizada.
+trazo sólido y angular — la idea: información dispersa y en movimiento que se convierte en
+un sistema ordenado. Es 100% vectorial (paths SVG rectos + un arco chico en cada línea),
+calcado a mano desde el mockup original para mantener exactamente su composición:
+
+- Las puntas de la "M" son **cortes rectos en ángulo** (uniones a inglete, no redondeadas).
+- Todo el símbolo (y el texto) llevan una **inclinación de 10° (`skewX(-10)`)** para transmitir
+  velocidad — es la razón por la que se ve "cursiva" en vez de recta.
+- La pata derecha es más alta que la izquierda (composición asimétrica, como si la letra
+  estuviera "despegando" hacia adelante).
 
 ## Archivos incluidos
 
@@ -12,7 +19,7 @@ un sistema ordenado. Es 100% vectorial (paths SVG), no hay ninguna imagen raster
 |---|---|
 | `motoros-icon.svg` | Símbolo solo, con gradiente, fondo transparente |
 | `motoros-icon-mono-white.svg` / `-mono-black.svg` | Símbolo solo, un color |
-| `icon-square.svg` + `favicons/icon-*.png` (16/32/48/180/192/512px) | Ícono cuadrado con fondo, para favicon / ícono de app |
+| `favicons/icon-*.png` (16/32/48/180/192/512px) | Ícono cuadrado con fondo, para favicon / ícono de app |
 | `motoros-logo-horizontal-dark.svg` | Isologo horizontal (símbolo + "MotorOS"), fondo oscuro — **para el header del sitio** |
 | `motoros-logo-horizontal-light.svg` | Igual, adaptado a fondo claro |
 | `motoros-logo-horizontal-transparent.svg` | Igual, sin fondo (para superponer sobre cualquier color oscuro) |
@@ -37,9 +44,12 @@ fondo oscuro, o `#0B1220` sobre fondo claro.
 
 ## Tipografía
 
-- **Wordmark ("MotorOS"):** Poppins Bold Italic (o Montserrat/Inter Bold Italic como
-  alternativa si no está disponible Poppins).
-- **Tagline:** Poppins SemiBold, mayúsculas, letter-spacing amplio (`+3` a `+4`).
+- **Wordmark ("MotorOS"):** Poppins Bold Italic + una inclinación extra manual
+  (`skewX(-10)`) sobre el texto, para lograr el ángulo pronunciado del mockup original (más
+  inclinado que un itálico normal). Alternativa si no está Poppins: Montserrat/Inter Bold
+  Italic con el mismo `skewX(-10)`.
+- **Tagline:** Poppins SemiBold, mayúsculas, letter-spacing amplio (`+3` a `+4`), sin
+  inclinación.
 - Si se usa en el sitio web (HTML/CSS), Poppins se puede cargar gratis desde Google Fonts.
 
 ## Espaciado y tamaño mínimo
@@ -52,10 +62,12 @@ fondo oscuro, o `#0B1220` sobre fondo claro.
 ## Qué no hacer
 
 - No estirar ni deformar el símbolo de forma no proporcional.
+- No enderezar el ángulo de 10° ni redondear las puntas de la "M" — son parte de la
+  identidad (transmiten velocidad), no un detalle accidental.
 - No separar el gradiente en colores planos fuera de las versiones monocromáticas ya
   provistas.
 - No poner la versión "dark" (texto blanco) sobre fondos claros, ni la "light" (texto oscuro)
   sobre fondos oscuros — usar siempre la variante monocromática o transparente correcta
   según el fondo.
-- No usar una fuente distinta a la especificada para el wordmark; el itálico es parte de la
-  identidad (transmite velocidad).
+- No usar una fuente distinta a la especificada para el wordmark; el itálico + la
+  inclinación extra son parte de la identidad.

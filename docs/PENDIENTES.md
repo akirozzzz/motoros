@@ -43,6 +43,33 @@ Lo que ya funciona de punta a punta:
   Compras, Ventas, CRM, Financiamiento, Documentos, Contabilidad, Reportes) ya están
   conectados al generador de 140 vehículos.
 
+## Etapa reciente: logo recalcado del mockup original + sidebar con scroll interno
+
+El usuario avisó que la "M" instalada en la etapa anterior no se parecía al mockup real que
+había enviado (esa imagen ya no estaba disponible para Claude, se había subido en una sesión
+anterior y no persiste entre sesiones). El usuario volvió a compartir la imagen y se
+**recalcó el símbolo desde cero** para que coincida fielmente:
+- Antes: trazo grueso con puntas **redondeadas** (`stroke-linecap:round`, `stroke-linejoin:round`),
+  M simétrica, sin inclinación.
+- Ahora: puntas **en ángulo recto/a inglete** (`stroke-linecap:butt`, `stroke-linejoin:miter`),
+  pata derecha más alta que la izquierda (asimetría "despegando"), y **todo el símbolo + el
+  wordmark llevan `skewX(-10)`** para el efecto "cursiva/velocidad" que pidió el usuario
+  explícitamente. Ver `brand/BRAND-GUIDELINES.md` para el detalle exacto.
+- Se actualizó el `<symbol id="motorosLogo">` en los 3 HTML (mismo mecanismo de `<use>`, solo
+  cambió el contenido del symbol) y se regeneraron todos los archivos de `brand/` (SVGs +
+  favicons) con el nuevo diseño.
+
+**Aprendizaje para el futuro:** las imágenes que el usuario sube en el chat (no vía Finder a
+la carpeta conectada) **no persisten entre sesiones/compactaciones** — si se necesita
+recrear algo desde una imagen de referencia más adelante, pedirle que la vuelva a compartir
+en vez de asumir que sigue disponible.
+
+También se corrigió un bug real que el usuario reportó: el menú del sidebar en `app.html` se
+cortaba abajo en pantallas de altura normal (13 ítems + más padding vertical, por el aumento
+de íconos a 30px de la etapa anterior, ya no entraban en 100vh). Se envolvió el listado de
+navegación en `.app-nav-scroll` (`flex:1; overflow-y:auto`), dejando el logo fijo arriba y el
+pie fijo abajo — el sidebar ya no se corta en ninguna altura de pantalla.
+
 ## Etapa reciente: identidad de marca (logo vectorial) instalada + sidebar afinada
 
 Se creó un set completo de identidad de marca (`brand/`, además copiado a

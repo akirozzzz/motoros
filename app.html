@@ -35,6 +35,14 @@
     width:260px; padding:18px 12px;
     box-shadow: 18px 0 60px -18px rgba(0,0,0,0.6);
   }
+  /* Zona scrolleable del menu: el logo queda fijo arriba y el pie fijo abajo,
+     asi el listado de secciones nunca se corta en pantallas mas bajas. */
+  .app-nav-scroll{
+    flex:1 1 auto; min-height:0; overflow-y:auto; overflow-x:hidden;
+  }
+  .app-nav-scroll::-webkit-scrollbar{width:4px;}
+  .app-nav-scroll::-webkit-scrollbar-thumb{background:var(--line); border-radius:4px;}
+  .app-nav-scroll::-webkit-scrollbar-track{background:transparent;}
   .app-logo{
     display:flex; align-items:center; justify-content:center; gap:10px;
     font-weight:700; font-size:15px; margin-bottom:22px; padding:4px 8px; white-space:nowrap;
@@ -388,11 +396,13 @@
       <stop offset="45%" stop-color="#3B82F6"/>
       <stop offset="100%" stop-color="#1D4ED8"/>
     </linearGradient>
-    <symbol id="motorosLogo" viewBox="0 0 340 300">
-      <path d="M64,71 L64,79 L120,68 A9,9 0 0 1 120,86 L120,68 Z" fill="url(#motorosGrad)" opacity="0.5"/>
-      <path d="M32,102 L32,116 L120,98 A13,13 0 0 1 120,124 L120,98 Z" fill="url(#motorosGrad)" opacity="0.75"/>
-      <path d="M0,136 L0,158 L122,132 A17,17 0 0 1 122,166 L122,132 Z" fill="url(#motorosGrad)" opacity="1"/>
-      <path d="M120,252 L120,48 L212,168 L304,48 L304,252" fill="none" stroke="url(#motorosGrad)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
+    <symbol id="motorosLogo" viewBox="0 0 380 320">
+      <g transform="translate(30,15) skewX(-10)">
+        <path d="M78,66 L78,74 L144,60 A9,9 0 0 1 144,78 L144,60 Z" fill="url(#motorosGrad)" opacity="0.5"/>
+        <path d="M42,98 L42,112 L144,92 A13,13 0 0 1 144,118 L144,92 Z" fill="url(#motorosGrad)" opacity="0.75"/>
+        <path d="M6,134 L6,156 L146,128 A17,17 0 0 1 146,162 L146,128 Z" fill="url(#motorosGrad)" opacity="1"/>
+        <path d="M144,258 L144,55 L232,195 L322,20 L322,258" fill="none" stroke="url(#motorosGrad)" stroke-width="48" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="3"/>
+      </g>
     </symbol>
   </defs>
 </svg>
@@ -401,24 +411,26 @@
   <div class="app-sidebar">
     <div class="app-logo"><div class="logo-mark"><svg><use href="#motorosLogo"/></svg></div><span class="logo-label">MotorOS</span></div>
 
-    <div class="nav-group-label">General</div>
-    <div class="app-nav-item active" data-view="dashboard" title="Dashboard"><span class="ico"><i data-lucide="layout-dashboard"></i></span><span class="nav-label">Dashboard</span></div>
-    <div class="app-nav-item" data-view="inventario" title="Inventario"><span class="ico"><i data-lucide="car"></i></span><span class="nav-label">Inventario</span></div>
-    <div class="app-nav-item" data-view="compras" title="Compras"><span class="ico"><i data-lucide="shopping-cart"></i></span><span class="nav-label">Compras</span></div>
-    <div class="app-nav-item" data-view="ventas" title="Ventas"><span class="ico"><i data-lucide="badge-dollar-sign"></i></span><span class="nav-label">Ventas</span></div>
-    <div class="app-nav-item" data-view="crm" title="Clientes CRM"><span class="ico"><i data-lucide="users"></i></span><span class="nav-label">Clientes CRM</span></div>
-    <div class="app-nav-item" data-view="financiamiento" title="Financiamiento"><span class="ico"><i data-lucide="landmark"></i></span><span class="nav-label">Financiamiento</span></div>
+    <div class="app-nav-scroll">
+      <div class="nav-group-label">General</div>
+      <div class="app-nav-item active" data-view="dashboard" title="Dashboard"><span class="ico"><i data-lucide="layout-dashboard"></i></span><span class="nav-label">Dashboard</span></div>
+      <div class="app-nav-item" data-view="inventario" title="Inventario"><span class="ico"><i data-lucide="car"></i></span><span class="nav-label">Inventario</span></div>
+      <div class="app-nav-item" data-view="compras" title="Compras"><span class="ico"><i data-lucide="shopping-cart"></i></span><span class="nav-label">Compras</span></div>
+      <div class="app-nav-item" data-view="ventas" title="Ventas"><span class="ico"><i data-lucide="badge-dollar-sign"></i></span><span class="nav-label">Ventas</span></div>
+      <div class="app-nav-item" data-view="crm" title="Clientes CRM"><span class="ico"><i data-lucide="users"></i></span><span class="nav-label">Clientes CRM</span></div>
+      <div class="app-nav-item" data-view="financiamiento" title="Financiamiento"><span class="ico"><i data-lucide="landmark"></i></span><span class="nav-label">Financiamiento</span></div>
 
-    <div class="nav-group-label">Operación</div>
-    <div class="app-nav-item" data-view="documentos" title="Documentos"><span class="ico"><i data-lucide="file-text"></i></span><span class="nav-label">Documentos</span></div>
-    <div class="app-nav-item" data-view="contabilidad" title="Contabilidad"><span class="ico"><i data-lucide="calculator"></i></span><span class="nav-label">Contabilidad</span></div>
-    <div class="app-nav-item" data-view="marketing" title="Marketing"><span class="ico"><i data-lucide="megaphone"></i></span><span class="nav-label">Marketing</span></div>
-    <div class="app-nav-item" data-view="publicaciones" title="Publicaciones"><span class="ico"><i data-lucide="globe"></i></span><span class="nav-label">Publicaciones</span></div>
-    <div class="app-nav-item" data-view="reportes" title="Reportes"><span class="ico"><i data-lucide="chart-no-axes-combined"></i></span><span class="nav-label">Reportes</span></div>
+      <div class="nav-group-label">Operación</div>
+      <div class="app-nav-item" data-view="documentos" title="Documentos"><span class="ico"><i data-lucide="file-text"></i></span><span class="nav-label">Documentos</span></div>
+      <div class="app-nav-item" data-view="contabilidad" title="Contabilidad"><span class="ico"><i data-lucide="calculator"></i></span><span class="nav-label">Contabilidad</span></div>
+      <div class="app-nav-item" data-view="marketing" title="Marketing"><span class="ico"><i data-lucide="megaphone"></i></span><span class="nav-label">Marketing</span></div>
+      <div class="app-nav-item" data-view="publicaciones" title="Publicaciones"><span class="ico"><i data-lucide="globe"></i></span><span class="nav-label">Publicaciones</span></div>
+      <div class="app-nav-item" data-view="reportes" title="Reportes"><span class="ico"><i data-lucide="chart-no-axes-combined"></i></span><span class="nav-label">Reportes</span></div>
 
-    <div class="nav-group-label">Inteligencia</div>
-    <div class="app-nav-item" data-view="ai" title="MotorOS AI"><span class="ico"><i data-lucide="sparkles"></i></span><span class="nav-label">MotorOS AI</span></div>
-    <div class="app-nav-item" data-view="config" title="Configuración"><span class="ico"><i data-lucide="settings"></i></span><span class="nav-label">Configuración</span></div>
+      <div class="nav-group-label">Inteligencia</div>
+      <div class="app-nav-item" data-view="ai" title="MotorOS AI"><span class="ico"><i data-lucide="sparkles"></i></span><span class="nav-label">MotorOS AI</span></div>
+      <div class="app-nav-item" data-view="config" title="Configuración"><span class="ico"><i data-lucide="settings"></i></span><span class="nav-label">Configuración</span></div>
+    </div>
 
     <div class="sidebar-footer">
       <div class="avatar-sm">AQ</div>
