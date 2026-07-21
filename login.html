@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MotorOS — Iniciar sesión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08090b; --bg-soft:#0e1013; --graphite:#14161a; --graphite-2:#1a1d22;
+    --line:rgba(255,255,255,0.08); --line-soft:rgba(255,255,255,0.05);
+    --text:#f2f3f5; --text-dim:#9aa0aa; --text-faint:#666b76;
+    --accent:#5b8cff; --accent-2:#7ee3c8; --accent-3:#b98bff; --danger:#ff6b6b;
+    --glass:rgba(255,255,255,0.04); --glass-strong:rgba(255,255,255,0.07);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--text); font-family:'Inter',-apple-system,'Segoe UI',sans-serif;
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+    -webkit-font-smoothing:antialiased; position:relative; overflow:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  .bg-grid{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      radial-gradient(circle at 20% 15%, rgba(91,140,255,0.14), transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(185,139,255,0.10), transparent 45%);
+  }
+  .bg-grid::after{
+    content:""; position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image: radial-gradient(circle at 50% 40%, rgba(0,0,0,0.6), transparent 70%);
+  }
+
+  .login-card{
+    position:relative; z-index:1; width:100%; max-width:400px;
+    background: linear-gradient(180deg, var(--glass-strong), var(--glass));
+    border:1px solid var(--line); border-radius:20px; backdrop-filter: blur(20px);
+    padding:36px 32px 30px;
+    box-shadow: 0 40px 100px -30px rgba(0,0,0,0.8);
+  }
+  .logo{display:flex; align-items:center; justify-content:center; gap:10px; font-weight:700; font-size:19px; margin-bottom:6px;}
+  .logo-mark{width:30px; height:30px; border-radius:8px; background:linear-gradient(135deg,var(--accent),var(--accent-3)); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:#08090b;}
+  .login-sub{text-align:center; font-size:13.5px; color:var(--text-faint); margin-bottom:28px;}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:12px; font-weight:600; color:var(--text-dim); margin-bottom:7px;}
+  .field-input{position:relative;}
+  .field input{
+    width:100%; background:var(--graphite); border:1px solid var(--line); border-radius:10px;
+    padding:12px 14px; color:var(--text); font-size:13.5px; font-family:inherit; transition:border-color .15s;
+  }
+  .field input:focus{outline:none; border-color:var(--accent);}
+  .toggle-pass{
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    font-size:11.5px; color:var(--text-faint); cursor:pointer; background:none; border:none; font-family:inherit;
+  }
+  .toggle-pass:hover{color:var(--text-dim);}
+
+  .row-between{display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; font-size:12.5px;}
+  .remember{display:flex; align-items:center; gap:7px; color:var(--text-dim);}
+  .remember input{accent-color:var(--accent);}
+  .forgot{color:var(--accent); font-weight:600;}
+  .forgot:hover{text-decoration:underline;}
+
+  .btn-login{
+    width:100%; padding:13px; border-radius:10px; border:none; cursor:pointer;
+    background:linear-gradient(135deg,var(--accent),#4169e8); color:#fff; font-weight:700; font-size:14px;
+    font-family:inherit; box-shadow:0 8px 24px -8px rgba(91,140,255,0.6); transition: transform .15s;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-login:hover{transform:translateY(-1px);}
+  .btn-login:disabled{opacity:0.75; cursor:default; transform:none;}
+  .spinner{
+    width:14px; height:14px; border-radius:50%; border:2px solid rgba(255,255,255,0.35); border-top-color:#fff;
+    animation:spin .7s linear infinite; display:none;
+  }
+  .btn-login.loading .spinner{display:inline-block;}
+  .btn-login.loading .btn-label{display:none;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .error-msg{
+    display:none; background:rgba(255,107,107,0.1); border:1px solid rgba(255,107,107,0.3); color:var(--danger);
+    font-size:12px; padding:9px 12px; border-radius:9px; margin-bottom:16px;
+  }
+  .error-msg.show{display:block;}
+
+  .divider{display:flex; align-items:center; gap:12px; margin:24px 0 18px; color:var(--text-faint); font-size:11.5px;}
+  .divider::before, .divider::after{content:""; flex:1; height:1px; background:var(--line-soft);}
+
+  .demo-note{
+    font-size:11.5px; color:var(--text-faint); text-align:center; line-height:1.6;
+    background:var(--graphite-2); border:1px solid var(--line-soft); border-radius:10px; padding:10px 12px;
+  }
+  .demo-note strong{color:var(--text-dim);}
+
+  .signup-row{text-align:center; font-size:12.5px; color:var(--text-faint); margin-top:22px;}
+  .signup-row a{color:var(--accent); font-weight:600;}
+  .signup-row a:hover{text-decoration:underline;}
+
+  .back-home{
+    position:relative; z-index:1; display:flex; align-items:center; gap:6px;
+    position:fixed; top:24px; left:24px; font-size:13px; color:var(--text-faint); font-weight:500;
+  }
+  .back-home:hover{color:var(--text-dim);}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+
+<a href="index.html" class="back-home">← Volver al sitio</a>
+
+<div class="login-card">
+  <div class="logo"><div class="logo-mark">M</div>MotorOS</div>
+  <p class="login-sub">Inicia sesión para administrar tu automotora</p>
+
+  <div class="error-msg" id="errorMsg">Ingresa tu correo y contraseña para continuar.</div>
+
+  <form id="loginForm" novalidate>
+    <div class="field">
+      <label for="email">Correo electrónico</label>
+      <div class="field-input">
+        <input type="email" id="email" placeholder="tu@automotora.cl" autocomplete="email">
+      </div>
+    </div>
+    <div class="field">
+      <label for="password">Contraseña</label>
+      <div class="field-input">
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+        <button type="button" class="toggle-pass" id="togglePass">Mostrar</button>
+      </div>
+    </div>
+    <div class="row-between">
+      <label class="remember"><input type="checkbox"> Recordarme</label>
+      <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
+    </div>
+    <button type="submit" class="btn-login" id="loginBtn">
+      <span class="spinner"></span><span class="btn-label">Iniciar sesión</span>
+    </button>
+  </form>
+
+  <div class="divider">o</div>
+
+  <div class="demo-note">
+    <strong>Demo:</strong> ingresa cualquier correo y contraseña para entrar a la plataforma de ejemplo.
+  </div>
+
+  <p class="signup-row">¿Tu automotora aún no usa MotorOS? <a href="index.html#contacto">Solicita una demo</a></p>
+</div>
+
+<script>
+  const form = document.getElementById('loginForm');
+  const btn = document.getElementById('loginBtn');
+  const errorMsg = document.getElementById('errorMsg');
+  const togglePass = document.getElementById('togglePass');
+  const passInput = document.getElementById('password');
+
+  togglePass.addEventListener('click', () => {
+    const isPass = passInput.type === 'password';
+    passInput.type = isPass ? 'text' : 'password';
+    togglePass.textContent = isPass ? 'Ocultar' : 'Mostrar';
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const password = passInput.value.trim();
+
+    if (!email || !password) {
+      errorMsg.textContent = 'Ingresa tu correo y contraseña para continuar.';
+      errorMsg.classList.add('show');
+      return;
+    }
+    errorMsg.classList.remove('show');
+
+    btn.classList.add('loading');
+    btn.disabled = true;
+    setTimeout(() => {
+      window.location.href = 'app.html';
+    }, 900);
+  });
+</script>
+
+</body>
+</html>
