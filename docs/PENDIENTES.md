@@ -79,12 +79,13 @@ En orden de impacto probable:
   junto con el nav central en mobile (<=760px) para no saturar el header. Commit `6004fa7`.
 - **Etapa 4 — Imágenes en la sección "El problema" (varias iteraciones de diseño).**
   Collage grande superpuesto → fila compacta de miniaturas con etiquetas de texto → fila
-  sin etiquetas con imágenes más grandes (140×140px, 100×100px en mobile). El usuario subió
-  **Frazer** y **Facebook Marketplace** a `~/CLAUDE/motoros/images/` (vía Finder), se
-  comprimieron (una pesaba 4.4MB) y se muestran apiladas como dos hojas superpuestas, sin
-  texto encima. Commits `348e1e6`, `5dc6203`, `7209015`, `225e3dd`. **Pendiente: faltan 3
-  imágenes reales** (Excel, Fotos dispersas, Sin seguimiento) — siguen como placeholders sin
-  etiqueta. Ver `images/README.md` para el estado exacto.
+  sin etiquetas con imágenes más grandes (140×140px, 100×100px en mobile) → **si falta la
+  imagen, el espacio se oculta por completo (sin placeholder)**. El usuario subió **Frazer**
+  y **Facebook Marketplace** a `~/CLAUDE/motoros/images/` (vía Finder), se comprimieron (una
+  pesaba 4.4MB) y se muestran apiladas como dos hojas superpuestas, sin texto encima.
+  Commits `348e1e6`, `5dc6203`, `7209015`, `225e3dd`, `4e8d0b0`. **Pendiente: faltan 3
+  imágenes reales** (Excel, Fotos dispersas, Sin seguimiento) — esos espacios no se muestran
+  hasta que se agreguen. Ver `images/README.md` para el estado exacto.
 - **Fix — placeholder de imágenes no se veía.** El `onerror` de los `<img>` llamaba
   `this.remove()` antes de leer `this.parentElement`, y al remover el nodo se pierde la
   referencia al padre — la clase `img-missing` nunca se aplicaba y la tarjeta quedaba
