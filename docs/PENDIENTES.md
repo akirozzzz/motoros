@@ -68,7 +68,24 @@ También se corrigió un bug real que el usuario reportó: el menú del sidebar 
 cortaba abajo en pantallas de altura normal (13 ítems + más padding vertical, por el aumento
 de íconos a 30px de la etapa anterior, ya no entraban en 100vh). Se envolvió el listado de
 navegación en `.app-nav-scroll` (`flex:1; overflow-y:auto`), dejando el logo fijo arriba y el
-pie fijo abajo — el sidebar ya no se corta en ninguna altura de pantalla.
+pie fijo abajo.
+
+**El usuario avisó que seguía cortándose** después del primer intento (flex + min-height:0).
+Como Claude no tiene forma de abrir un navegador real en este sandbox para verificar
+visualmente el resultado (no hay Chromium/Playwright instalado y no se puede instalar sin
+red), se reforzó el fix con un patrón más a prueba de balas en vez de solo confiar en la
+lectura del CSS:
+- El sidebar pasó de `flex` a **CSS Grid** (`grid-template-rows: auto minmax(0,1fr) auto`)
+  para el patrón logo-fijo / menú-scrolleable / usuario-fijo — más confiable entre
+  navegadores que flex+min-height:0.
+- Se recortó el padding vertical de los ítems (11px→8px) y de las etiquetas de grupo para
+  que en la mayoría de las pantallas entre todo sin necesitar scroll.
+- Se agregó un **difuminado visual (mask-image)** abajo del listado que avisa cuando hay más
+  opciones para scrollear (y se apaga solo con JS al llegar al final, para no tapar
+  "Configuración", el último ítem) — así, si en alguna pantalla todavía hace falta scrollear,
+  al menos es obvio que se puede, en vez de parecer que el contenido está roto/perdido.
+Si después de este cambio el problema persiste, lo más rápido para diagnosticarlo es que el
+usuario mande una captura de pantalla del sidebar tal cual se ve cortado.
 
 ## Etapa reciente: identidad de marca (logo vectorial) instalada + sidebar afinada
 
