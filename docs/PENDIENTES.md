@@ -80,9 +80,24 @@ Se reemplazaron todos los emojis de la interfaz (nav, topbar, alertas, chat, etc
 recordatorio importante sobre llamar `lucide.createIcons()` en contenido dinámico. Commit
 `e303f14`.
 
-**Pendiente menor:** `images/chatbot.png` quedó sin usar en el repo (se reemplazó por el
-ícono `Bot`). No se borró porque no hay que eliminar archivos sin preguntar — confirmar con
-el usuario si se puede quitar.
+**Corrección:** `images/chatbot.png` **sí sigue en uso** — la nota anterior estaba
+desactualizada. Solo se migraron a Lucide los íconos `Bot` chicos dentro de las burbujas de
+chat; el botón flotante circular (`#aiWidgetBtn`, la mascota robot completa) sigue usando
+`images/chatbot.png` a propósito, ahora con animación (ver etapa siguiente).
+
+## Etapa reciente: animación del botón flotante de MotorOS AI
+
+El usuario subió un video (`chatbot.mp4`) para usar como GIF animado del botón del chat,
+pero tenía marca de agua de **Iconscout** visible (asset de stock sin licencia comprada) —
+se le avisó el riesgo y eligió que se hiciera una animación original en su lugar, sin
+depender de ese archivo. Se implementó con CSS puro sobre la imagen ya existente
+(`images/chatbot.png`):
+- Animación continua de "flote" suave (`botIdleFloat`, sube/baja y rota levemente en loop).
+- Al apretar el botón, un salto hacia arriba con rebote (`botRiseUp`) antes de que se abra el
+  panel del chat.
+- Ambas respetan `prefers-reduced-motion` (no se activan si el usuario tiene animaciones
+  reducidas en su sistema).
+El archivo `chatbot.mp4` original no se usó ni se copió al repo.
 
 ## Próximos pasos sugeridos (sin confirmar con el usuario todavía — ver primero con él)
 

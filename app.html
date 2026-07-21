@@ -287,6 +287,20 @@
   .ai-widget-btn:hover{transform:scale(1.06);}
   .ai-widget-btn img{width:100%; height:100%; object-fit:contain; display:block;}
   .ai-widget-btn .dot-live{position:absolute; top:2px; right:2px; width:11px; height:11px; border-radius:50%; background:var(--accent-2); border:2px solid var(--bg);}
+  @media (prefers-reduced-motion: no-preference){
+    .ai-widget-btn img{animation: botIdleFloat 2.6s ease-in-out infinite;}
+    .ai-widget-btn.rising img{animation: botRiseUp .55s cubic-bezier(.34,1.56,.64,1);}
+  }
+  @keyframes botIdleFloat{
+    0%, 100%{transform:translateY(0) rotate(0deg);}
+    50%{transform:translateY(-4px) rotate(-3deg);}
+  }
+  @keyframes botRiseUp{
+    0%{transform:translateY(0) scale(1);}
+    40%{transform:translateY(-16px) scale(1.1);}
+    70%{transform:translateY(3px) scale(0.96);}
+    100%{transform:translateY(0) scale(1);}
+  }
   .ai-widget-panel{
     position:fixed; bottom:88px; right:22px; width:360px; max-width:calc(100vw - 40px); max-height:min(560px, calc(100vh - 120px));
     background:linear-gradient(180deg,#14161a,#0d0e11); border:1px solid var(--line); border-radius:16px;
@@ -1193,7 +1207,16 @@
   const widgetInput = document.getElementById('widgetInput');
   const widgetSend = document.getElementById('widgetSend');
 
-  aiWidgetBtn.addEventListener('click', ()=> aiWidgetPanel.classList.toggle('open'));
+  aiWidgetBtn.addEventListener('click', ()=>{
+    aiWidgetPanel.classList.toggle('open');
+    aiWidgetBtn.classList.remove('rising');
+    // Forzar reflow para poder re-disparar la animacion de "subir" en clicks seguidos
+    void aiWidgetBtn.offsetWidth;
+    aiWidgetBtn.classList.add('rising');
+  });
+  aiWidgetBtn.addEventListener('animationend', e=>{
+    if(e.animationName === 'botRiseUp') aiWidgetBtn.classList.remove('rising');
+  });
   aiWidgetClose.addEventListener('click', ()=> aiWidgetPanel.classList.remove('open'));
 
   // Respuestas: la IA "conoce todo el proyecto", pero algunos temas quedan
