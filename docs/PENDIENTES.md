@@ -71,6 +71,9 @@ En orden de impacto probable:
   Margen/Comisiones/Flujo de caja sumando los 40 vendidos; Reportes agregó una tabla de
   "Top 10 vehículos por rentabilidad". Verificado con balance de tags, sintaxis JS y una
   corrida en Node con DOM simulado (sin excepciones). Commit `89910fc`.
+- **Etapa 3 — Botón "Iniciar sesión" en el header de la landing.** Enlace de texto simple
+  junto a "Ver plataforma" (ambos llevan a `login.html` por ahora, es intencional). Se oculta
+  junto con el nav central en mobile (<=760px) para no saturar el header. Commit `6004fa7`.
 
 ## Cómo publicar cambios (recordatorio para el asistente)
 
