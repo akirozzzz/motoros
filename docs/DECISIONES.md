@@ -68,12 +68,17 @@ los vehículos se vieran con ese nivel de detalle, no solo el seleccionado.
 carga por JavaScript y no se pudo inspeccionar (sin navegador Chrome conectado en la
 sesión). Es un login 100% demo: cualquier correo/contraseña entra, no hay backend.
 
-## Sección "El problema" — collage con placeholders
+## Sección "El problema" — de emojis a collage a fila chica
 
-Se rediseñó de tarjetas con emoji a un collage de 5 fotos superpuestas y rotadas (estilo
-"caos operativo"), a pedido del usuario, quien va a subir las imágenes reales él mismo
-(capturas de Frazer, Excel, fotos desordenadas de vehículos, Facebook Marketplace, y algo
-que represente clientes sin seguimiento).
+Se rediseñó dos veces sobre la misma idea (5 imágenes: Frazer, Excel, fotos desordenadas de
+vehículos, Facebook Marketplace, clientes sin seguimiento — que el usuario sube él mismo):
+
+1. Primero, de tarjetas con emoji a un **collage grande de fotos superpuestas y rotadas**
+   (estilo "caos operativo").
+2. El usuario pidió algo más chico y "que se vea rápido" — se cambió a una **fila compacta
+   de 5 miniaturas (92×92px) a la derecha del título**, con el texto a la izquierda. Esta es
+   la versión vigente. Si se vuelve a pedir un cambio de layout de esta sección, no asumir
+   que el collage grande es lo correcto — la fila chica es la decisión más reciente.
 
 **Los `<img>` usan `onerror` para degradarse a un placeholder con patrón diagonal + ícono**
 en vez de mostrar el ícono nativo de "imagen rota" del navegador. Esto es intencional: como

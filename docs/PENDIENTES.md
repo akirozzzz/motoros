@@ -77,11 +77,13 @@ En orden de impacto probable:
 - **Etapa 3 — Botón "Iniciar sesión" en el header de la landing.** Enlace de texto simple
   junto a "Ver plataforma" (ambos llevan a `login.html` por ahora, es intencional). Se oculta
   junto con el nav central en mobile (<=760px) para no saturar el header. Commit `6004fa7`.
-- **Etapa 4 — Collage de imágenes en la sección "El problema".** Se reemplazaron las 6
-  tarjetas con emoji por un collage de 5 fotos superpuestas (Frazer, Excel, fotos dispersas,
-  Facebook Marketplace, sin seguimiento) con placeholders que se ven bien incluso sin los
-  archivos reales. **Pendiente: el usuario debe agregar las 5 imágenes reales** en
-  `images/` con los nombres exactos listados en `images/README.md`. Commit `348e1e6`.
+- **Etapa 4 — Imágenes en la sección "El problema" (rediseñada dos veces).** Primero se hizo
+  un collage grande de 5 fotos superpuestas/rotadas (commit `348e1e6`), pero el usuario pidió
+  algo más chico y rápido de ver: se cambió a una **fila compacta de 5 miniaturas (92×92px)
+  a la derecha del título**, con el texto a la izquierda (commit `5dc6203`). Los 5
+  placeholders (Frazer, Excel, Fotos dispersas, Facebook, Sin seguimiento) siguen siendo los
+  mismos. **Pendiente: el usuario debe agregar las 5 imágenes reales** en `images/` con los
+  nombres exactos listados en `images/README.md`.
 - **Fix — placeholder de imágenes no se veía.** El `onerror` de los `<img>` llamaba
   `this.remove()` antes de leer `this.parentElement`, y al remover el nodo se pierde la
   referencia al padre — la clase `img-missing` nunca se aplicaba y la tarjeta quedaba
