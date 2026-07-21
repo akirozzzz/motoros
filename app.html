@@ -201,6 +201,41 @@
   .form-row label{display:block; font-size:11.5px; color:var(--text-faint); margin-bottom:6px; font-weight:600;}
   .form-row input, .form-row select{width:100%; background:var(--graphite-2); border:1px solid var(--line); border-radius:9px; padding:10px 12px; color:var(--text); font-size:13px;}
 
+  /* MotorOS AI — widget flotante global */
+  .ai-widget-btn{
+    position:fixed; bottom:22px; right:22px; width:54px; height:54px; border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),var(--accent-3)); border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+    box-shadow:0 14px 32px -8px rgba(91,140,255,0.6); z-index:200; transition:transform .15s;
+  }
+  .ai-widget-btn:hover{transform:scale(1.06);}
+  .ai-widget-btn .dot-live{position:absolute; top:2px; right:2px; width:11px; height:11px; border-radius:50%; background:var(--accent-2); border:2px solid var(--bg);}
+  .ai-widget-panel{
+    position:fixed; bottom:88px; right:22px; width:360px; max-width:calc(100vw - 40px); max-height:min(560px, calc(100vh - 120px));
+    background:linear-gradient(180deg,#14161a,#0d0e11); border:1px solid var(--line); border-radius:16px;
+    box-shadow:0 40px 90px -20px rgba(0,0,0,0.85); z-index:200; display:none; flex-direction:column; overflow:hidden;
+  }
+  .ai-widget-panel.open{display:flex;}
+  .ai-widget-head{display:flex; align-items:center; gap:10px; padding:13px 14px; border-bottom:1px solid var(--line-soft); flex-shrink:0;}
+  .ai-widget-head .info{flex:1; min-width:0;}
+  .ai-widget-head .t{font-size:13px; font-weight:700;}
+  .ai-widget-head .s{font-size:10px; color:var(--accent-2); font-weight:600; display:flex; align-items:center; gap:5px;}
+  .role-select{
+    background:var(--graphite-2); border:1px solid var(--line); border-radius:7px; color:var(--text-dim);
+    font-size:10.5px; font-family:inherit; padding:4px 6px; cursor:pointer;
+  }
+  .ai-widget-close{cursor:pointer; color:var(--text-faint); font-size:16px; background:none; border:none; font-family:inherit; flex-shrink:0;}
+  .ai-widget-close:hover{color:var(--text);}
+  .ai-widget-log{flex:1; overflow-y:auto; padding:13px 14px; display:flex; flex-direction:column; gap:11px; min-height:180px;}
+  .ai-widget-suggest{display:flex; gap:6px; flex-wrap:wrap; padding:0 14px 10px; flex-shrink:0;}
+  .ai-widget-inputrow{display:flex; gap:8px; padding:11px 14px; border-top:1px solid var(--line-soft); flex-shrink:0;}
+  .ai-widget-inputrow input{flex:1; background:var(--graphite); border:1px solid var(--line); border-radius:9px; padding:9px 12px; color:var(--text); font-size:12.5px; font-family:inherit;}
+  .ai-widget-inputrow input:focus{outline:none; border-color:var(--accent);}
+  .ai-widget-inputrow button{background:linear-gradient(135deg,var(--accent),#4169e8); color:#fff; border:none; border-radius:9px; padding:9px 14px; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit;}
+  .locked-bubble{border-color:rgba(255,199,107,0.3) !important; background:rgba(255,199,107,0.08) !important; color:#ffc76b !important;}
+  .widget-suggest-chip{font-size:11px; padding:6px 11px; border-radius:100px; background:var(--glass); border:1px solid var(--line); color:var(--text-dim); cursor:pointer;}
+  .widget-suggest-chip:hover{border-color:var(--accent); color:var(--text);}
+
   @media (max-width:1000px){
     .kpi-row{grid-template-columns:repeat(2,1fr);}
     .grid-2{grid-template-columns:1fr;}
@@ -468,6 +503,37 @@
   </div>
 </div>
 
+<!-- ============ MOTOROS AI — WIDGET FLOTANTE ============ -->
+<button class="ai-widget-btn" id="aiWidgetBtn" title="MotorOS AI">
+  🤖<span class="dot-live"></span>
+</button>
+
+<div class="ai-widget-panel" id="aiWidgetPanel">
+  <div class="ai-widget-head">
+    <div class="info">
+      <div class="t">MotorOS AI</div>
+      <div class="s">● Conectado a toda tu automotora</div>
+    </div>
+    <select class="role-select" id="roleSelect" title="Rol de quien pregunta (demo)">
+      <option value="Dueño">Viendo como: Dueño</option>
+      <option value="Vendedor">Viendo como: Vendedor</option>
+    </select>
+    <button class="ai-widget-close" id="aiWidgetClose">✕</button>
+  </div>
+  <div class="ai-widget-log" id="widgetLog">
+    <div class="chat-msg ai"><div class="chat-avatar">🤖</div><div class="chat-bubble">Hola, soy MotorOS AI. Conozco todo tu inventario, ventas, clientes y documentos — pregúntame lo que necesites. Algunas respuestas cambian según tu rol.</div></div>
+  </div>
+  <div class="ai-widget-suggest">
+    <div class="widget-suggest-chip" data-q="agregar">¿Cómo agrego un vehículo?</div>
+    <div class="widget-suggest-chip" data-q="documento">¿Cómo genero un documento?</div>
+    <div class="widget-suggest-chip" data-q="ganancias">¿Cuánto ganamos este mes?</div>
+  </div>
+  <div class="ai-widget-inputrow">
+    <input type="text" id="widgetInput" placeholder="Pregúntale algo a MotorOS AI…">
+    <button id="widgetSend">Enviar</button>
+  </div>
+</div>
+
 <script>
   // ---------- View switching ----------
   const navItems = document.querySelectorAll('.app-nav-item');
@@ -689,6 +755,67 @@
   });
   chatInput.addEventListener('keydown', e=>{
     if(e.key==='Enter'){ chatSend.click(); }
+  });
+
+  // ---------- MotorOS AI — widget flotante global (disponible en toda la app) ----------
+  const aiWidgetBtn = document.getElementById('aiWidgetBtn');
+  const aiWidgetPanel = document.getElementById('aiWidgetPanel');
+  const aiWidgetClose = document.getElementById('aiWidgetClose');
+  const roleSelect = document.getElementById('roleSelect');
+  const widgetLog = document.getElementById('widgetLog');
+  const widgetInput = document.getElementById('widgetInput');
+  const widgetSend = document.getElementById('widgetSend');
+
+  aiWidgetBtn.addEventListener('click', ()=> aiWidgetPanel.classList.toggle('open'));
+  aiWidgetClose.addEventListener('click', ()=> aiWidgetPanel.classList.remove('open'));
+
+  // Respuestas: la IA "conoce todo el proyecto", pero algunos temas quedan
+  // restringidos según el rol de quien pregunta — todos menos el dueño ven un aviso.
+  const widgetAnswers = {
+    agregar: { text: "Puedes agregar un vehículo de dos formas: desde Inventario con '+ Nuevo vehículo', o más rápido con la Carga Inteligente — solo escribes la patente y la IA completa el resto.", ownerOnly:false },
+    documento: { text: "Los documentos (notas de venta, contratos) se generan solos en Documentos, usando los datos del vehículo y del cliente. No necesitas escribir nada manualmente.", ownerOnly:false },
+    precio: { text: "El precio de un vehículo se ajusta desde su ficha en Inventario. Si queda fuera de mercado, te va a aparecer una alerta ahí mismo.", ownerOnly:false },
+    stock: { text: "8 vehículos llevan más de 90 días en stock: Mazda CX-5, Hyundai Tucson y 6 más. Te recomiendo revisar su estrategia de precio esta semana.", ownerOnly:false },
+    leads: { text: "Tienes 6 clientes que requieren contacto hoy. El más urgente es Javier Muñoz (86% de probabilidad de compra, cotización enviada hace 3 horas).", ownerOnly:false },
+    ganancias: { text: "Vendieron 18 vehículos este mes con una utilidad neta estimada de $71.200.000 (margen promedio 14,8%).", ownerOnly:true },
+    comisiones: { text: "Este mes: Carla M. $3.850.000, Diego R. $3.120.000, Fernanda S. $2.660.000 en comisiones acumuladas.", ownerOnly:true },
+  };
+  const lockedReply = "🔒 Esta información financiera es solo para el dueño de la automotora. Pídele a un administrador que la consulte por ti.";
+
+  function widgetAddMsg(text, who, locked){
+    const div = document.createElement('div');
+    div.className = 'chat-msg ' + who;
+    const bubbleClass = locked ? 'chat-bubble locked-bubble' : 'chat-bubble';
+    div.innerHTML = `<div class="chat-avatar">${who==='user' ? 'AQ' : '🤖'}</div><div class="${bubbleClass}">${text}</div>`;
+    widgetLog.appendChild(div);
+    widgetLog.scrollTop = widgetLog.scrollHeight;
+  }
+
+  function widgetRespond(userText, key){
+    widgetAddMsg(userText, 'user');
+    setTimeout(()=>{
+      const role = roleSelect.value;
+      const entry = key ? widgetAnswers[key] : null;
+      if(entry && entry.ownerOnly && role !== 'Dueño'){
+        widgetAddMsg(lockedReply, 'ai', true);
+      } else if(entry){
+        widgetAddMsg(entry.text, 'ai');
+      } else {
+        widgetAddMsg("Conozco todo tu inventario, ventas, clientes y documentos. Prueba una de las preguntas sugeridas, o sé más específico y te respondo con datos reales de tu operación.", 'ai');
+      }
+    }, 500);
+  }
+
+  document.querySelectorAll('.widget-suggest-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=> widgetRespond(chip.textContent, chip.dataset.q));
+  });
+  widgetSend.addEventListener('click', ()=>{
+    if(!widgetInput.value.trim()) return;
+    widgetRespond(widgetInput.value.trim(), null);
+    widgetInput.value = '';
+  });
+  widgetInput.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){ widgetSend.click(); }
   });
 </script>
 
