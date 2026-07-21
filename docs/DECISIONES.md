@@ -196,3 +196,33 @@ de chat siempre abajo de la página". Incluye un selector de rol (Dueño / Vende
 demostración tangible de que "la IA conoce todo el proyecto pero contesta con limitaciones,
 excepto el dueño" — las preguntas financieras sensibles (ganancias, comisiones) muestran un
 aviso de acceso restringido cuando el rol no es Dueño.
+
+## Identidad de marca: logo vectorial y su instalación
+
+**El logo se construyó a mano en SVG (paths/polygons con degradado), no se generó como
+imagen ni se trazó de una foto** — el usuario pidió explícitamente "un logo completamente
+editable", así que cada variante (ícono solo, lockup horizontal, lockup vertical, mono
+blanco/negro) vive como archivos `.svg` de texto plano en `brand/`.
+
+**Instalación en el sitio: `<symbol>` SVG oculto + `<use>`, no `<img>`.** El ícono se define
+una sola vez por archivo HTML (bloque `<svg width="0" height="0" style="position:absolute">`
+con el `<symbol id="motorosLogo">` y su gradiente) y se reutiliza con
+`<svg><use href="#motorosLogo"/></svg>` en cada lugar donde aparecía el viejo cuadrado con la
+letra "M" (header de `index.html`, `login.html`, sidebar y preview interno de `app.html`).
+Ventaja sobre usar un archivo de imagen: cero requests HTTP extra, se puede re-colorear con
+CSS si hace falta, y es coherente con que todo el sitio es HTML autocontenido.
+
+**Centrado del logo/íconos en el sidebar compacto: colapsar `max-width` a 0, no solo
+`opacity`.** El bug que reportó el usuario ("no recortes ni muestres parcialmente MotorOS")
+pasaba porque el texto seguía ocupando espacio en el layout (solo se volvía invisible con
+`opacity:0`), y el `overflow:hidden` del sidebar lo cortaba a la mitad en vez de ocultarlo
+del todo. Además, con `gap` fijo entre ícono y texto, un texto "invisible pero con ancho"
+descentraba visualmente al ícono solo. Se corrigió con:
+1. `max-width:0; overflow:hidden;` además de `opacity:0` en las etiquetas de texto (logo,
+   nav items, pie del sidebar) — así el texto realmente no ocupa espacio en compacto.
+2. `justify-content:center` por defecto (compacto) y `justify-content:flex-start` en
+   `.app-sidebar:hover` (expandido), tanto en el logo como en cada `.app-nav-item` y en el
+   pie del sidebar — así el ícono queda perfectamente centrado en la barra de 80px, y pasa a
+   alineación izquierda junto al texto al expandir a 260px.
+Este mismo fix se aplicó también al pie (avatar + info + botón salir) aunque el usuario no
+lo pidió explícitamente para esa zona, porque tenía el mismo bug de recorte parcial.

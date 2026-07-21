@@ -44,7 +44,8 @@
     box-shadow: 0 40px 100px -30px rgba(0,0,0,0.8);
   }
   .logo{display:flex; align-items:center; justify-content:center; gap:10px; font-weight:700; font-size:19px; margin-bottom:6px;}
-  .logo-mark{width:30px; height:30px; border-radius:8px; background:linear-gradient(135deg,var(--accent),var(--accent-3)); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:#08090b;}
+  .logo-mark{width:32px; height:30px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .logo-mark svg{width:100%; height:100%; display:block;}
   .login-sub{text-align:center; font-size:13.5px; color:var(--text-faint); margin-bottom:28px;}
 
   .field{margin-bottom:16px;}
@@ -113,10 +114,26 @@
 
 <div class="bg-grid"></div>
 
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <linearGradient id="motorosGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8FC7FF"/>
+      <stop offset="45%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <symbol id="motorosLogo" viewBox="0 0 340 300">
+      <path d="M64,71 L64,79 L120,68 A9,9 0 0 1 120,86 L120,68 Z" fill="url(#motorosGrad)" opacity="0.5"/>
+      <path d="M32,102 L32,116 L120,98 A13,13 0 0 1 120,124 L120,98 Z" fill="url(#motorosGrad)" opacity="0.75"/>
+      <path d="M0,136 L0,158 L122,132 A17,17 0 0 1 122,166 L122,132 Z" fill="url(#motorosGrad)" opacity="1"/>
+      <path d="M120,252 L120,48 L212,168 L304,48 L304,252" fill="none" stroke="url(#motorosGrad)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
 <a href="index.html" class="back-home">← Volver al sitio</a>
 
 <div class="login-card">
-  <div class="logo"><div class="logo-mark">M</div>MotorOS</div>
+  <div class="logo"><div class="logo-mark"><svg><use href="#motorosLogo"/></svg></div>MotorOS</div>
   <p class="login-sub">Inicia sesión para administrar tu automotora</p>
 
   <div class="error-msg" id="errorMsg">Ingresa tu correo y contraseña para continuar.</div>

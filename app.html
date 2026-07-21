@@ -35,8 +35,19 @@
     width:260px; padding:18px 12px;
     box-shadow: 18px 0 60px -18px rgba(0,0,0,0.6);
   }
-  .app-logo{display:flex; align-items:center; gap:9px; font-weight:700; font-size:15px; margin-bottom:22px; padding:4px 8px; white-space:nowrap;}
-  .logo-mark{width:26px; height:26px; border-radius:7px; background:linear-gradient(135deg,var(--accent),var(--accent-3)); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:#08090b; flex-shrink:0;}
+  .app-logo{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    font-weight:700; font-size:15px; margin-bottom:22px; padding:4px 8px; white-space:nowrap;
+    transition: justify-content .25s ease, gap .25s ease;
+  }
+  .app-sidebar:hover .app-logo{justify-content:flex-start;}
+  .logo-mark{width:30px; height:28px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .logo-mark svg{width:100%; height:100%; display:block;}
+  .app-logo .logo-label{
+    opacity:0; max-width:0; overflow:hidden; transform:translateX(-8px); white-space:nowrap;
+    transition: opacity .22s ease, transform .22s ease, max-width .25s ease;
+  }
+  .app-sidebar:hover .app-logo .logo-label{opacity:1; max-width:160px; transform:translateX(0); transition-delay:.05s;}
   .nav-group-label{
     font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-faint); padding:14px 10px 6px;
     white-space:nowrap; opacity:0; transform:translateX(-8px);
@@ -44,36 +55,40 @@
   }
   .app-sidebar:hover .nav-group-label{opacity:1; transform:translateX(0); transition-delay:.05s;}
   .app-nav-item{
-    display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text-dim);
-    padding:9px 10px; border-radius:9px; margin-bottom:1px; font-weight:500; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:10px; font-size:13px; color:var(--text-dim);
+    padding:11px 10px; border-radius:9px; margin-bottom:2px; font-weight:500; cursor:pointer;
     white-space:nowrap;
-    transition:background .15s, color .15s;
+    transition:background .15s, color .15s, justify-content .25s ease;
   }
+  .app-sidebar:hover .app-nav-item{justify-content:flex-start;}
   .app-nav-item:hover{background:var(--glass); color:var(--text);}
   .app-nav-item.active{background:var(--glass-strong); color:var(--text);}
-  .app-nav-item .ico{width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; opacity:0.85; flex-shrink:0;}
-  .app-nav-item .ico svg{width:16px; height:16px;}
+  .app-nav-item .ico{width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; opacity:0.85; flex-shrink:0;}
+  .app-nav-item .ico svg{width:30px; height:30px;}
   .app-nav-item.active .ico{color:var(--accent); opacity:1;}
   .app-nav-item .nav-label{
-    opacity:0; transform:translateX(-8px);
-    transition: opacity .2s ease, transform .2s ease;
+    opacity:0; max-width:0; overflow:hidden; transform:translateX(-8px);
+    transition: opacity .22s ease, transform .22s ease, max-width .25s ease;
   }
-  .app-sidebar:hover .app-nav-item .nav-label{opacity:1; transform:translateX(0); transition-delay:.05s;}
-  .sidebar-footer{margin-top:auto; display:flex; align-items:center; gap:9px; padding:10px; border-top:1px solid var(--line-soft); overflow:hidden;}
+  .app-sidebar:hover .app-nav-item .nav-label{opacity:1; max-width:180px; transform:translateX(0); transition-delay:.05s;}
+  .sidebar-footer{margin-top:auto; display:flex; align-items:center; justify-content:center; gap:9px; padding:10px; border-top:1px solid var(--line-soft); overflow:hidden; transition:justify-content .25s ease;}
+  .app-sidebar:hover .sidebar-footer{justify-content:flex-start;}
   .avatar-sm{width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg,var(--accent-3),var(--accent)); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#08090b; flex-shrink:0;}
   .sidebar-footer .who{font-size:12px; font-weight:600; white-space:nowrap;}
   .sidebar-footer .role{font-size:10.5px; color:var(--text-faint); white-space:nowrap;}
   .sidebar-footer-info{
-    flex:1; min-width:0; opacity:0; transform:translateX(-8px);
-    transition: opacity .2s ease, transform .2s ease;
+    flex:0 1 0; min-width:0; opacity:0; max-width:0; overflow:hidden; transform:translateX(-8px);
+    transition: opacity .22s ease, transform .22s ease, max-width .25s ease;
   }
   .sidebar-footer .icon-btn{
-    opacity:0; pointer-events:none;
-    transition: opacity .2s ease;
+    opacity:0; max-width:0; overflow:hidden; pointer-events:none;
+    transition: opacity .2s ease, max-width .25s ease;
   }
-  .app-sidebar:hover .sidebar-footer-info,
+  .app-sidebar:hover .sidebar-footer-info{
+    opacity:1; max-width:140px; flex:1; transform:translateX(0); transition-delay:.05s;
+  }
   .app-sidebar:hover .sidebar-footer .icon-btn{
-    opacity:1; transform:translateX(0); pointer-events:auto; transition-delay:.05s;
+    opacity:1; max-width:32px; pointer-events:auto; transition-delay:.05s;
   }
 
   /* MAIN */
@@ -316,12 +331,19 @@
       box-shadow:20px 0 60px rgba(0,0,0,0.5);
     }
     .app-sidebar.open{transform:translateX(0);}
+    .app-sidebar .app-logo,
+    .app-sidebar .app-nav-item,
+    .app-sidebar .sidebar-footer{
+      justify-content:flex-start;
+    }
+    .app-sidebar .app-logo .logo-label,
     .app-sidebar .nav-group-label,
     .app-sidebar .app-nav-item .nav-label,
     .app-sidebar .sidebar-footer-info,
     .app-sidebar .sidebar-footer .icon-btn{
-      opacity:1; transform:translateX(0); pointer-events:auto;
+      opacity:1; max-width:none; transform:translateX(0); pointer-events:auto;
     }
+    .app-sidebar .sidebar-footer-info{flex:1;}
     .app-content{margin-left:0;}
     .hamburger-btn{display:flex;}
     .topbar-search span{display:none;}
@@ -345,9 +367,25 @@
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <linearGradient id="motorosGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8FC7FF"/>
+      <stop offset="45%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <symbol id="motorosLogo" viewBox="0 0 340 300">
+      <path d="M64,71 L64,79 L120,68 A9,9 0 0 1 120,86 L120,68 Z" fill="url(#motorosGrad)" opacity="0.5"/>
+      <path d="M32,102 L32,116 L120,98 A13,13 0 0 1 120,124 L120,98 Z" fill="url(#motorosGrad)" opacity="0.75"/>
+      <path d="M0,136 L0,158 L122,132 A17,17 0 0 1 122,166 L122,132 Z" fill="url(#motorosGrad)" opacity="1"/>
+      <path d="M120,252 L120,48 L212,168 L304,48 L304,252" fill="none" stroke="url(#motorosGrad)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
 <div class="app-shell">
   <div class="app-sidebar">
-    <div class="app-logo"><div class="logo-mark">M</div>MotorOS</div>
+    <div class="app-logo"><div class="logo-mark"><svg><use href="#motorosLogo"/></svg></div><span class="logo-label">MotorOS</span></div>
 
     <div class="nav-group-label">General</div>
     <div class="app-nav-item active" data-view="dashboard" title="Dashboard"><span class="ico"><i data-lucide="layout-dashboard"></i></span><span class="nav-label">Dashboard</span></div>

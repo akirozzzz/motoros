@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" font-family="'Poppins',Arial,sans-serif">
+  <defs>
+    <linearGradient id="motorosGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8FC7FF"/>
+      <stop offset="45%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  
+  <g transform="translate(210,30) scale(1.2)">
+    <path d="M64,71 L64,79 L120,68 A9,9 0 0 1 120,86 L120,68 Z" fill="url(#motorosGrad)" opacity="0.5"/>
+    <path d="M32,102 L32,116 L120,98 A13,13 0 0 1 120,124 L120,98 Z" fill="url(#motorosGrad)" opacity="0.75"/>
+    <path d="M0,136 L0,158 L122,132 A17,17 0 0 1 122,166 L122,132 Z" fill="url(#motorosGrad)" opacity="1"/>
+    <path d="M120,252 L120,48 L212,168 L304,48 L304,252" fill="none" stroke="url(#motorosGrad)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="246" y="565" font-size="92" font-weight="700" font-style="italic" fill="#ffffff">Motor</text>
+  <text x="528" y="565" font-size="92" font-weight="700" font-style="italic" fill="url(#motorosGrad)">OS</text>
+  <text x="450" y="625" font-size="20" font-weight="600" fill="#6fa3ff" text-anchor="middle" letter-spacing="3">INTELIGENCIA QUE ACELERA TU NEGOCIO</text>
+</svg>

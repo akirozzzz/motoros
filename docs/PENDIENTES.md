@@ -43,6 +43,29 @@ Lo que ya funciona de punta a punta:
   Compras, Ventas, CRM, Financiamiento, Documentos, Contabilidad, Reportes) ya están
   conectados al generador de 140 vehículos.
 
+## Etapa reciente: identidad de marca (logo vectorial) instalada + sidebar afinada
+
+Se creó un set completo de identidad de marca (`brand/`, además copiado a
+`/Users/akirozzz/CLAUDE/motoros/brand/` en el repo): ícono "M" vectorial (líneas de
+movimiento que se transforman en un trazo sólido, degradado azul), lockups horizontal y
+vertical, variantes claras/oscuras/transparentes/monocromáticas, favicons en 6 tamaños y
+`brand/BRAND-GUIDELINES.md` con colores/tipografía/uso. El ícono se instaló como un
+`<symbol>` SVG inline (reutilizado vía `<use>`) en `index.html`, `login.html` y `app.html`,
+reemplazando el cuadrado con la letra "M" en CSS. **No se agregó todavía el favicon `<link>`
+en el `<head>`** (los PNG ya están listos en `brand/favicons/`, falta solo enlazarlos si se
+quiere).
+
+Además se ajustó el sidebar de `app.html` a pedido explícito del usuario:
+- El logo en modo compacto ahora muestra solo la "M" **centrada** (antes el texto "MotorOS"
+  quedaba parcialmente cortado por el `overflow:hidden` en vez de ocultarse limpiamente —
+  se corrigió colapsando su ancho a 0, no solo su opacidad).
+- Mismo fix aplicado también al pie del sidebar (avatar + info + botón de salir), que tenía
+  el mismo problema de recorte parcial aunque no se pidió explícitamente — se corrigió por
+  consistencia con la regla "no mostrar nada parcialmente cortado".
+- Íconos del menú aumentados de 16px a 30px, con más padding vertical (11px) para que respiren.
+- Todos los ítems del nav (y el logo) ahora se centran en modo compacto y pasan a alineación
+  izquierda al expandir, con transición de 200-250ms en ancho/opacidad/posición.
+
 ## Etapa reciente: sidebar compacta con hover-expand
 
 `app.html`: el sidebar ahora es compacto (80px, solo íconos) por defecto en escritorio y se
