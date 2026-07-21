@@ -48,9 +48,13 @@
     height:56px; border-bottom:1px solid var(--line-soft); display:flex; align-items:center; justify-content:space-between;
     padding:0 26px; flex-shrink:0; background:rgba(8,9,11,0.7); backdrop-filter:blur(10px);
   }
-  .topbar-search{flex:1; max-width:340px; display:flex; align-items:center; gap:8px; background:var(--glass); border:1px solid var(--line); border-radius:9px; padding:7px 12px; color:var(--text-faint); font-size:12.5px;}
-  .topbar-right{display:flex; align-items:center; gap:14px;}
-  .icon-btn{width:32px; height:32px; border-radius:8px; background:var(--glass); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--text-dim); cursor:pointer;}
+  .topbar-search{flex:1; max-width:340px; display:flex; align-items:center; gap:8px; background:var(--glass); border:1px solid var(--line); border-radius:9px; padding:7px 12px; color:var(--text-faint); font-size:12.5px; min-width:0;}
+  .topbar-left{display:flex; align-items:center; gap:12px; flex:1; min-width:0;}
+  .topbar-right{display:flex; align-items:center; gap:14px; flex-shrink:0;}
+  .icon-btn{width:32px; height:32px; border-radius:8px; background:var(--glass); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--text-dim); cursor:pointer; flex-shrink:0;}
+  .hamburger-btn{display:none;}
+  .sidebar-backdrop{display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:290;}
+  .sidebar-backdrop.show{display:block;}
   .view-scroll{flex:1; overflow-y:auto;}
   .view{display:none; padding:26px 32px 60px; animation:fadeIn .3s ease;}
   .view.active{display:block;}
@@ -92,7 +96,7 @@
   tr.row-click{cursor:pointer;}
   tr.row-click:hover td{background:var(--glass);}
   tr.selected td{background:var(--glass-strong); color:var(--text);}
-  .thumb-sm{width:34px; height:24px; border-radius:5px; display:inline-block; vertical-align:middle; margin-right:8px;}
+  .thumb-sm{width:30px; height:30px; border-radius:6px; display:inline-block; vertical-align:middle; margin-right:8px;}
   /* marco fotografico consistente para todos los vehiculos: mismo tamano, mismo recorte, misma superposicion */
   .veh-thumb{
     position:relative; width:100%; height:100%; border-radius:inherit; overflow:hidden; background:#1c1e23;
@@ -119,7 +123,7 @@
   .kcol-head .count{margin-left:auto; font-size:10.5px; font-weight:700; color:var(--text-faint); background:var(--bg-soft); padding:2px 9px; border-radius:100px;}
   .kcard{display:flex; align-items:center; gap:10px; background:var(--graphite); border:1px solid var(--line-soft); border-radius:10px; padding:9px; margin-bottom:8px; cursor:pointer; transition:border-color .15s;}
   .kcard:hover{border-color:var(--accent);}
-  .kcard .kthumb{width:44px; height:44px; border-radius:9px; flex-shrink:0;}
+  .kcard .kthumb{width:36px; height:36px; border-radius:8px; flex-shrink:0;}
   .kcard .kinfo{flex:1; min-width:0;}
   .kcard .kname{font-size:12px; font-weight:700; color:var(--text); line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .kcard .kyear{font-size:10.5px; color:var(--text-faint); margin-top:2px;}
@@ -133,7 +137,7 @@
   /* Vehicle detail panel */
   .detail-panel{margin-top:16px;}
   .detail-head{display:flex; gap:14px; justify-content:space-between; align-items:flex-start; margin-bottom:16px;}
-  .detail-photo{width:96px; height:64px; border-radius:10px; flex-shrink:0;}
+  .detail-photo{width:72px; height:52px; border-radius:9px; flex-shrink:0;}
   .detail-head .name{font-size:17px; font-weight:700;}
   .detail-head .sub{font-size:12px; color:var(--text-faint); margin-top:3px;}
   .field-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
@@ -250,9 +254,34 @@
   @media (max-width:1000px){
     .kpi-row{grid-template-columns:repeat(2,1fr);}
     .grid-2{grid-template-columns:1fr;}
-    .crm-board{grid-template-columns:repeat(4,1fr);}
     .field-cols{grid-template-columns:1fr;}
     .report-grid{grid-template-columns:repeat(2,1fr);}
+  }
+
+  .table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  .table-scroll table{min-width:640px;}
+
+  @media (max-width:860px){
+    .app-sidebar{
+      position:fixed; top:0; left:0; height:100vh; z-index:300;
+      transform:translateX(-100%); transition:transform .25s ease;
+      box-shadow:20px 0 60px rgba(0,0,0,0.5);
+    }
+    .app-sidebar.open{transform:translateX(0);}
+    .hamburger-btn{display:flex;}
+    .topbar-search span{display:none;}
+    .topbar-search{max-width:none; flex:0 0 auto; width:38px; justify-content:center; padding:7px;}
+    .view{padding:18px 16px 50px;}
+    .view-head h1{font-size:17px;}
+    .crm-board{grid-template-columns:repeat(4,minmax(130px,1fr)); overflow-x:auto; padding-bottom:6px;}
+    .ai-widget-panel{right:12px; bottom:78px; width:calc(100vw - 24px);}
+    .ai-widget-btn{right:16px; bottom:16px;}
+  }
+  @media (max-width:520px){
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+    .kboard{grid-template-columns:repeat(5,minmax(130px,1fr));}
+    .crm-board{grid-template-columns:repeat(4,minmax(115px,1fr));}
+    .role-select{display:none;}
   }
 </style>
 </head>
@@ -288,9 +317,14 @@
     </div>
   </div>
 
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
   <div class="app-content">
     <div class="app-topbar">
-      <div class="topbar-search">🔍 Buscar vehículo, cliente o documento…</div>
+      <div class="topbar-left">
+        <div class="icon-btn hamburger-btn" id="hamburgerBtn">☰</div>
+        <div class="topbar-search">🔍 <span>Buscar vehículo, cliente o documento…</span></div>
+      </div>
       <div class="topbar-right">
         <div class="icon-btn">🔔</div>
         <div class="icon-btn">⌘K</div>
@@ -335,12 +369,12 @@
 
         <div class="card">
           <div class="card-head"><strong>Ranking de vendedores</strong><span>Este mes</span></div>
-          <table>
+          <div class="table-scroll"><table>
             <tr><th>Vendedor</th><th>Vehículos vendidos</th><th>Ventas</th><th>Comisiones</th></tr>
             <tr><td>Carla M.</td><td>7</td><td>$128.400.000</td><td>$3.850.000</td></tr>
             <tr><td>Diego R.</td><td>6</td><td>$104.200.000</td><td>$3.120.000</td></tr>
             <tr><td>Fernanda S.</td><td>5</td><td>$88.900.000</td><td>$2.660.000</td></tr>
-          </table>
+          </table></div>
         </div>
       </div>
 
@@ -354,10 +388,10 @@
         <div class="kboard" id="kanbanBoard"></div>
 
         <div class="card" style="margin-bottom:16px;">
-          <table>
+          <div class="table-scroll"><table>
             <tr><th>Vehículo</th><th>Patente</th><th>Año</th><th>Km</th><th>Estado</th><th>Precio venta</th><th>Margen</th><th>Días stock</th></tr>
             <tbody id="vehicleTableBody"></tbody>
-          </table>
+          </table></div>
         </div>
 
         <div class="card detail-panel" id="vehicleDetail"></div>
@@ -380,12 +414,12 @@
       <div class="view" id="view-ventas">
         <div class="view-head"><div><h1>Ventas y Cierre</h1><p>Rentabilidad calculada automáticamente al cerrar</p></div></div>
         <div class="card">
-          <table>
+          <div class="table-scroll"><table>
             <tr><th>Cliente</th><th>Vehículo</th><th>Precio venta</th><th>Forma pago</th><th>Vendedor</th><th>Margen real</th><th>Comisión</th></tr>
             <tr><td>Javier Muñoz</td><td>Mazda CX-5 2020</td><td>$16.490.000</td><td>Financiamiento</td><td>Carla M.</td><td style="color:var(--accent-2); font-weight:600;">$2.180.000</td><td>$494.700</td></tr>
             <tr><td>Soledad Vera</td><td>Kia Sportage 2021</td><td>$19.990.000</td><td>Contado</td><td>Diego R.</td><td style="color:var(--accent-2); font-weight:600;">$2.640.000</td><td>$599.700</td></tr>
             <tr><td>Ignacio Rojas</td><td>Nissan Versa 2019</td><td>$9.290.000</td><td>Financiamiento</td><td>Fernanda S.</td><td style="color:var(--accent-2); font-weight:600;">$1.120.000</td><td>$278.700</td></tr>
-          </table>
+          </table></div>
         </div>
       </div>
 
@@ -455,7 +489,7 @@
       <div class="view" id="view-publicaciones">
         <div class="view-head"><div><h1>Publicaciones</h1><p>Sincronización multicanal</p></div></div>
         <div class="card">
-          <table>
+          <div class="table-scroll"><table>
             <tr><th>Canal</th><th>Vehículos publicados</th><th>Estado</th></tr>
             <tr><td>Sitio propio</td><td>58</td><td><span class="badge available">Sincronizado</span></td></tr>
             <tr><td>Mercado Libre</td><td>52</td><td><span class="badge available">Sincronizado</span></td></tr>
@@ -464,7 +498,7 @@
             <tr><td>GoAutos</td><td>35</td><td><span class="badge available">Sincronizado</span></td></tr>
             <tr><td>OLX Autos</td><td>31</td><td><span class="badge available">Sincronizado</span></td></tr>
             <tr><td>Demotores</td><td>27</td><td><span class="badge available">Sincronizado</span></td></tr>
-          </table>
+          </table></div>
         </div>
       </div>
 
@@ -549,12 +583,28 @@
   // ---------- View switching ----------
   const navItems = document.querySelectorAll('.app-nav-item');
   const views = document.querySelectorAll('.view');
+  const appSidebar = document.querySelector('.app-sidebar');
+  const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+
+  function closeSidebar(){
+    appSidebar.classList.remove('open');
+    sidebarBackdrop.classList.remove('show');
+  }
+  function toggleSidebar(){
+    appSidebar.classList.toggle('open');
+    sidebarBackdrop.classList.toggle('show');
+  }
+  hamburgerBtn.addEventListener('click', toggleSidebar);
+  sidebarBackdrop.addEventListener('click', closeSidebar);
+
   navItems.forEach(item=>{
     item.addEventListener('click', ()=>{
       navItems.forEach(i=>i.classList.remove('active'));
       item.classList.add('active');
       views.forEach(v=>v.classList.remove('active'));
       document.getElementById('view-'+item.dataset.view).classList.add('active');
+      closeSidebar();
     });
   });
 

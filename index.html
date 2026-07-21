@@ -253,6 +253,12 @@
     .tab-list{flex-direction:row; overflow-x:auto; position:static; padding-bottom:6px; -webkit-overflow-scrolling:touch;}
     .tab-item{white-space:nowrap;}
     .tab-panel, .tab-panel.active{grid-template-columns:1fr; gap:24px;}
+    .kanban{grid-template-columns:repeat(5,minmax(110px,1fr)); overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch;}
+    .site-catalog{grid-template-columns:repeat(2,1fr);}
+    .mini-kpi-row{grid-template-columns:repeat(3,1fr);}
+  }
+  @media (max-width: 480px){
+    .mini-kpi-row{grid-template-columns:repeat(2,1fr);}
   }
 
   /* shared mini components */
