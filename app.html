@@ -129,6 +129,18 @@
   .kcard .kyear{font-size:10.5px; color:var(--text-faint); margin-top:2px;}
   .kdays{font-size:9.5px; font-weight:700; color:var(--accent); background:rgba(91,140,255,0.12); border:1px solid rgba(91,140,255,0.3); padding:3px 9px; border-radius:100px; white-space:nowrap; flex-shrink:0;}
   .kempty{font-size:11px; color:var(--text-faint); text-align:center; padding:22px 4px;}
+  .kmore{text-align:center; font-size:10.5px; color:var(--accent); font-weight:600; padding:7px 4px; cursor:pointer;}
+  .kmore:hover{text-decoration:underline;}
+
+  /* filtros y paginacion del inventario */
+  .inv-toolbar{display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;}
+  .inv-filters{display:flex; gap:6px; flex-wrap:wrap;}
+  .inv-filter-chip{font-size:11.5px; padding:6px 13px; border-radius:100px; background:var(--graphite-2); color:var(--text-faint); border:1px solid var(--line-soft); cursor:pointer;}
+  .inv-filter-chip.active{background:var(--accent); color:#fff; border-color:transparent;}
+  .inv-search{background:var(--graphite-2); border:1px solid var(--line); border-radius:9px; padding:7px 12px; color:var(--text); font-size:12.5px; font-family:inherit; min-width:200px;}
+  .inv-search:focus{outline:none; border-color:var(--accent);}
+  .inv-count{font-size:11.5px; color:var(--text-faint); margin-left:auto;}
+  .load-more-btn{display:inline-flex; margin:6px auto 20px; }
 
   @media (max-width:1100px){
     .kboard{grid-template-columns:repeat(5,minmax(150px,1fr)); overflow-x:auto; padding-bottom:6px;}
@@ -344,7 +356,7 @@
           <div class="kpi-card"><div class="l">Ventas totales</div><div class="v">$458.500.000</div><div class="t up">↑ 12.4%</div></div>
           <div class="kpi-card"><div class="l">Margen bruto</div><div class="v">$96.400.000</div><div class="t up">↑ 8.1%</div></div>
           <div class="kpi-card"><div class="l">Utilidad neta</div><div class="v">$71.200.000</div><div class="t up">14.8% margen</div></div>
-          <div class="kpi-card"><div class="l">Capital invertido</div><div class="v">$612.000.000</div><div class="t warn">72 vehículos</div></div>
+          <div class="kpi-card"><div class="l">Capital invertido</div><div class="v">$612.000.000</div><div class="t warn">100 vehículos activos</div></div>
         </div>
         <div class="kpi-row">
           <div class="kpi-card"><div class="l">Caja disponible</div><div class="v">$184.000.000</div><div class="t up">Saludable</div></div>
@@ -368,12 +380,10 @@
         </div>
 
         <div class="card">
-          <div class="card-head"><strong>Ranking de vendedores</strong><span>Este mes</span></div>
+          <div class="card-head"><strong>Ranking de vendedores</strong><span>Histórico de vendidos</span></div>
           <div class="table-scroll"><table>
             <tr><th>Vendedor</th><th>Vehículos vendidos</th><th>Ventas</th><th>Comisiones</th></tr>
-            <tr><td>Carla M.</td><td>7</td><td>$128.400.000</td><td>$3.850.000</td></tr>
-            <tr><td>Diego R.</td><td>6</td><td>$104.200.000</td><td>$3.120.000</td></tr>
-            <tr><td>Fernanda S.</td><td>5</td><td>$88.900.000</td><td>$2.660.000</td></tr>
+            <tbody id="rankingTableBody"></tbody>
           </table></div>
         </div>
       </div>
@@ -381,13 +391,27 @@
       <!-- ============ INVENTARIO ============ -->
       <div class="view" id="view-inventario">
         <div class="view-head">
-          <div><h1>Inventario Vehicular</h1><p>72 vehículos activos · ficha completa de cada uno</p></div>
+          <div><h1>Inventario Vehicular</h1><p>100 vehículos activos · 40 vendidos este período</p></div>
           <div class="btn btn-primary">+ Nuevo vehículo</div>
         </div>
 
         <div class="kboard" id="kanbanBoard"></div>
 
+        <div class="inv-toolbar">
+          <div class="inv-filters" id="invFilters">
+            <div class="inv-filter-chip active" data-filter="all">Todos</div>
+            <div class="inv-filter-chip" data-filter="ingreso">Ingreso</div>
+            <div class="inv-filter-chip" data-filter="prep">Preparación</div>
+            <div class="inv-filter-chip" data-filter="available">Publicado</div>
+            <div class="inv-filter-chip" data-filter="reserved">Reservado</div>
+            <div class="inv-filter-chip" data-filter="sold">Vendido</div>
+          </div>
+          <input type="text" class="inv-search" id="invSearch" placeholder="Buscar por modelo o patente…">
+          <div class="inv-count" id="vehicleCountLabel"></div>
+        </div>
+
         <div id="vehicleList"></div>
+        <div class="btn btn-ghost load-more-btn" id="loadMoreBtn" style="display:none;">Cargar más vehículos</div>
       </div>
 
       <!-- ============ COMPRAS ============ -->
@@ -405,13 +429,11 @@
 
       <!-- ============ VENTAS ============ -->
       <div class="view" id="view-ventas">
-        <div class="view-head"><div><h1>Ventas y Cierre</h1><p>Rentabilidad calculada automáticamente al cerrar</p></div></div>
+        <div class="view-head"><div><h1>Ventas y Cierre</h1><p id="ventasSubtitle">Rentabilidad calculada automáticamente al cerrar</p></div></div>
         <div class="card">
-          <div class="table-scroll"><table>
+          <div class="table-scroll" style="max-height:480px; overflow-y:auto;"><table>
             <tr><th>Cliente</th><th>Vehículo</th><th>Precio venta</th><th>Forma pago</th><th>Vendedor</th><th>Margen real</th><th>Comisión</th></tr>
-            <tr><td>Javier Muñoz</td><td>Mazda CX-5 2020</td><td>$16.490.000</td><td>Financiamiento</td><td>Carla M.</td><td style="color:var(--accent-2); font-weight:600;">$2.180.000</td><td>$494.700</td></tr>
-            <tr><td>Soledad Vera</td><td>Kia Sportage 2021</td><td>$19.990.000</td><td>Contado</td><td>Diego R.</td><td style="color:var(--accent-2); font-weight:600;">$2.640.000</td><td>$599.700</td></tr>
-            <tr><td>Ignacio Rojas</td><td>Nissan Versa 2019</td><td>$9.290.000</td><td>Financiamiento</td><td>Fernanda S.</td><td style="color:var(--accent-2); font-weight:600;">$1.120.000</td><td>$278.700</td></tr>
+            <tbody id="ventasTableBody"></tbody>
           </table></div>
         </div>
       </div>
@@ -610,33 +632,99 @@
   buildBars('dashBars', [40,55,48,62,58,75,70,88,80,95,90,100]);
   buildBars('reportBars', [25,35,32,48,44,60,55,70,66,78,82,90]);
 
-  // ---------- Inventario: table + ficha de vehículo ----------
-  const vehicles = [
-    { name:"Toyota Hilux SRV", plate:"ABC123", vin:"9BWZZZ377VT004251", engine:"2GD-FTV", year:2023, km:120000, fuel:"Diesel", trans:"Automática", color:"Blanco", body:"Doble cabina",
-      state:"available", stateLabel:"Publicado", price:31490000, buy:24200000, costs:1300000, totalCost:25500000, minPrice:29900000, marginExp:5990000, marginFinal:null, days:22,
-      photo:"https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=500&q=80&fit=crop&auto=format",
-      alerts:[] },
-    { name:"Mazda CX-5", plate:"XPQ982", vin:"JM3KE2CY0M0123456", engine:"PY-VPS", year:2020, km:58000, fuel:"Bencina", trans:"Automática", color:"Gris", body:"SUV",
-      state:"available", stateLabel:"Publicado", price:16490000, buy:13100000, costs:800000, totalCost:13900000, minPrice:15200000, marginExp:2600000, marginFinal:null, days:92,
-      photo:"https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=500&q=80&fit=crop&auto=format",
-      alerts:["stalled","price"] },
-    { name:"Kia Sportage", plate:"RTY345", vin:"KNAPH813AG7654321", engine:"G4NA", year:2021, km:41000, fuel:"Bencina", trans:"Automática", color:"Rojo", body:"SUV",
-      state:"reserved", stateLabel:"Reservado", price:19990000, buy:16500000, costs:600000, totalCost:17100000, minPrice:18900000, marginExp:2890000, marginFinal:null, days:14,
-      photo:"https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=500&q=80&fit=crop&auto=format",
-      alerts:[] },
-    { name:"Nissan Versa", plate:"LMN221", vin:"3N1CN7AP4KL456789", engine:"HR16", year:2019, km:70500, fuel:"Bencina", trans:"Manual", color:"Blanco", body:"Sedán",
-      state:"sold", stateLabel:"Vendido", price:9290000, buy:7600000, costs:400000, totalCost:8000000, minPrice:8700000, marginExp:1290000, marginFinal:1120000, days:0,
-      photo:"https://images.unsplash.com/photo-1704246125646-cfdf0cb6d2b8?w=500&q=80&fit=crop&auto=format",
-      alerts:[] },
-    { name:"Chevrolet Sail", plate:"GHI778", vin:"9GAAT8090J1122334", engine:"1.5L", year:2021, km:45000, fuel:"Bencina", trans:"Manual", color:"Plata", body:"Sedán",
-      state:"prep", stateLabel:"Preparación", price:9800000, buy:8100000, costs:350000, totalCost:8450000, minPrice:9200000, marginExp:1350000, marginFinal:null, days:5,
-      photo:"https://images.unsplash.com/photo-1654554584641-1266def1cd14?w=500&q=80&fit=crop&auto=format",
-      alerts:["margin"] },
-    { name:"Hyundai Tucson", plate:"JKL560", vin:"KM8J3CA46NU123456", engine:"2.0L", year:2022, km:30200, fuel:"Bencina", trans:"Automática", color:"Azul", body:"SUV",
-      state:"ingreso", stateLabel:"Ingreso", price:0, buy:15200000, costs:0, totalCost:15200000, minPrice:0, marginExp:0, marginFinal:null, days:2,
-      photo:"https://images.unsplash.com/photo-1688893287874-ac7fbd686c24?w=500&q=80&fit=crop&auto=format",
-      alerts:[] },
+  // ---------- Inventario: generador de datos realistas (100 activos + 40 vendidos) ----------
+  function seededRandom(seed){
+    let s = seed;
+    return function(){ s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; };
+  }
+  const rnd = seededRandom(1234567);
+  const pick = arr => arr[Math.floor(rnd()*arr.length)];
+  const randInt = (min,max) => Math.floor(rnd()*(max-min+1))+min;
+  const randPlate = () => {
+    const L = () => String.fromCharCode(65+Math.floor(rnd()*26));
+    return `${L()}${L()}${L()}${randInt(10,99)}`;
+  };
+  const randVin = () => Array.from({length:17}, () => "0123456789ABCDEFGHJKLMNPRSTUVWXYZ"[Math.floor(rnd()*34)]).join('');
+
+  const PHOTOS = {
+    pickup:"https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=500&q=80&fit=crop&auto=format",
+    suv1:"https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=500&q=80&fit=crop&auto=format",
+    suv2:"https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=500&q=80&fit=crop&auto=format",
+    suv3:"https://images.unsplash.com/photo-1688893287874-ac7fbd686c24?w=500&q=80&fit=crop&auto=format",
+    sedan1:"https://images.unsplash.com/photo-1654554584641-1266def1cd14?w=500&q=80&fit=crop&auto=format",
+    sedan2:"https://images.unsplash.com/photo-1704246125646-cfdf0cb6d2b8?w=500&q=80&fit=crop&auto=format",
+  };
+  const CATALOG = [
+    { name:"Toyota Hilux SRV", body:"Doble cabina", fuel:"Diesel", trans:"Automática", photo:PHOTOS.pickup, priceRange:[24000000,35000000] },
+    { name:"Ford Ranger XLT", body:"Doble cabina", fuel:"Diesel", trans:"Automática", photo:PHOTOS.pickup, priceRange:[22000000,32000000] },
+    { name:"Mazda CX-5", body:"SUV", fuel:"Bencina", trans:"Automática", photo:PHOTOS.suv1, priceRange:[13000000,19000000] },
+    { name:"Honda CR-V", body:"SUV", fuel:"Bencina", trans:"Automática", photo:PHOTOS.suv1, priceRange:[14000000,20000000] },
+    { name:"Kia Sportage", body:"SUV", fuel:"Bencina", trans:"Automática", photo:PHOTOS.suv2, priceRange:[15000000,21000000] },
+    { name:"Volkswagen Tiguan", body:"SUV", fuel:"Bencina", trans:"Automática", photo:PHOTOS.suv2, priceRange:[15000000,22000000] },
+    { name:"Hyundai Tucson", body:"SUV", fuel:"Bencina", trans:"Automática", photo:PHOTOS.suv3, priceRange:[14000000,20000000] },
+    { name:"Renault Duster", body:"SUV", fuel:"Bencina", trans:"Manual", photo:PHOTOS.suv3, priceRange:[9000000,14000000] },
+    { name:"Nissan Versa", body:"Sedán", fuel:"Bencina", trans:"Manual", photo:PHOTOS.sedan2, priceRange:[7000000,11000000] },
+    { name:"Toyota Corolla", body:"Sedán", fuel:"Bencina", trans:"Automática", photo:PHOTOS.sedan1, priceRange:[9000000,14000000] },
+    { name:"Chevrolet Sail", body:"Sedán", fuel:"Bencina", trans:"Manual", photo:PHOTOS.sedan1, priceRange:[7000000,10500000] },
+    { name:"Suzuki Swift", body:"Sedán", fuel:"Bencina", trans:"Manual", photo:PHOTOS.sedan2, priceRange:[6500000,9500000] },
   ];
+  const COLORS = ["Blanco","Gris","Plata","Negro","Rojo","Azul"];
+  const SELLERS = ["Carla M.","Diego R.","Fernanda S.","Pablo T.","Marcela U."];
+  const FIRST_NAMES = ["Javier","Soledad","Ignacio","María","Rodrigo","Camila","Pedro","Andrea","Felipe","Valentina","Nicolás","Constanza","Matías","Francisca","Sebastián","Antonia"];
+  const LAST_NAMES = ["Muñoz","Vera","Rojas","Soto","Paredes","Reyes","Alarcón","González","Fuentes","Contreras","Espinoza","Bravo"];
+  const randClient = () => `${pick(FIRST_NAMES)} ${pick(LAST_NAMES)}`;
+
+  function buildVehicle(state){
+    const cat = pick(CATALOG);
+    const year = randInt(2016, 2024);
+    const age = 2026 - year;
+    const km = Math.max(3000, age*randInt(9000,16000));
+    const basePrice = randInt(cat.priceRange[0], cat.priceRange[1]);
+    const buy = Math.round(basePrice * (0.76 + rnd()*0.06));
+    const costs = Math.round(buy * (0.03 + rnd()*0.05));
+    const totalCost = buy + costs;
+    const minPrice = Math.round(totalCost * 1.05);
+    const isPending = state === "ingreso";
+    const price = isPending ? 0 : basePrice;
+    const marginExp = isPending ? 0 : (price - totalCost);
+    let days, marginFinal = null;
+    if(state==="ingreso") days = randInt(0,5);
+    else if(state==="prep") days = randInt(2,15);
+    else if(state==="reserved") days = randInt(2,30);
+    else if(state==="sold") { days = randInt(4,60); marginFinal = Math.round(marginExp * (0.85 + rnd()*0.25)); }
+    else days = randInt(1,150); // available
+
+    const alerts = [];
+    if(state==="available" && days>90) alerts.push("stalled");
+    if(!isPending && (marginExp/totalCost) < 0.09) alerts.push("margin");
+    if(state==="available" && rnd()<0.12) alerts.push("price");
+
+    const stateLabel = { ingreso:"Ingreso", prep:"Preparación", available:"Publicado", reserved:"Reservado", sold:"Vendido" }[state];
+
+    return {
+      name: cat.name, plate: randPlate(), vin: randVin(), engine: cat.body==="Doble cabina" ? "Diesel Turbo" : "Multipoint",
+      year, km, fuel: cat.fuel, trans: cat.trans, color: pick(COLORS), body: cat.body,
+      state, stateLabel, price, buy, costs, totalCost, minPrice, marginExp, marginFinal, days,
+      photo: cat.photo, alerts,
+      // solo para vendidos: datos de la venta
+      sale: state==="sold" ? {
+        cliente: randClient(),
+        formaPago: rnd()<0.55 ? "Financiamiento" : "Contado",
+        vendedor: pick(SELLERS),
+        comision: Math.round((marginFinal ?? 0) * 0.22),
+      } : null,
+    };
+  }
+
+  function generateInventory(){
+    const list = [];
+    const counts = { ingreso:8, prep:14, available:61, reserved:17, sold:40 };
+    Object.entries(counts).forEach(([state,n])=>{
+      for(let i=0;i<n;i++) list.push(buildVehicle(state));
+    });
+    return list;
+  }
+  const vehicles = generateInventory();
   const fmt = n => "$" + n.toLocaleString('es-CL');
   const badgeClass = { available:"available", reserved:"reserved", sold:"sold", prep:"prep", ingreso:"ingreso" };
   const kanbanCols = [
@@ -646,10 +734,13 @@
     { state:"reserved", label:"Reservado", dot:"#ffc76b" },
     { state:"sold", label:"Vendido", dot:"var(--text-faint)" },
   ];
+  const KANBAN_PREVIEW_LIMIT = 4;
   function renderInventoryKanban(){
     const board = document.getElementById('kanbanBoard');
     board.innerHTML = kanbanCols.map(col=>{
       const items = vehicles.map((v,i)=>({...v, idx:i})).filter(v=>v.state===col.state);
+      const shown = items.slice(0, KANBAN_PREVIEW_LIMIT);
+      const rest = items.length - shown.length;
       return `
         <div class="kcol">
           <div class="kcol-head">
@@ -657,7 +748,7 @@
             <span class="lbl">${col.label}</span>
             <span class="count">${items.length}</span>
           </div>
-          ${items.length ? items.map(v=>`
+          ${shown.length ? shown.map(v=>`
             <div class="kcard" data-idx="${v.idx}">
               <div class="kthumb veh-thumb"><img class="veh-photo" src="${v.photo}" alt="${v.name}" loading="lazy"></div>
               <div class="kinfo">
@@ -666,6 +757,7 @@
               </div>
               <div class="kdays">${v.days} días</div>
             </div>`).join('') : `<div class="kempty">No hay vehículos</div>`}
+          ${rest > 0 ? `<div class="kmore" data-state="${col.state}">+${rest} más</div>` : ''}
         </div>`;
     }).join('');
     board.querySelectorAll('.kcard').forEach(card=>{
@@ -673,6 +765,9 @@
         const el = document.getElementById('vehicle-card-'+card.dataset.idx);
         if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
       });
+    });
+    board.querySelectorAll('.kmore').forEach(el=>{
+      el.addEventListener('click', ()=>setInventoryFilter(el.dataset.state));
     });
   }
 
@@ -722,12 +817,88 @@
     </div>`;
   }
 
+  const PAGE_SIZE = 8;
+  let invFilter = 'all';
+  let invSearchTerm = '';
+  let invVisibleCount = PAGE_SIZE;
+
+  function getFilteredVehicles(){
+    return vehicles
+      .map((v,idx)=>({...v, idx}))
+      .filter(v=>{
+        const matchesFilter = invFilter==='all' || v.state===invFilter;
+        const term = invSearchTerm.toLowerCase();
+        const matchesSearch = !term || v.name.toLowerCase().includes(term) || v.plate.toLowerCase().includes(term);
+        return matchesFilter && matchesSearch;
+      });
+  }
+
   function renderVehicleList(){
-    document.getElementById('vehicleList').innerHTML = vehicles.map((v,idx)=>vehicleCardHTML(v, idx)).join('');
+    const filtered = getFilteredVehicles();
+    const toShow = filtered.slice(0, invVisibleCount);
+    document.getElementById('vehicleList').innerHTML = toShow.map(v=>vehicleCardHTML(v, v.idx)).join('')
+      || `<div class="card" style="text-align:center; color:var(--text-faint); font-size:12.5px;">No se encontraron vehículos con ese filtro o búsqueda.</div>`;
+    document.getElementById('vehicleCountLabel').textContent = `${filtered.length} vehículo${filtered.length===1?'':'s'}`;
+    document.getElementById('loadMoreBtn').style.display = invVisibleCount < filtered.length ? 'inline-flex' : 'none';
+  }
+
+  function setInventoryFilter(state){
+    invFilter = state;
+    invVisibleCount = PAGE_SIZE;
+    document.querySelectorAll('.inv-filter-chip').forEach(c=>c.classList.toggle('active', c.dataset.filter===state));
+    renderVehicleList();
+    document.getElementById('vehicleList').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  document.querySelectorAll('.inv-filter-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>setInventoryFilter(chip.dataset.filter));
+  });
+  document.getElementById('invSearch').addEventListener('input', e=>{
+    invSearchTerm = e.target.value;
+    invVisibleCount = PAGE_SIZE;
+    renderVehicleList();
+  });
+  document.getElementById('loadMoreBtn').addEventListener('click', ()=>{
+    invVisibleCount += PAGE_SIZE;
+    renderVehicleList();
+  });
+
+  function renderVentas(){
+    const sold = vehicles.filter(v=>v.state==="sold");
+    const totalVentas = sold.reduce((sum,v)=>sum+(v.price||0), 0);
+    document.getElementById('ventasTableBody').innerHTML = sold.map(v=>`
+      <tr>
+        <td>${v.sale.cliente}</td>
+        <td>${v.name} ${v.year}</td>
+        <td>${fmt(v.price)}</td>
+        <td>${v.sale.formaPago}</td>
+        <td>${v.sale.vendedor}</td>
+        <td style="color:var(--accent-2); font-weight:600;">${fmt(v.marginFinal)}</td>
+        <td>${fmt(v.sale.comision)}</td>
+      </tr>`).join('');
+    document.getElementById('ventasSubtitle').textContent =
+      `${sold.length} vehículos vendidos este período · ${fmt(totalVentas)} en ventas totales`;
+  }
+
+  function renderRanking(){
+    const sold = vehicles.filter(v=>v.state==="sold");
+    const bySeller = {};
+    sold.forEach(v=>{
+      const key = v.sale.vendedor;
+      if(!bySeller[key]) bySeller[key] = { count:0, ventas:0, comisiones:0 };
+      bySeller[key].count++;
+      bySeller[key].ventas += v.price;
+      bySeller[key].comisiones += v.sale.comision;
+    });
+    const rows = Object.entries(bySeller).sort((a,b)=>b[1].ventas-a[1].ventas);
+    document.getElementById('rankingTableBody').innerHTML = rows.map(([name,d])=>`
+      <tr><td>${name}</td><td>${d.count}</td><td>${fmt(d.ventas)}</td><td>${fmt(d.comisiones)}</td></tr>`).join('');
   }
 
   renderInventoryKanban();
   renderVehicleList();
+  renderVentas();
+  renderRanking();
 
   // ---------- CRM Kanban ----------
   const stages = ["Lead nuevo","Contacto","Cotización","Prueba","Financiam.","Negociación","Venta"];
