@@ -47,6 +47,9 @@ Lo que ya funciona de punta a punta:
 
 En orden de impacto probable:
 
+0. **Agregar las 5 imágenes reales de la sección "El problema"** en `images/` (ver
+   `images/README.md` para nombres exactos y especificación). Hasta que no se suban, la
+   sección se ve con placeholders con patrón diagonal en vez de las fotos reales.
 1. **Decidir si Marketing y Configuración necesitan conectarse a algo real**, o si se dejan
    como están (campañas de ejemplo y formulario de ajustes respectivamente) porque no tienen
    un mapeo natural a los datos de vehículos.
@@ -74,6 +77,11 @@ En orden de impacto probable:
 - **Etapa 3 — Botón "Iniciar sesión" en el header de la landing.** Enlace de texto simple
   junto a "Ver plataforma" (ambos llevan a `login.html` por ahora, es intencional). Se oculta
   junto con el nav central en mobile (<=760px) para no saturar el header. Commit `6004fa7`.
+- **Etapa 4 — Collage de imágenes en la sección "El problema".** Se reemplazaron las 6
+  tarjetas con emoji por un collage de 5 fotos superpuestas (Frazer, Excel, fotos dispersas,
+  Facebook Marketplace, sin seguimiento) con placeholders que se ven bien incluso sin los
+  archivos reales. **Pendiente: el usuario debe agregar las 5 imágenes reales** en
+  `images/` con los nombres exactos listados en `images/README.md`. Commit `348e1e6`.
 
 ## Cómo publicar cambios (recordatorio para el asistente)
 

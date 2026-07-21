@@ -68,6 +68,20 @@ los vehículos se vieran con ese nivel de detalle, no solo el seleccionado.
 carga por JavaScript y no se pudo inspeccionar (sin navegador Chrome conectado en la
 sesión). Es un login 100% demo: cualquier correo/contraseña entra, no hay backend.
 
+## Sección "El problema" — collage con placeholders
+
+Se rediseñó de tarjetas con emoji a un collage de 5 fotos superpuestas y rotadas (estilo
+"caos operativo"), a pedido del usuario, quien va a subir las imágenes reales él mismo
+(capturas de Frazer, Excel, fotos desordenadas de vehículos, Facebook Marketplace, y algo
+que represente clientes sin seguimiento).
+
+**Los `<img>` usan `onerror` para degradarse a un placeholder con patrón diagonal + ícono**
+en vez de mostrar el ícono nativo de "imagen rota" del navegador. Esto es intencional: como
+las imágenes reales todavía no existen en el repo, el sitio se ve terminado e intencional
+igual mientras el usuario las sube. Los nombres de archivo exactos esperados están en
+`images/README.md` — si se agregan imágenes con otro nombre, hay que actualizar el `src` en
+`index.html` o renombrar los archivos para que coincidan.
+
 ## Módulos conectados al generador de datos
 
 **Se conectaron Compras, Financiamiento, Documentos, Contabilidad y Reportes al mismo
