@@ -68,6 +68,21 @@ los vehículos se vieran con ese nivel de detalle, no solo el seleccionado.
 carga por JavaScript y no se pudo inspeccionar (sin navegador Chrome conectado en la
 sesión). Es un login 100% demo: cualquier correo/contraseña entra, no hay backend.
 
+## Cómo entregar imágenes reales a Claude (importante, causó confusión una vez)
+
+**Las imágenes pegadas o adjuntadas directamente en el chat NO quedan como archivo
+accesible para Claude** — Claude solo las "ve" como parte de la conversación, pero no hay
+un archivo en disco que pueda copiar (se verificó que la carpeta de uploads del sandbox
+queda vacía en ese caso). La única forma que funciona es que el usuario **arrastre el
+archivo directamente a la carpeta conectada** (`~/CLAUDE/...`, cualquier subcarpeta) usando
+Finder — ahí sí Claude puede leerlo, moverlo, comprimirlo, etc.
+
+**Las imágenes que suba el usuario deben comprimirse antes de commitear** si van a mostrarse
+como miniaturas pequeñas: no tiene sentido subir un screenshot de pantalla completa de varios
+MB para una foto de 92×92px. Se usó PIL (`Image.resize` + guardar como JPEG calidad ~78,
+máximo 600px de ancho) — una imagen de 4.4MB bajó a ~46KB sin pérdida visible a ese tamaño.
+Esto es una buena práctica a repetir con cualquier imagen nueva que se agregue al sitio.
+
 ## Sección "El problema" — de emojis a collage a fila chica
 
 Se rediseñó dos veces sobre la misma idea (5 imágenes: Frazer, Excel, fotos desordenadas de

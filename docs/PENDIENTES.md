@@ -77,13 +77,15 @@ En orden de impacto probable:
 - **Etapa 3 — Botón "Iniciar sesión" en el header de la landing.** Enlace de texto simple
   junto a "Ver plataforma" (ambos llevan a `login.html` por ahora, es intencional). Se oculta
   junto con el nav central en mobile (<=760px) para no saturar el header. Commit `6004fa7`.
-- **Etapa 4 — Imágenes en la sección "El problema" (rediseñada dos veces).** Primero se hizo
-  un collage grande de 5 fotos superpuestas/rotadas (commit `348e1e6`), pero el usuario pidió
-  algo más chico y rápido de ver: se cambió a una **fila compacta de 5 miniaturas (92×92px)
-  a la derecha del título**, con el texto a la izquierda (commit `5dc6203`). Los 5
-  placeholders (Frazer, Excel, Fotos dispersas, Facebook, Sin seguimiento) siguen siendo los
-  mismos. **Pendiente: el usuario debe agregar las 5 imágenes reales** en `images/` con los
-  nombres exactos listados en `images/README.md`.
+- **Etapa 4 — Imágenes en la sección "El problema" (rediseñada dos veces + 2 imágenes reales
+  agregadas).** Primero un collage grande de 5 fotos superpuestas/rotadas (commit `348e1e6`),
+  luego una fila compacta de 5 miniaturas (92×92px) a la derecha del título (commit
+  `5dc6203`). El usuario subió las imágenes reales de **Frazer** y **Facebook Marketplace**
+  a `~/CLAUDE/motoros/images/` (via Finder, no por el chat — los archivos pegados en el chat
+  no quedan accesibles como archivo real, solo se ven). Se comprimieron (una pesaba 4.4MB) y
+  se muestran **apiladas como dos hojas superpuestas**, no como cuadros separados (commit
+  `7209015`). **Pendiente: faltan 3 imágenes reales** (Excel, Fotos dispersas, Sin
+  seguimiento) — siguen como placeholders. Ver `images/README.md` para el estado exacto.
 - **Fix — placeholder de imágenes no se veía.** El `onerror` de los `<img>` llamaba
   `this.remove()` antes de leer `this.parentElement`, y al remover el nodo se pierde la
   referencia al padre — la clase `img-missing` nunca se aplicaba y la tarjeta quedaba
