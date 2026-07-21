@@ -77,15 +77,14 @@ En orden de impacto probable:
 - **Etapa 3 — Botón "Iniciar sesión" en el header de la landing.** Enlace de texto simple
   junto a "Ver plataforma" (ambos llevan a `login.html` por ahora, es intencional). Se oculta
   junto con el nav central en mobile (<=760px) para no saturar el header. Commit `6004fa7`.
-- **Etapa 4 — Imágenes en la sección "El problema" (rediseñada dos veces + 2 imágenes reales
-  agregadas).** Primero un collage grande de 5 fotos superpuestas/rotadas (commit `348e1e6`),
-  luego una fila compacta de 5 miniaturas (92×92px) a la derecha del título (commit
-  `5dc6203`). El usuario subió las imágenes reales de **Frazer** y **Facebook Marketplace**
-  a `~/CLAUDE/motoros/images/` (via Finder, no por el chat — los archivos pegados en el chat
-  no quedan accesibles como archivo real, solo se ven). Se comprimieron (una pesaba 4.4MB) y
-  se muestran **apiladas como dos hojas superpuestas**, no como cuadros separados (commit
-  `7209015`). **Pendiente: faltan 3 imágenes reales** (Excel, Fotos dispersas, Sin
-  seguimiento) — siguen como placeholders. Ver `images/README.md` para el estado exacto.
+- **Etapa 4 — Imágenes en la sección "El problema" (varias iteraciones de diseño).**
+  Collage grande superpuesto → fila compacta de miniaturas con etiquetas de texto → fila
+  sin etiquetas con imágenes más grandes (140×140px, 100×100px en mobile). El usuario subió
+  **Frazer** y **Facebook Marketplace** a `~/CLAUDE/motoros/images/` (vía Finder), se
+  comprimieron (una pesaba 4.4MB) y se muestran apiladas como dos hojas superpuestas, sin
+  texto encima. Commits `348e1e6`, `5dc6203`, `7209015`, `225e3dd`. **Pendiente: faltan 3
+  imágenes reales** (Excel, Fotos dispersas, Sin seguimiento) — siguen como placeholders sin
+  etiqueta. Ver `images/README.md` para el estado exacto.
 - **Fix — placeholder de imágenes no se veía.** El `onerror` de los `<img>` llamaba
   `this.remove()` antes de leer `this.parentElement`, y al remover el nodo se pierde la
   referencia al padre — la clase `img-missing` nunca se aplicaba y la tarjeta quedaba
