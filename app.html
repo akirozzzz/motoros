@@ -92,7 +92,19 @@
   tr.row-click{cursor:pointer;}
   tr.row-click:hover td{background:var(--glass);}
   tr.selected td{background:var(--glass-strong); color:var(--text);}
-  .thumb-sm{width:34px; height:24px; border-radius:5px; background:linear-gradient(135deg,#23262d,#191b1f); display:inline-block; vertical-align:middle; margin-right:8px;}
+  .thumb-sm{width:34px; height:24px; border-radius:5px; display:inline-block; vertical-align:middle; margin-right:8px;}
+  /* estudio fotografico consistente para todos los vehiculos */
+  .veh-thumb{
+    position:relative; width:100%; height:100%; border-radius:inherit; overflow:hidden;
+    background: radial-gradient(ellipse 90% 75% at 50% 32%, #2c303a 0%, #1c1e23 62%, #131418 100%);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .veh-thumb::after{
+    content:""; position:absolute; bottom:10%; left:50%; width:64%; height:16%;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.55), transparent 72%);
+    transform: translateX(-50%);
+  }
+  .veh-icon{position:relative; z-index:1; width:66%; height:auto; color:#c9cdd6; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.45));}
   .badge{font-size:10px; padding:3px 9px; border-radius:100px; font-weight:600;}
   .badge.available{background:rgba(126,227,200,0.12); color:var(--accent-2); border:1px solid rgba(126,227,200,0.3);}
   .badge.reserved{background:rgba(255,199,107,0.12); color:#ffc76b; border:1px solid rgba(255,199,107,0.3);}
@@ -109,7 +121,7 @@
   .kcol-head .count{margin-left:auto; font-size:10.5px; font-weight:700; color:var(--text-faint); background:var(--bg-soft); padding:2px 9px; border-radius:100px;}
   .kcard{display:flex; align-items:center; gap:10px; background:var(--graphite); border:1px solid var(--line-soft); border-radius:10px; padding:9px; margin-bottom:8px; cursor:pointer; transition:border-color .15s;}
   .kcard:hover{border-color:var(--accent);}
-  .kcard .kthumb{width:44px; height:44px; border-radius:9px; background:linear-gradient(135deg,#272b34,#191b1f); display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0;}
+  .kcard .kthumb{width:44px; height:44px; border-radius:9px; flex-shrink:0;}
   .kcard .kinfo{flex:1; min-width:0;}
   .kcard .kname{font-size:12px; font-weight:700; color:var(--text); line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .kcard .kyear{font-size:10.5px; color:var(--text-faint); margin-top:2px;}
@@ -122,7 +134,8 @@
 
   /* Vehicle detail panel */
   .detail-panel{margin-top:16px;}
-  .detail-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;}
+  .detail-head{display:flex; gap:14px; justify-content:space-between; align-items:flex-start; margin-bottom:16px;}
+  .detail-photo{width:96px; height:64px; border-radius:10px; flex-shrink:0;}
   .detail-head .name{font-size:17px; font-weight:700;}
   .detail-head .sub{font-size:12px; color:var(--text-faint); margin-top:3px;}
   .field-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
@@ -246,6 +259,18 @@
 </style>
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute;">
+  <defs>
+    <symbol id="carGlyph" viewBox="0 0 100 50">
+      <path d="M8 34 C8 34 10 20 24 18 L34 18 C38 12 46 8 56 8 L68 8 C76 8 82 14 84 20 L90 20 C94 20 96 24 96 28 L96 32 C96 34 94 36 92 36 L86 36 C86 30 81 26 75 26 C69 26 64 30 64 36 L34 36 C34 30 29 26 23 26 C17 26 12 30 12 36 L8 36 C6 36 4 34 4 32 L4 30 Z" fill="currentColor"/>
+      <circle cx="23" cy="36" r="7" fill="#12141a"/>
+      <circle cx="23" cy="36" r="3" fill="currentColor" opacity="0.5"/>
+      <circle cx="75" cy="36" r="7" fill="#12141a"/>
+      <circle cx="75" cy="36" r="3" fill="currentColor" opacity="0.5"/>
+    </symbol>
+  </defs>
+</svg>
 
 <div class="app-shell">
   <div class="app-sidebar">
@@ -579,7 +604,6 @@
   ];
   const fmt = n => "$" + n.toLocaleString('es-CL');
   const badgeClass = { available:"available", reserved:"reserved", sold:"sold", prep:"prep", ingreso:"ingreso" };
-  const bodyIcon = { "Doble cabina":"🛻", "SUV":"🚙", "Sedán":"🚗" };
   const kanbanCols = [
     { state:"ingreso", label:"Ingreso", dot:"var(--accent-3)" },
     { state:"prep", label:"Preparación", dot:"var(--accent)" },
@@ -600,7 +624,7 @@
           </div>
           ${items.length ? items.map(v=>`
             <div class="kcard" data-idx="${v.idx}">
-              <div class="kthumb">${bodyIcon[v.body] || "🚗"}</div>
+              <div class="kthumb veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div>
               <div class="kinfo">
                 <div class="kname">${v.name}</div>
                 <div class="kyear">${v.year} · ${v.km.toLocaleString('es-CL')} km</div>
@@ -618,7 +642,7 @@
     const tbody = document.getElementById('vehicleTableBody');
     tbody.innerHTML = vehicles.map((v,i)=>`
       <tr class="row-click" data-idx="${i}">
-        <td><span class="thumb-sm"></span>${v.name}</td>
+        <td><span class="thumb-sm veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></span>${v.name}</td>
         <td class="mono">${v.plate}</td>
         <td>${v.year}</td>
         <td>${v.km.toLocaleString('es-CL')} km</td>
@@ -642,7 +666,8 @@
     const v = vehicles[idx];
     document.getElementById('vehicleDetail').innerHTML = `
       <div class="detail-head">
-        <div><div class="name">${v.name} ${v.year}</div><div class="sub">${v.plate} · VIN ${v.vin} · Motor ${v.engine} · ${v.fuel} · ${v.trans}</div></div>
+        <div class="detail-photo veh-thumb"><svg class="veh-icon" viewBox="0 0 100 50"><use href="#carGlyph"/></svg></div>
+        <div style="flex:1;"><div class="name">${v.name} ${v.year}</div><div class="sub">${v.plate} · VIN ${v.vin} · Motor ${v.engine} · ${v.fuel} · ${v.trans}</div></div>
         <span class="badge ${badgeClass[v.state]}">${v.stateLabel}</span>
       </div>
       <div class="field-cols">
