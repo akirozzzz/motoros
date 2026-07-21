@@ -82,6 +82,12 @@ En orden de impacto probable:
   Facebook Marketplace, sin seguimiento) con placeholders que se ven bien incluso sin los
   archivos reales. **Pendiente: el usuario debe agregar las 5 imágenes reales** en
   `images/` con los nombres exactos listados en `images/README.md`. Commit `348e1e6`.
+- **Fix — placeholder de imágenes no se veía.** El `onerror` de los `<img>` llamaba
+  `this.remove()` antes de leer `this.parentElement`, y al remover el nodo se pierde la
+  referencia al padre — la clase `img-missing` nunca se aplicaba y la tarjeta quedaba
+  vacía. Se corrigió el orden de las instrucciones. **Ojo para el futuro:** si se agrega
+  un patrón similar de "fallback de imagen con onerror" en otro lado del sitio, usar
+  siempre el orden "leer/usar el padre → después remover", nunca al revés. Commit `2b97d1d`.
 
 ## Cómo publicar cambios (recordatorio para el asistente)
 
