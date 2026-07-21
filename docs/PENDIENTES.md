@@ -37,16 +37,17 @@ Lo que ya funciona de punta a punta:
   respuestas **separada y duplicada** (dos diccionarios de preguntas/respuestas distintos).
   Si se agregan más respuestas, hay que decidir si conviene unificarlos.
 - Módulos del sidebar de `app.html` que **no tienen datos dinámicos todavía** (son vistas
-  con contenido de ejemplo estático, no conectadas al generador de inventario): Compras,
+  con contenido de ejemplo estático, no conectadas al generador de inventario):
   Financiamiento, Documentos, Contabilidad, Marketing, Reportes, Configuración.
+  (**Compras ya se conectó** — ver `docs/DECISIONES.md`.)
 
 ## Próximos pasos sugeridos (sin confirmar con el usuario todavía — ver primero con él)
 
 En orden de impacto probable:
 
-1. **Conectar el resto de los módulos al generador de datos** (Compras, Financiamiento,
-   Documentos, Contabilidad, Reportes) para que sean coherentes con los 140 vehículos, igual
-   que ya se hizo con Inventario y Ventas.
+1. **Conectar el resto de los módulos al generador de datos** (Financiamiento, Documentos,
+   Contabilidad, Reportes) para que sean coherentes con los 140 vehículos, igual que ya se
+   hizo con Inventario, Ventas y Compras.
 2. **Definir si el login necesita algo más real** (aunque sea simulado con localStorage) o
    si se deja como demo pura a propósito.
 3. **Decidir la estrategia de fotos de vehículos a largo plazo** (subir fotos propias del
@@ -56,6 +57,12 @@ En orden de impacto probable:
    no se ha hecho una pasada dedicada a esto.
 5. Confirmar si se quiere unificar la lógica de MotorOS AI (widget + vista dedicada) en una
    sola fuente de respuestas.
+
+## Historial de etapas completadas
+
+- **Etapa 1 — Compras conectada al inventario real.** Cada vehículo generado tiene un
+  origen de compra (tipo, contraparte, estado de pago, días desde el ingreso). La vista
+  Compras muestra las 20 adquisiciones más recientes de las 140 totales. Commit `6e973ef`.
 
 ## Cómo publicar cambios (recordatorio para el asistente)
 
