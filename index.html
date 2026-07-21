@@ -312,7 +312,7 @@
   .filter-chip.active{background:var(--accent); color:#fff; border-color:transparent;}
 
   /* Dashboard tab */
-  .insight-tag{font-size:10.5px; color:var(--accent-2); font-weight:700; margin-bottom:10px; letter-spacing:0.03em;}
+  .insight-tag{font-size:10.5px; color:var(--accent-2); font-weight:700; margin-bottom:10px; letter-spacing:0.03em; display:inline-flex; align-items:center; gap:6px;}
 
   /* Inventory tab: detail card + alerts */
   .veh-detail-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;}
@@ -324,7 +324,7 @@
   .field-item .l{font-size:9px; color:var(--text-faint); margin-bottom:3px; text-transform:uppercase; letter-spacing:0.03em;}
   .field-item .v{font-size:11.5px; font-weight:600; color:var(--text);}
   .alert-strip{display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;}
-  .alert-chip{font-size:10px; padding:5px 10px; border-radius:100px; background:rgba(255,199,107,0.1); color:#ffc76b; border:1px solid rgba(255,199,107,0.25); font-weight:600;}
+  .alert-chip{font-size:10px; padding:5px 10px; border-radius:100px; background:rgba(255,199,107,0.1); color:#ffc76b; border:1px solid rgba(255,199,107,0.25); font-weight:600; display:inline-flex; align-items:center; gap:5px;}
   .alert-chip.danger{background:rgba(255,107,107,0.1); color:var(--danger); border-color:rgba(255,107,107,0.25);}
 
   /* Scanner tab */
@@ -387,7 +387,6 @@
   .chat-msg.user{align-self:flex-end; flex-direction:row-reverse;}
   .chat-avatar{width:26px; height:26px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px;}
   .chat-msg.user .chat-avatar{background:var(--graphite-2); border:1px solid var(--line-soft);}
-  .bot-img{width:100%; height:100%; object-fit:contain; display:block;}
   .chat-bubble{background:var(--graphite-2); border:1px solid var(--line-soft); border-radius:12px; padding:10px 13px; font-size:12.5px; line-height:1.6; color:var(--text-dim);}
   .chat-msg.user .chat-bubble{background:rgba(91,140,255,0.12); border-color:rgba(91,140,255,0.25); color:var(--text);}
   .chat-input-mock{display:flex; align-items:center; gap:8px; background:var(--graphite-2); border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:12.5px; color:var(--text-faint);}
@@ -397,7 +396,7 @@
   .pipeline-stage{flex:1; min-width:70px; text-align:center; font-size:9px; color:var(--text-faint); background:var(--graphite-2); border-radius:7px; padding:8px 3px;}
   .pipeline-stage.hot{color:var(--accent-2); background:rgba(126,227,200,0.08); border:1px solid rgba(126,227,200,0.3);}
   .ai-insight{background:linear-gradient(135deg, rgba(185,139,255,0.1), rgba(91,140,255,0.06)); border:1px solid rgba(185,139,255,0.25); border-radius:12px; padding:14px 16px;}
-  .ai-insight .tag{font-size:10.5px; color:var(--accent-3); font-weight:700; margin-bottom:8px; letter-spacing:0.03em;}
+  .ai-insight .tag{font-size:10.5px; color:var(--accent-3); font-weight:700; margin-bottom:8px; letter-spacing:0.03em; display:inline-flex; align-items:center; gap:6px;}
   .ai-insight p{font-size:12.5px; color:var(--text-dim); line-height:1.6; margin-bottom:6px;}
   .ai-insight .prob{font-weight:700; color:var(--text);}
   .action-chip-row{display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;}
@@ -460,7 +459,9 @@
     padding:9px 11px; border-radius:9px; margin-bottom:1px; font-weight:500;
   }
   .app-nav-item.active{background:var(--glass-strong); color:var(--text);}
-  .app-nav-item .ico{width:16px; text-align:center; opacity:0.8; font-size:12px;}
+  .app-nav-item .ico{width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; opacity:0.85; flex-shrink:0;}
+  .app-nav-item .ico svg{width:16px; height:16px;}
+  .app-nav-item.active .ico{color:var(--accent);}
   .app-main{padding:26px 30px;}
   .app-main-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; flex-wrap:wrap; gap:12px;}
   .app-main-head h4{font-size:18px;}
@@ -488,6 +489,9 @@
   .footer-copy{font-size:12.5px; color:var(--text-faint);}
 
   ::selection{background:rgba(91,140,255,0.35);}
+
+  /* Lucide icons: trazo fino consistente, color hereda de currentColor */
+  svg.lucide{stroke-width:1.75; vertical-align:middle; flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -532,22 +536,22 @@
           <div class="kpi-card">
             <div class="kpi-label">Ventas del mes</div>
             <div class="kpi-value mono" data-count="458500000" data-prefix="$">$0</div>
-            <div class="kpi-trend up">↑ 12.4% vs mes anterior</div>
+            <div class="kpi-trend up"><i data-lucide="trending-up" style="width:13px;height:13px;"></i> 12.4% vs mes anterior</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Inventario activo</div>
             <div class="kpi-value mono" data-count="72" data-suffix=" vehículos">0</div>
-            <div class="kpi-trend up">↑ 5 esta semana</div>
+            <div class="kpi-trend up"><i data-lucide="trending-up" style="width:13px;height:13px;"></i> 5 esta semana</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Utilidad neta</div>
             <div class="kpi-value mono" data-count="71200000" data-prefix="$">$0</div>
-            <div class="kpi-trend up">↑ 14.8% margen medio</div>
+            <div class="kpi-trend up"><i data-lucide="trending-up" style="width:13px;height:13px;"></i> 14.8% margen medio</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Leads pendientes</div>
             <div class="kpi-value mono" data-count="18">0</div>
-            <div class="kpi-trend warn">⚠ 6 requieren contacto hoy</div>
+            <div class="kpi-trend warn"><i data-lucide="triangle-alert" style="width:13px;height:13px;"></i> 6 requieren contacto hoy</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-label">Alertas IA</div>
@@ -657,7 +661,7 @@
                 <div class="mini-kpi"><div class="l">Caja disponible</div><div class="v small">$184M</div></div>
                 <div class="mini-kpi"><div class="l">Ctas. por cobrar</div><div class="v small">$38M</div></div>
               </div>
-              <div class="insight-tag">🤖 MOTOROS INSIGHTS</div>
+              <div class="insight-tag"><i data-lucide="sparkles" style="width:12px;height:12px;"></i> MOTOROS INSIGHTS</div>
               <div class="ai-alert-list">
                 <div class="ai-alert"><span class="pip"></span> Tu inventario aumentó 15% este mes.</div>
                 <div class="ai-alert"><span class="pip"></span> 8 vehículos llevan más de 90 días sin venderse.</div>
@@ -680,7 +684,7 @@
               <div class="kanban">
                 <div class="kanban-col"><h5>Ingreso</h5><div class="car-card"><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1654554584641-1266def1cd14?w=300&q=80&fit=crop&auto=format" alt="Chevrolet Sail" loading="lazy"></div><div class="name">Chevrolet Sail</div><div class="meta">2021 · 45.000 km</div></div></div>
                 <div class="kanban-col"><h5>Preparación</h5><div class="car-card"><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1688893287874-ac7fbd686c24?w=300&q=80&fit=crop&auto=format" alt="Hyundai Tucson" loading="lazy"></div><div class="name">Hyundai Tucson</div><div class="meta">2022 · 30.200 km</div></div></div>
-                <div class="kanban-col"><h5>Publicado</h5><div class="car-card"><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=300&q=80&fit=crop&auto=format" alt="Hilux SRV" loading="lazy"></div><div class="name">Hilux SRV</div><div class="meta">2023 · 120.000 km</div></div><div class="car-card"><div class="warn-dot">⚠</div><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=300&q=80&fit=crop&auto=format" alt="CX-5" loading="lazy"></div><div class="name">CX-5</div><div class="meta">92 días en stock</div></div></div>
+                <div class="kanban-col"><h5>Publicado</h5><div class="car-card"><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1559416523-140ddc3d238c?w=300&q=80&fit=crop&auto=format" alt="Hilux SRV" loading="lazy"></div><div class="name">Hilux SRV</div><div class="meta">2023 · 120.000 km</div></div><div class="car-card"><div class="warn-dot"><i data-lucide="triangle-alert" style="width:10px;height:10px;"></i></div><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=300&q=80&fit=crop&auto=format" alt="CX-5" loading="lazy"></div><div class="name">CX-5</div><div class="meta">92 días en stock</div></div></div>
                 <div class="kanban-col"><h5>Reservado</h5><div class="car-card"><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=300&q=80&fit=crop&auto=format" alt="Kia Sportage" loading="lazy"></div><div class="name">Kia Sportage</div><div class="meta">2021 · 41.000 km</div></div></div>
                 <div class="kanban-col"><h5>Vendido</h5><div class="car-card"><div class="thumb veh-thumb"><img class="veh-photo" src="https://images.unsplash.com/photo-1704246125646-cfdf0cb6d2b8?w=300&q=80&fit=crop&auto=format" alt="Nissan Versa" loading="lazy"></div><div class="name">Nissan Versa</div><div class="meta">2019 · 70.500 km</div></div></div>
               </div>
@@ -694,9 +698,9 @@
                 <div class="field-item"><div class="l">Margen esperado</div><div class="v">$5.990.000</div></div>
               </div>
               <div class="alert-strip">
-                <div class="alert-chip">⚠ Vehículo detenido (2)</div>
-                <div class="alert-chip danger">⚠ Margen bajo (1)</div>
-                <div class="alert-chip">⚠ Precio fuera de mercado (3)</div>
+                <div class="alert-chip"><i data-lucide="triangle-alert" style="width:12px;height:12px;"></i> Vehículo detenido (2)</div>
+                <div class="alert-chip danger"><i data-lucide="triangle-alert" style="width:12px;height:12px;"></i> Margen bajo (1)</div>
+                <div class="alert-chip"><i data-lucide="triangle-alert" style="width:12px;height:12px;"></i> Precio fuera de mercado (3)</div>
               </div>
             </div>
           </div>
@@ -741,9 +745,9 @@
           <div class="module-visual">
             <div class="visual-card">
               <div class="doc-list">
-                <div class="doc-row"><div class="ico">🔑</div><div class="body"><div class="name">Compra directa — Chevrolet Sail</div><div class="meta">Cliente vendedor: Rodrigo Paredes · $18.900.000</div></div><div class="status">Pagado</div></div>
-                <div class="doc-row"><div class="ico">📋</div><div class="body"><div class="name">Consignación — Hyundai Tucson</div><div class="meta">Proveedor: AutoExpress</div></div><div class="status pending">Doc. pendiente</div></div>
-                <div class="doc-row"><div class="ico">🔁</div><div class="body"><div class="name">Intercambio — recibe Chevrolet Sail</div><div class="meta">Cliente: María Soto</div></div><div class="status">Registrado</div></div>
+                <div class="doc-row"><div class="ico"><i data-lucide="banknote" style="width:14px;height:14px;"></i></div><div class="body"><div class="name">Compra directa — Chevrolet Sail</div><div class="meta">Cliente vendedor: Rodrigo Paredes · $18.900.000</div></div><div class="status">Pagado</div></div>
+                <div class="doc-row"><div class="ico"><i data-lucide="file-signature" style="width:14px;height:14px;"></i></div><div class="body"><div class="name">Consignación — Hyundai Tucson</div><div class="meta">Proveedor: AutoExpress</div></div><div class="status pending">Doc. pendiente</div></div>
+                <div class="doc-row"><div class="ico"><i data-lucide="repeat" style="width:14px;height:14px;"></i></div><div class="body"><div class="name">Intercambio — recibe Chevrolet Sail</div><div class="meta">Cliente: María Soto</div></div><div class="status">Registrado</div></div>
               </div>
             </div>
           </div>
@@ -769,7 +773,7 @@
                 <div class="pipeline-stage">Venta</div>
               </div>
               <div class="ai-insight">
-                <div class="tag">🤖 IA COMERCIAL</div>
+                <div class="tag"><i data-lucide="sparkles" style="width:12px;height:12px;"></i> IA COMERCIAL</div>
                 <p>"Cliente interesado en Toyota Corolla hace 3 horas."</p>
                 <p>Probabilidad de compra: <span class="prob">86%</span>. Cliente con alta intención.</p>
               </div>
@@ -816,8 +820,8 @@
           <div class="module-visual">
             <div class="visual-card">
               <div class="stepper">
-                <div class="step done"><div class="dot2">✓</div><div class="lbl">Enviada</div></div>
-                <div class="step done"><div class="dot2">✓</div><div class="lbl">Evaluación</div></div>
+                <div class="step done"><div class="dot2"><i data-lucide="check" style="width:11px;height:11px;"></i></div><div class="lbl">Enviada</div></div>
+                <div class="step done"><div class="dot2"><i data-lucide="check" style="width:11px;height:11px;"></i></div><div class="lbl">Evaluación</div></div>
                 <div class="step current"><div class="dot2">●</div><div class="lbl">Aprobado</div></div>
                 <div class="step"><div class="dot2">4</div><div class="lbl">Firmado</div></div>
               </div>
@@ -841,10 +845,10 @@
           <div class="module-visual">
             <div class="visual-card">
               <div class="doc-list">
-                <div class="doc-row"><div class="ico">📄</div><div class="body"><div class="name">Nota de venta — Mazda CX-5</div></div><div class="status">Generado</div></div>
-                <div class="doc-row"><div class="ico">📄</div><div class="body"><div class="name">Contrato de compra — Chevrolet Sail</div></div><div class="status">Generado</div></div>
-                <div class="doc-row"><div class="ico">📄</div><div class="body"><div class="name">Contrato de consignación</div></div><div class="status">Generado</div></div>
-                <div class="doc-row"><div class="ico">📄</div><div class="body"><div class="name">Documentos de entrega</div></div><div class="status">Generado</div></div>
+                <div class="doc-row"><div class="ico"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div><div class="body"><div class="name">Nota de venta — Mazda CX-5</div></div><div class="status">Generado</div></div>
+                <div class="doc-row"><div class="ico"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div><div class="body"><div class="name">Contrato de compra — Chevrolet Sail</div></div><div class="status">Generado</div></div>
+                <div class="doc-row"><div class="ico"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div><div class="body"><div class="name">Contrato de consignación</div></div><div class="status">Generado</div></div>
+                <div class="doc-row"><div class="ico"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div><div class="body"><div class="name">Documentos de entrega</div></div><div class="status">Generado</div></div>
               </div>
             </div>
           </div>
@@ -943,10 +947,10 @@
           <div class="module-visual">
             <div class="visual-card">
               <div class="chat-window">
-                <div class="chat-msg user"><div class="chat-avatar">👤</div><div class="chat-bubble">¿Qué autos debería bajar de precio?</div></div>
-                <div class="chat-msg ai"><div class="chat-avatar"><img class="bot-img" src="images/chatbot.png" alt="MotorOS AI"></div><div class="chat-bubble">Estos 7 vehículos tienen bajo movimiento y margen suficiente para ajuste.</div></div>
-                <div class="chat-msg user"><div class="chat-avatar">👤</div><div class="chat-bubble">¿Cuánto ganamos este mes?</div></div>
-                <div class="chat-msg ai"><div class="chat-avatar"><img class="bot-img" src="images/chatbot.png" alt="MotorOS AI"></div><div class="chat-bubble">Vendieron 18 vehículos con margen promedio de 14,8%.</div></div>
+                <div class="chat-msg user"><div class="chat-avatar"><i data-lucide="user" style="width:15px;height:15px;"></i></div><div class="chat-bubble">¿Qué autos debería bajar de precio?</div></div>
+                <div class="chat-msg ai"><div class="chat-avatar"><i data-lucide="bot" style="width:15px;height:15px;"></i></div><div class="chat-bubble">Estos 7 vehículos tienen bajo movimiento y margen suficiente para ajuste.</div></div>
+                <div class="chat-msg user"><div class="chat-avatar"><i data-lucide="user" style="width:15px;height:15px;"></i></div><div class="chat-bubble">¿Cuánto ganamos este mes?</div></div>
+                <div class="chat-msg ai"><div class="chat-avatar"><i data-lucide="bot" style="width:15px;height:15px;"></i></div><div class="chat-bubble">Vendieron 18 vehículos con margen promedio de 14,8%.</div></div>
               </div>
               <div class="chat-input-mock">Pregúntale a MotorOS AI...</div>
             </div>
@@ -970,19 +974,19 @@
     <div class="product-frame reveal">
       <div class="app-sidebar">
         <div class="app-logo"><div class="logo-mark">M</div>MotorOS</div>
-        <div class="app-nav-item active"><span class="ico">▣</span> Dashboard</div>
-        <div class="app-nav-item"><span class="ico">🚗</span> Inventario</div>
-        <div class="app-nav-item"><span class="ico">🔑</span> Compras</div>
-        <div class="app-nav-item"><span class="ico">💳</span> Ventas</div>
-        <div class="app-nav-item"><span class="ico">👥</span> Clientes CRM</div>
-        <div class="app-nav-item"><span class="ico">🏦</span> Financiamiento</div>
-        <div class="app-nav-item"><span class="ico">📄</span> Documentos</div>
-        <div class="app-nav-item"><span class="ico">📚</span> Contabilidad</div>
-        <div class="app-nav-item"><span class="ico">📣</span> Marketing</div>
-        <div class="app-nav-item"><span class="ico">🌐</span> Publicaciones</div>
-        <div class="app-nav-item"><span class="ico">📊</span> Reportes</div>
-        <div class="app-nav-item"><span class="ico">🤖</span> MotorOS AI</div>
-        <div class="app-nav-item"><span class="ico">⚙️</span> Configuración</div>
+        <div class="app-nav-item active"><span class="ico"><i data-lucide="layout-dashboard"></i></span> Dashboard</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="car"></i></span> Inventario</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="shopping-cart"></i></span> Compras</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="badge-dollar-sign"></i></span> Ventas</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="users"></i></span> Clientes CRM</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="landmark"></i></span> Financiamiento</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="file-text"></i></span> Documentos</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="calculator"></i></span> Contabilidad</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="megaphone"></i></span> Marketing</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="globe"></i></span> Publicaciones</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="chart-no-axes-combined"></i></span> Reportes</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="sparkles"></i></span> MotorOS AI</div>
+        <div class="app-nav-item"><span class="ico"><i data-lucide="settings"></i></span> Configuración</div>
       </div>
       <div class="app-main">
         <div class="app-main-head">
@@ -1036,6 +1040,7 @@
   </div>
 </footer>
 
+<script src="https://unpkg.com/lucide@latest"></script>
 <script>
   // Reveal on scroll
   const revealEls = document.querySelectorAll('.reveal');
@@ -1085,6 +1090,9 @@
     tabPanels.forEach(el=>el.classList.toggle('active', el.dataset.tab===String(n)));
   }
   tabItems.forEach(el=>el.addEventListener('click', ()=>showTab(el.dataset.tab)));
+
+  // Lucide icons: reemplaza cada <i data-lucide="..."> por su SVG
+  if(window.lucide) lucide.createIcons();
 </script>
 
 </body>

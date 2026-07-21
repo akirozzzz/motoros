@@ -36,7 +36,9 @@
   }
   .app-nav-item:hover{background:var(--glass); color:var(--text);}
   .app-nav-item.active{background:var(--glass-strong); color:var(--text);}
-  .app-nav-item .ico{width:16px; text-align:center; font-size:13px; flex-shrink:0;}
+  .app-nav-item .ico{width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; opacity:0.85; flex-shrink:0;}
+  .app-nav-item .ico svg{width:16px; height:16px;}
+  .app-nav-item.active .ico{color:var(--accent); opacity:1;}
   .sidebar-footer{margin-top:auto; display:flex; align-items:center; gap:9px; padding:10px; border-top:1px solid var(--line-soft);}
   .avatar-sm{width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg,var(--accent-3),var(--accent)); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#08090b; flex-shrink:0;}
   .sidebar-footer .who{font-size:12px; font-weight:600;}
@@ -75,7 +77,7 @@
   .kpi-card{background:var(--graphite); border:1px solid var(--line-soft); border-radius:13px; padding:16px;}
   .kpi-card .l{font-size:11.5px; color:var(--text-dim); margin-bottom:8px; font-weight:500;}
   .kpi-card .v{font-size:20px; font-weight:700;}
-  .kpi-card .t{font-size:11px; margin-top:6px; font-weight:600;}
+  .kpi-card .t{font-size:11px; margin-top:6px; font-weight:600; display:inline-flex; align-items:center; gap:4px;}
   .up{color:var(--accent-2);} .warn{color:#ffc76b;}
 
   .grid-2{display:grid; grid-template-columns:1.4fr 1fr; gap:14px;}
@@ -158,7 +160,7 @@
   .field-row .l{color:var(--text-faint);}
   .field-row .v{color:var(--text); font-weight:600;}
   .alert-strip{display:flex; gap:6px; flex-wrap:wrap; margin-top:16px;}
-  .alert-chip{font-size:10.5px; padding:5px 11px; border-radius:100px; background:rgba(255,199,107,0.1); color:#ffc76b; border:1px solid rgba(255,199,107,0.25); font-weight:600;}
+  .alert-chip{font-size:10.5px; padding:5px 11px; border-radius:100px; background:rgba(255,199,107,0.1); color:#ffc76b; border:1px solid rgba(255,199,107,0.25); font-weight:600; display:inline-flex; align-items:center; gap:5px;}
   .alert-chip.danger{background:rgba(255,107,107,0.1); color:var(--danger); border-color:rgba(255,107,107,0.25);}
   .alert-chip.ok{background:rgba(126,227,200,0.1); color:var(--accent-2); border-color:rgba(126,227,200,0.25);}
 
@@ -174,7 +176,7 @@
   .lead-card .p{font-size:9px; color:var(--accent-2); margin-top:4px; font-weight:600;}
   .lead-detail{background:var(--graphite); border:1px solid var(--line-soft); border-radius:14px; padding:18px;}
   .ai-insight{background:linear-gradient(135deg, rgba(185,139,255,0.1), rgba(91,140,255,0.06)); border:1px solid rgba(185,139,255,0.25); border-radius:12px; padding:14px 16px; margin-top:14px;}
-  .ai-insight .tag{font-size:10.5px; color:var(--accent-3); font-weight:700; margin-bottom:8px;}
+  .ai-insight .tag{font-size:10.5px; color:var(--accent-3); font-weight:700; margin-bottom:8px; display:inline-flex; align-items:center; gap:6px;}
   .ai-insight p{font-size:12.5px; color:var(--text-dim); line-height:1.6;}
   .action-chip-row{display:flex; gap:6px; flex-wrap:wrap; margin-top:12px;}
   .action-chip{font-size:10.5px; padding:6px 11px; border-radius:100px; background:var(--glass-strong); border:1px solid var(--line); color:var(--text-dim); cursor:pointer;}
@@ -252,7 +254,7 @@
     background:var(--graphite-2); border:1px solid var(--line); border-radius:7px; color:var(--text-dim);
     font-size:10.5px; font-family:inherit; padding:4px 6px; cursor:pointer;
   }
-  .ai-widget-close{cursor:pointer; color:var(--text-faint); font-size:16px; background:none; border:none; font-family:inherit; flex-shrink:0;}
+  .ai-widget-close{cursor:pointer; color:var(--text-faint); font-size:16px; background:none; border:none; font-family:inherit; flex-shrink:0; display:flex; align-items:center;}
   .ai-widget-close:hover{color:var(--text);}
   .ai-widget-log{flex:1; overflow-y:auto; padding:13px 14px; display:flex; flex-direction:column; gap:11px; min-height:180px;}
   .ai-widget-suggest{display:flex; gap:6px; flex-wrap:wrap; padding:0 14px 10px; flex-shrink:0;}
@@ -296,6 +298,9 @@
     .crm-board{grid-template-columns:repeat(4,minmax(115px,1fr));}
     .role-select{display:none;}
   }
+
+  /* Lucide icons: trazo fino consistente, color hereda de currentColor */
+  svg.lucide{stroke-width:1.75; vertical-align:middle; flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -305,28 +310,28 @@
     <div class="app-logo"><div class="logo-mark">M</div>MotorOS</div>
 
     <div class="nav-group-label">General</div>
-    <div class="app-nav-item active" data-view="dashboard"><span class="ico">▣</span> Dashboard</div>
-    <div class="app-nav-item" data-view="inventario"><span class="ico">🚗</span> Inventario</div>
-    <div class="app-nav-item" data-view="compras"><span class="ico">🔑</span> Compras</div>
-    <div class="app-nav-item" data-view="ventas"><span class="ico">💳</span> Ventas</div>
-    <div class="app-nav-item" data-view="crm"><span class="ico">👥</span> Clientes CRM</div>
-    <div class="app-nav-item" data-view="financiamiento"><span class="ico">🏦</span> Financiamiento</div>
+    <div class="app-nav-item active" data-view="dashboard"><span class="ico"><i data-lucide="layout-dashboard"></i></span> Dashboard</div>
+    <div class="app-nav-item" data-view="inventario"><span class="ico"><i data-lucide="car"></i></span> Inventario</div>
+    <div class="app-nav-item" data-view="compras"><span class="ico"><i data-lucide="shopping-cart"></i></span> Compras</div>
+    <div class="app-nav-item" data-view="ventas"><span class="ico"><i data-lucide="badge-dollar-sign"></i></span> Ventas</div>
+    <div class="app-nav-item" data-view="crm"><span class="ico"><i data-lucide="users"></i></span> Clientes CRM</div>
+    <div class="app-nav-item" data-view="financiamiento"><span class="ico"><i data-lucide="landmark"></i></span> Financiamiento</div>
 
     <div class="nav-group-label">Operación</div>
-    <div class="app-nav-item" data-view="documentos"><span class="ico">📄</span> Documentos</div>
-    <div class="app-nav-item" data-view="contabilidad"><span class="ico">📚</span> Contabilidad</div>
-    <div class="app-nav-item" data-view="marketing"><span class="ico">📣</span> Marketing</div>
-    <div class="app-nav-item" data-view="publicaciones"><span class="ico">🌐</span> Publicaciones</div>
-    <div class="app-nav-item" data-view="reportes"><span class="ico">📊</span> Reportes</div>
+    <div class="app-nav-item" data-view="documentos"><span class="ico"><i data-lucide="file-text"></i></span> Documentos</div>
+    <div class="app-nav-item" data-view="contabilidad"><span class="ico"><i data-lucide="calculator"></i></span> Contabilidad</div>
+    <div class="app-nav-item" data-view="marketing"><span class="ico"><i data-lucide="megaphone"></i></span> Marketing</div>
+    <div class="app-nav-item" data-view="publicaciones"><span class="ico"><i data-lucide="globe"></i></span> Publicaciones</div>
+    <div class="app-nav-item" data-view="reportes"><span class="ico"><i data-lucide="chart-no-axes-combined"></i></span> Reportes</div>
 
     <div class="nav-group-label">Inteligencia</div>
-    <div class="app-nav-item" data-view="ai"><span class="ico">🤖</span> MotorOS AI</div>
-    <div class="app-nav-item" data-view="config"><span class="ico">⚙️</span> Configuración</div>
+    <div class="app-nav-item" data-view="ai"><span class="ico"><i data-lucide="sparkles"></i></span> MotorOS AI</div>
+    <div class="app-nav-item" data-view="config"><span class="ico"><i data-lucide="settings"></i></span> Configuración</div>
 
     <div class="sidebar-footer">
       <div class="avatar-sm">AQ</div>
       <div style="flex:1;"><div class="who">Ariel Quiroz</div><div class="role">Dueño · Automotora Demo</div></div>
-      <a href="login.html" class="icon-btn" title="Cerrar sesión" style="width:26px;height:26px;font-size:11px;">⏻</a>
+      <a href="login.html" class="icon-btn" aria-label="Cerrar sesión" title="Cerrar sesión" style="width:26px;height:26px;"><i data-lucide="log-out" style="width:14px;height:14px;"></i></a>
     </div>
   </div>
 
@@ -335,12 +340,12 @@
   <div class="app-content">
     <div class="app-topbar">
       <div class="topbar-left">
-        <div class="icon-btn hamburger-btn" id="hamburgerBtn">☰</div>
-        <div class="topbar-search">🔍 <span>Buscar vehículo, cliente o documento…</span></div>
+        <div class="icon-btn hamburger-btn" id="hamburgerBtn" aria-label="Abrir menú"><i data-lucide="menu" style="width:16px;height:16px;"></i></div>
+        <div class="topbar-search"><i data-lucide="search" style="width:14px;height:14px;"></i> <span>Buscar vehículo, cliente o documento…</span></div>
       </div>
       <div class="topbar-right">
-        <div class="icon-btn">🔔</div>
-        <div class="icon-btn">⌘K</div>
+        <div class="icon-btn" aria-label="Notificaciones"><i data-lucide="bell" style="width:15px;height:15px;"></i></div>
+        <div class="icon-btn" aria-label="Atajo de teclado ⌘K">⌘K</div>
       </div>
     </div>
 
@@ -354,8 +359,8 @@
         </div>
 
         <div class="kpi-row">
-          <div class="kpi-card"><div class="l">Ventas totales</div><div class="v">$458.500.000</div><div class="t up">↑ 12.4%</div></div>
-          <div class="kpi-card"><div class="l">Margen bruto</div><div class="v">$96.400.000</div><div class="t up">↑ 8.1%</div></div>
+          <div class="kpi-card"><div class="l">Ventas totales</div><div class="v">$458.500.000</div><div class="t up"><i data-lucide="trending-up" style="width:12px;height:12px;"></i> 12.4%</div></div>
+          <div class="kpi-card"><div class="l">Margen bruto</div><div class="v">$96.400.000</div><div class="t up"><i data-lucide="trending-up" style="width:12px;height:12px;"></i> 8.1%</div></div>
           <div class="kpi-card"><div class="l">Utilidad neta</div><div class="v">$71.200.000</div><div class="t up">14.8% margen</div></div>
           <div class="kpi-card"><div class="l">Capital invertido</div><div class="v">$612.000.000</div><div class="t warn">100 vehículos activos</div></div>
         </div>
@@ -466,9 +471,9 @@
         <div class="view-head"><div><h1>Marketing</h1><p>Campañas activas por canal</p></div></div>
         <div class="card">
           <div class="doc-list">
-            <div class="doc-row"><div class="ico">📸</div><div class="body"><div class="name">Campaña Instagram — SUVs de la semana</div><div class="meta">3.200 alcance · 48 clics</div></div><div class="status">Activa</div></div>
-            <div class="doc-row"><div class="ico">📘</div><div class="body"><div class="name">Campaña Facebook — Financiamiento 0% pie</div><div class="meta">5.100 alcance · 112 clics</div></div><div class="status">Activa</div></div>
-            <div class="doc-row"><div class="ico">✉️</div><div class="body"><div class="name">Email — Leads fríos últimos 90 días</div><div class="meta">340 envíos</div></div><div class="status pending">Programada</div></div>
+            <div class="doc-row"><div class="ico"><i data-lucide="camera" style="width:14px;height:14px;"></i></div><div class="body"><div class="name">Campaña Instagram — SUVs de la semana</div><div class="meta">3.200 alcance · 48 clics</div></div><div class="status">Activa</div></div>
+            <div class="doc-row"><div class="ico"><i data-lucide="megaphone" style="width:14px;height:14px;"></i></div><div class="body"><div class="name">Campaña Facebook — Financiamiento 0% pie</div><div class="meta">5.100 alcance · 112 clics</div></div><div class="status">Activa</div></div>
+            <div class="doc-row"><div class="ico"><i data-lucide="mail" style="width:14px;height:14px;"></i></div><div class="body"><div class="name">Email — Leads fríos últimos 90 días</div><div class="meta">340 envíos</div></div><div class="status pending">Programada</div></div>
           </div>
         </div>
       </div>
@@ -512,9 +517,9 @@
         <div class="chat-shell">
           <div class="chat-log" id="chatLog">
             <div class="chat-msg user"><div class="chat-avatar">AQ</div><div class="chat-bubble">¿Qué autos debería bajar de precio?</div></div>
-            <div class="chat-msg ai"><div class="chat-avatar"><img class="bot-img" src="images/chatbot.png" alt="MotorOS AI"></div><div class="chat-bubble">Estos 7 vehículos tienen bajo movimiento y margen suficiente para ajuste: CX-5 2020, Tucson 2022, Sail 2021 y 4 más. ¿Quieres que prepare las nuevas fichas de precio?</div></div>
+            <div class="chat-msg ai"><div class="chat-avatar"><i data-lucide="bot" style="width:14px;height:14px;"></i></div><div class="chat-bubble">Estos 7 vehículos tienen bajo movimiento y margen suficiente para ajuste: CX-5 2020, Tucson 2022, Sail 2021 y 4 más. ¿Quieres que prepare las nuevas fichas de precio?</div></div>
             <div class="chat-msg user"><div class="chat-avatar">AQ</div><div class="chat-bubble">¿Cuánto ganamos este mes?</div></div>
-            <div class="chat-msg ai"><div class="chat-avatar"><img class="bot-img" src="images/chatbot.png" alt="MotorOS AI"></div><div class="chat-bubble">Vendieron 18 vehículos con margen promedio de 14,8%. Utilidad neta estimada: $71.200.000.</div></div>
+            <div class="chat-msg ai"><div class="chat-avatar"><i data-lucide="bot" style="width:14px;height:14px;"></i></div><div class="chat-bubble">Vendieron 18 vehículos con margen promedio de 14,8%. Utilidad neta estimada: $71.200.000.</div></div>
           </div>
           <div class="chat-suggestions">
             <div class="chat-suggest-chip" data-q="stock">¿Qué vehículos llevan más tiempo en stock?</div>
@@ -558,10 +563,10 @@
       <option value="Dueño">Viendo como: Dueño</option>
       <option value="Vendedor">Viendo como: Vendedor</option>
     </select>
-    <button class="ai-widget-close" id="aiWidgetClose">✕</button>
+    <button class="ai-widget-close" id="aiWidgetClose" aria-label="Cerrar chat"><i data-lucide="x" style="width:15px;height:15px;"></i></button>
   </div>
   <div class="ai-widget-log" id="widgetLog">
-    <div class="chat-msg ai"><div class="chat-avatar"><img class="bot-img" src="images/chatbot.png" alt="MotorOS AI"></div><div class="chat-bubble">Hola, soy MotorOS AI. Conozco todo tu inventario, ventas, clientes y documentos — pregúntame lo que necesites. Algunas respuestas cambian según tu rol.</div></div>
+    <div class="chat-msg ai"><div class="chat-avatar"><i data-lucide="bot" style="width:14px;height:14px;"></i></div><div class="chat-bubble">Hola, soy MotorOS AI. Conozco todo tu inventario, ventas, clientes y documentos — pregúntame lo que necesites. Algunas respuestas cambian según tu rol.</div></div>
   </div>
   <div class="ai-widget-suggest">
     <div class="widget-suggest-chip" data-q="agregar">¿Cómo agrego un vehículo?</div>
@@ -574,6 +579,7 @@
   </div>
 </div>
 
+<script src="https://unpkg.com/lucide@latest"></script>
 <script>
   // ---------- View switching ----------
   const navItems = document.querySelectorAll('.app-nav-item');
@@ -762,10 +768,11 @@
     });
   }
 
+  const alertIco = '<i data-lucide="triangle-alert" style="width:12px;height:12px;"></i>';
   function alertChip(type){
-    if(type==="stalled") return `<div class="alert-chip">⚠ Vehículo detenido</div>`;
-    if(type==="margin") return `<div class="alert-chip danger">⚠ Margen bajo</div>`;
-    if(type==="price") return `<div class="alert-chip">⚠ Precio fuera de mercado</div>`;
+    if(type==="stalled") return `<div class="alert-chip">${alertIco} Vehículo detenido</div>`;
+    if(type==="margin") return `<div class="alert-chip danger">${alertIco} Margen bajo</div>`;
+    if(type==="price") return `<div class="alert-chip">${alertIco} Precio fuera de mercado</div>`;
     return "";
   }
 
@@ -803,7 +810,7 @@
         </div>
       </div>
       <div class="alert-strip">
-        ${v.alerts.length ? v.alerts.map(alertChip).join('') : '<div class="alert-chip ok">✓ Sin alertas activas</div>'}
+        ${v.alerts.length ? v.alerts.map(alertChip).join('') : '<div class="alert-chip ok"><i data-lucide="check" style="width:12px;height:12px;"></i> Sin alertas activas</div>'}
       </div>
     </div>`;
   }
@@ -831,6 +838,7 @@
       || `<div class="card" style="text-align:center; color:var(--text-faint); font-size:12.5px;">No se encontraron vehículos con ese filtro o búsqueda.</div>`;
     document.getElementById('vehicleCountLabel').textContent = `${filtered.length} vehículo${filtered.length===1?'':'s'}`;
     document.getElementById('loadMoreBtn').style.display = invVisibleCount < filtered.length ? 'inline-flex' : 'none';
+    if(window.lucide) lucide.createIcons();
   }
 
   function setInventoryFilter(state){
@@ -859,7 +867,7 @@
   function financingStepper(currentIdx){
     return FIN_STAGES.map((label,i)=>{
       const cls = i < currentIdx ? "done" : i === currentIdx ? "current" : "";
-      const dot = i < currentIdx ? "✓" : i === currentIdx ? "●" : (i+1);
+      const dot = i < currentIdx ? '<i data-lucide="check" style="width:11px;height:11px;"></i>' : i === currentIdx ? "●" : (i+1);
       return `<div class="step ${cls}"><div class="dot2">${dot}</div><div class="lbl">${label}</div></div>`;
     }).join('');
   }
@@ -905,7 +913,7 @@
     const top = docs.slice(0,20);
     document.getElementById('documentosList').innerHTML = top.map(d=>`
       <div class="doc-row">
-        <div class="ico">📄</div>
+        <div class="ico"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div>
         <div class="body"><div class="name">${d.name}</div><div class="meta">${d.meta}</div></div>
         <div class="status">Generado</div>
       </div>`).join('');
@@ -946,7 +954,11 @@
       </tr>`).join('');
   }
 
-  const ACQ_ICON = { "Compra directa":"🔑", "Consignación":"📋", "Intercambio":"🔁" };
+  const ACQ_ICON = {
+    "Compra directa": '<i data-lucide="banknote" style="width:14px;height:14px;"></i>',
+    "Consignación": '<i data-lucide="file-signature" style="width:14px;height:14px;"></i>',
+    "Intercambio": '<i data-lucide="repeat" style="width:14px;height:14px;"></i>',
+  };
   function renderCompras(){
     const recientes = [...vehicles]
       .sort((a,b)=>a.acquisition.diasIngreso - b.acquisition.diasIngreso)
@@ -1048,11 +1060,12 @@
       </div>
       <div class="field-row"><span class="l">Notas del vendedor</span><span class="v" style="text-align:right; max-width:60%;">${l.notes}</span></div>
       <div class="ai-insight">
-        <div class="tag">🤖 IA COMERCIAL</div>
+        <div class="tag"><i data-lucide="sparkles" style="width:12px;height:12px;"></i> IA COMERCIAL</div>
         <p>${l.ai}</p>
       </div>
       <div class="action-chip-row">${l.actions.map(a=>`<div class="action-chip">${a}</div>`).join('')}</div>
     `;
+    if(window.lucide) lucide.createIcons();
   }
   renderCRM();
   selectLead(2);
@@ -1069,9 +1082,10 @@
   function addMsg(text, who){
     const div = document.createElement('div');
     div.className = 'chat-msg ' + who;
-    div.innerHTML = `<div class="chat-avatar">${who==='user'?'AQ':'<img class=\"bot-img\" src=\"images/chatbot.png\" alt=\"MotorOS AI\">'}</div><div class="chat-bubble">${text}</div>`;
+    div.innerHTML = `<div class="chat-avatar">${who==='user'?'AQ':'<i data-lucide=\"bot\" style=\"width:14px;height:14px;\"></i>'}</div><div class="chat-bubble">${text}</div>`;
     chatLog.appendChild(div);
     chatLog.scrollTop = chatLog.scrollHeight;
+    if(window.lucide) lucide.createIcons();
   }
   function respond(userText, key){
     addMsg(userText, 'user');
@@ -1115,15 +1129,16 @@
     ganancias: { text: "Vendieron 18 vehículos este mes con una utilidad neta estimada de $71.200.000 (margen promedio 14,8%).", ownerOnly:true },
     comisiones: { text: "Este mes: Carla M. $3.850.000, Diego R. $3.120.000, Fernanda S. $2.660.000 en comisiones acumuladas.", ownerOnly:true },
   };
-  const lockedReply = "🔒 Esta información financiera es solo para el dueño de la automotora. Pídele a un administrador que la consulte por ti.";
+  const lockedReply = '<i data-lucide="lock" style="width:12px;height:12px;"></i> Esta información financiera es solo para el dueño de la automotora. Pídele a un administrador que la consulte por ti.';
 
   function widgetAddMsg(text, who, locked){
     const div = document.createElement('div');
     div.className = 'chat-msg ' + who;
     const bubbleClass = locked ? 'chat-bubble locked-bubble' : 'chat-bubble';
-    div.innerHTML = `<div class="chat-avatar">${who==='user' ? 'AQ' : '<img class=\"bot-img\" src=\"images/chatbot.png\" alt=\"MotorOS AI\">'}</div><div class="${bubbleClass}">${text}</div>`;
+    div.innerHTML = `<div class="chat-avatar">${who==='user' ? 'AQ' : '<i data-lucide=\"bot\" style=\"width:14px;height:14px;\"></i>'}</div><div class="${bubbleClass}">${text}</div>`;
     widgetLog.appendChild(div);
     widgetLog.scrollTop = widgetLog.scrollHeight;
+    if(window.lucide) lucide.createIcons();
   }
 
   function widgetRespond(userText, key){
@@ -1152,6 +1167,9 @@
   widgetInput.addEventListener('keydown', e=>{
     if(e.key==='Enter'){ widgetSend.click(); }
   });
+
+  // Lucide icons: reemplaza cada <i data-lucide="..."> por su SVG (icono estatico inicial)
+  if(window.lucide) lucide.createIcons();
 </script>
 
 </body>
