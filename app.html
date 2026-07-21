@@ -28,24 +28,28 @@
   .app-sidebar{
     position:fixed; top:0; left:0; height:100vh; z-index:100;
     width:80px; background:var(--bg-soft); border-right:1px solid var(--line-soft);
-    display:flex; flex-direction:column; padding:18px 10px; overflow:hidden;
+    display:grid; grid-template-rows:auto minmax(0,1fr) auto; padding:14px 10px; overflow:hidden;
     transition: width .25s cubic-bezier(.4,0,.2,1), box-shadow .25s ease;
   }
   .app-sidebar:hover{
-    width:260px; padding:18px 12px;
+    width:260px; padding:14px 12px;
     box-shadow: 18px 0 60px -18px rgba(0,0,0,0.6);
   }
-  /* Zona scrolleable del menu: el logo queda fijo arriba y el pie fijo abajo,
-     asi el listado de secciones nunca se corta en pantallas mas bajas. */
+  /* Zona scrolleable del menu: el logo queda fijo arriba y el pie fijo abajo (fila de grid
+     propia con minmax(0,1fr)), asi el listado de secciones nunca se corta en pantallas
+     mas bajas -- se ve un difuminado abajo cuando hay mas contenido para scrollear. */
   .app-nav-scroll{
-    flex:1 1 auto; min-height:0; overflow-y:auto; overflow-x:hidden;
+    min-height:0; overflow-y:auto; overflow-x:hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent 100%);
   }
+  .app-nav-scroll.at-bottom{-webkit-mask-image:none; mask-image:none;}
   .app-nav-scroll::-webkit-scrollbar{width:4px;}
   .app-nav-scroll::-webkit-scrollbar-thumb{background:var(--line); border-radius:4px;}
   .app-nav-scroll::-webkit-scrollbar-track{background:transparent;}
   .app-logo{
     display:flex; align-items:center; justify-content:center; gap:10px;
-    font-weight:700; font-size:15px; margin-bottom:22px; padding:4px 8px; white-space:nowrap;
+    font-weight:700; font-size:15px; margin-bottom:14px; padding:4px 8px; white-space:nowrap;
     transition: justify-content .25s ease, gap .25s ease;
   }
   .app-sidebar:hover .app-logo{justify-content:flex-start;}
@@ -57,14 +61,14 @@
   }
   .app-sidebar:hover .app-logo .logo-label{opacity:1; max-width:160px; transform:translateX(0); transition-delay:.05s;}
   .nav-group-label{
-    font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-faint); padding:14px 10px 6px;
+    font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-faint); padding:10px 10px 4px;
     white-space:nowrap; opacity:0; transform:translateX(-8px);
     transition: opacity .2s ease, transform .2s ease;
   }
   .app-sidebar:hover .nav-group-label{opacity:1; transform:translateX(0); transition-delay:.05s;}
   .app-nav-item{
     display:flex; align-items:center; justify-content:center; gap:10px; font-size:13px; color:var(--text-dim);
-    padding:11px 10px; border-radius:9px; margin-bottom:2px; font-weight:500; cursor:pointer;
+    padding:8px 10px; border-radius:9px; margin-bottom:2px; font-weight:500; cursor:pointer;
     white-space:nowrap;
     transition:background .15s, color .15s, justify-content .25s ease;
   }
@@ -702,6 +706,19 @@
   }
   hamburgerBtn.addEventListener('click', toggleSidebar);
   sidebarBackdrop.addEventListener('click', closeSidebar);
+
+  // El listado del menu scrollea de forma independiente (logo y usuario quedan fijos).
+  // Este difuminado inferior avisa que hay mas opciones debajo; se apaga solo al llegar al final.
+  const appNavScroll = document.querySelector('.app-nav-scroll');
+  function updateNavScrollFade(){
+    const atBottom = appNavScroll.scrollHeight - appNavScroll.scrollTop - appNavScroll.clientHeight < 4;
+    appNavScroll.classList.toggle('at-bottom', atBottom);
+  }
+  if(appNavScroll){
+    updateNavScrollFade();
+    appNavScroll.addEventListener('scroll', updateNavScrollFade);
+    window.addEventListener('resize', updateNavScrollFade);
+  }
 
   navItems.forEach(item=>{
     item.addEventListener('click', ()=>{
