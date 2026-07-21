@@ -68,6 +68,19 @@ los vehículos se vieran con ese nivel de detalle, no solo el seleccionado.
 carga por JavaScript y no se pudo inspeccionar (sin navegador Chrome conectado en la
 sesión). Es un login 100% demo: cualquier correo/contraseña entra, no hay backend.
 
+## Mascota del chatbot (MotorOS AI)
+
+El usuario subió `images/chatbot.png` (un robot ilustrado cargando un auto) para usar como
+ícono del asistente MotorOS AI en vez del emoji 🤖. La imagen original tenía fondo blanco
+y pesaba 973KB; se procesó con PIL (umbral de blanco → transparencia, recorte al bounding
+box del contenido, resize a 300px máx.) quedando en ~116KB con fondo transparente.
+
+Se reemplazó el emoji específicamente en: el botón flotante del widget, los avatares de
+mensajes de IA en ambos chats (widget y vista dedicada de `app.html`), y el mockup de chat
+del módulo 12 en `index.html`. **No** se tocaron los usos de 🤖 en otros contextos (etiquetas
+"MOTOROS INSIGHTS" / "IA COMERCIAL", ícono chico de 16px del sidebar) — esos son elementos
+de texto distintos, no el avatar del chatbot.
+
 ## Cómo entregar imágenes reales a Claude (importante, causó confusión una vez)
 
 **Las imágenes pegadas o adjuntadas directamente en el chat NO quedan como archivo
