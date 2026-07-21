@@ -416,14 +416,9 @@
 
       <!-- ============ COMPRAS ============ -->
       <div class="view" id="view-compras">
-        <div class="view-head"><div><h1>Compras y Adquisiciones</h1><p>Compra directa, consignación e intercambio</p></div><div class="btn btn-primary">+ Registrar compra</div></div>
+        <div class="view-head"><div><h1>Compras y Adquisiciones</h1><p id="comprasSubtitle">Compra directa, consignación e intercambio</p></div><div class="btn btn-primary">+ Registrar compra</div></div>
         <div class="card">
-          <div class="doc-list">
-            <div class="doc-row"><div class="ico">🔑</div><div class="body"><div class="name">Compra directa — Chevrolet Sail</div><div class="meta">Cliente vendedor: Rodrigo Paredes · $18.900.000</div></div><div class="status">Pagado</div></div>
-            <div class="doc-row"><div class="ico">📋</div><div class="body"><div class="name">Consignación — Hyundai Tucson</div><div class="meta">Proveedor: AutoExpress</div></div><div class="status pending">Doc. pendiente</div></div>
-            <div class="doc-row"><div class="ico">🔁</div><div class="body"><div class="name">Intercambio — recibe Chevrolet Sail</div><div class="meta">Cliente: María Soto</div></div><div class="status">Registrado</div></div>
-            <div class="doc-row"><div class="ico">🔑</div><div class="body"><div class="name">Compra directa — Renault Sandero</div><div class="meta">Cliente vendedor: Pablo Ibáñez · $9.400.000</div></div><div class="status pending">Pago parcial</div></div>
-          </div>
+          <div class="doc-list" id="comprasList"></div>
         </div>
       </div>
 
@@ -672,6 +667,7 @@
   const SELLERS = ["Carla M.","Diego R.","Fernanda S.","Pablo T.","Marcela U."];
   const FIRST_NAMES = ["Javier","Soledad","Ignacio","María","Rodrigo","Camila","Pedro","Andrea","Felipe","Valentina","Nicolás","Constanza","Matías","Francisca","Sebastián","Antonia"];
   const LAST_NAMES = ["Muñoz","Vera","Rojas","Soto","Paredes","Reyes","Alarcón","González","Fuentes","Contreras","Espinoza","Bravo"];
+  const PROVIDERS = ["AutoExpress","Motor Center","Comercial del Sur","Grupo Andes Motors","Rentas y Flotas Ltda."];
   const randClient = () => `${pick(FIRST_NAMES)} ${pick(LAST_NAMES)}`;
 
   function buildVehicle(state){
@@ -701,11 +697,21 @@
 
     const stateLabel = { ingreso:"Ingreso", prep:"Preparación", available:"Publicado", reserved:"Reservado", sold:"Vendido" }[state];
 
+    const acqRoll = rnd();
+    const acqTipo = acqRoll < 0.55 ? "Compra directa" : acqRoll < 0.85 ? "Consignación" : "Intercambio";
+    const acqDiasIngreso = state==="ingreso" ? days : state==="prep" ? days + randInt(2,10) : randInt(5,200);
+    const acquisition = {
+      tipo: acqTipo,
+      contraparte: acqTipo==="Consignación" ? pick(PROVIDERS) : randClient(),
+      estadoPago: rnd() < 0.75 ? "Pagado" : (rnd() < 0.5 ? "Pago parcial" : "Doc. pendiente"),
+      diasIngreso: acqDiasIngreso,
+    };
+
     return {
       name: cat.name, plate: randPlate(), vin: randVin(), engine: cat.body==="Doble cabina" ? "Diesel Turbo" : "Multipoint",
       year, km, fuel: cat.fuel, trans: cat.trans, color: pick(COLORS), body: cat.body,
       state, stateLabel, price, buy, costs, totalCost, minPrice, marginExp, marginFinal, days,
-      photo: cat.photo, alerts,
+      photo: cat.photo, alerts, acquisition,
       // solo para vendidos: datos de la venta
       sale: state==="sold" ? {
         cliente: randClient(),
@@ -863,6 +869,29 @@
     renderVehicleList();
   });
 
+  const ACQ_ICON = { "Compra directa":"🔑", "Consignación":"📋", "Intercambio":"🔁" };
+  function renderCompras(){
+    const recientes = [...vehicles]
+      .sort((a,b)=>a.acquisition.diasIngreso - b.acquisition.diasIngreso)
+      .slice(0, 20);
+    document.getElementById('comprasList').innerHTML = recientes.map(v=>{
+      const a = v.acquisition;
+      const statusClass = a.estadoPago === "Pagado" ? "status" : "status pending";
+      const contraparteLabel = a.tipo === "Consignación" ? "Proveedor" : "Cliente vendedor";
+      return `
+      <div class="doc-row">
+        <div class="ico">${ACQ_ICON[a.tipo]}</div>
+        <div class="body">
+          <div class="name">${a.tipo} — ${v.name} ${v.year}</div>
+          <div class="meta">${contraparteLabel}: ${a.contraparte} · ${fmt(v.buy)} · hace ${a.diasIngreso} días</div>
+        </div>
+        <div class="${statusClass}">${a.estadoPago}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('comprasSubtitle').textContent =
+      `${vehicles.length} adquisiciones registradas · mostrando las 20 más recientes`;
+  }
+
   function renderVentas(){
     const sold = vehicles.filter(v=>v.state==="sold");
     const totalVentas = sold.reduce((sum,v)=>sum+(v.price||0), 0);
@@ -897,6 +926,7 @@
 
   renderInventoryKanban();
   renderVehicleList();
+  renderCompras();
   renderVentas();
   renderRanking();
 
